@@ -1,0 +1,10 @@
+type Post struct {
+	Title   string
+	Content string
+	Link    string
+	Type    int
+}
+i would like to call a function and have an 
+array of these post structs returned. this
+can be modified as needed, but somehing that is
+for the most part this.

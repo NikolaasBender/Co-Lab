@@ -32,7 +32,15 @@
       </div>
     </div>
     <div class="container-fluid" id="body-contaioner">
-
+      <div>
+        {{range .Posts}}
+        <div class="item">
+          <h3 class="name">{{.Title}}</h3>
+          <p class="content">{{.Content}}</p>
+          <a href="{{.link}}">Full post</a>
+        </div>
+        {{end}}
+      </div>
     </div>
   </body>
   <!-- Optional JavaScript -->

@@ -1,6 +1,8 @@
 <div>
-    {{range .}}<tr>
-        {{range rangeStruct .}} <td>{{.}}</td>
-        {{end}}</tr>
+    {{range .Items}}
+    <div class="item">
+        <h3 class="name">{{.Name}}</h3>
+        <span class="price">${{.Price}}</span>
+    </div>
     {{end}}
 </div>

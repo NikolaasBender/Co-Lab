@@ -30,6 +30,5 @@ type Post struct {
 }
 
 type Feed struct {
-	Title string
-	Posts map[string]Post
+	Posts []Post
 }
