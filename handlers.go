@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"sdp_deploy/go_dev"
+	"Co-Lab/go_dev"
 
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
@@ -163,16 +163,6 @@ func login(w http.ResponseWriter, r *http.Request) {
 		t.Execute(w, nil)
 	}
 
-	// Set user as authenticated
-	// session.Values["authenticated"] = true
-	// session.Values["name"] = r.FormValue("username")
-	// session.Save(r, w)
-
-	// fmt.Println(session.Values["authenticated"])
-	// fmt.Println(details)
-
-	// http.Redirect(w, r, "view/userpage.html", http.StatusFound)
-
 }
 
 //=====================================================================================
@@ -190,7 +180,7 @@ func logout(w http.ResponseWriter, r *http.Request) {
 	session.Values["authenticated"] = false
 	session.Save(r, w)
 
-	http.Redirect(w, r, "/view/index.html", http.StatusFound)
+	IndexHandler(w, r)
 }
 
 //=====================================================================================
@@ -217,13 +207,13 @@ func FeedHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// page := file_finder("view/", w, r)
+	page := file_finder("view/", w, r)
 
-	// //GET POSTS FOR USER
-	// feedposts = getTasks(session.Values["name"])
+	//GET POSTS FOR USER
+	feedposts = go_dev.getTasks(session.Values["name"])
 
-	// p := Feed{Title: session.Values["name"], Posts: feedposts}
-	// t, _ := template.ParseFiles(page)
+	p := Feed{Title: session.Values["name"], Posts: feedposts}
+	t, _ := template.ParseFiles(page)
 
 }
 
