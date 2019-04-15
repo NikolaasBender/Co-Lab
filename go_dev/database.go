@@ -4,22 +4,24 @@ import (
 	"database/sql"
 	"fmt"
 	"os/exec"
+	"os"
 
 	_ "github.com/lib/pq"
 )
 
-const (
-	host     = "localhost"
-	port     = 5432
-	user     = "postgres"
-	password = "password"
-	dbname   = "sdev_db"
-)
+// const (
+// 	host     = "localhost"
+// 	port     = 5432
+// 	user     = "postgres"
+// 	password = "password"
+// 	dbname   = "sdev_db"
+// )
 
 func Initialize() *sql.DB {
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		host, port, user, password, dbname)
+	// psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
+	// 	"password=%s dbname=%s sslmode=disable",
+	// 	host, port, user, password, dbname)
+	psqlInfo := os.Getenv("POSTGRES_CONNECTION")
 	db, err := sql.Open("postgres", psqlInfo)
 
 	if err != nil {
