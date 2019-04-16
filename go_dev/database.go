@@ -2,7 +2,7 @@ package go_dev
 
 import (
 	"database/sql"
-	"fmt"
+	//"fmt"
 	"os/exec"
 	"os"
 
