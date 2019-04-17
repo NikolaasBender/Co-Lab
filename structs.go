@@ -1,10 +1,8 @@
 package main
 
-import (
-	"sdp_deploy/go_dev"
-)
+import "database/sql"
 
-var db = go_dev.Initialize()
+var db *sql.DB
 
 type ContactDetails struct {
 	Username string

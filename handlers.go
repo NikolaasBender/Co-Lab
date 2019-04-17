@@ -154,6 +154,9 @@ func login(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "cookie-name")
 
 	pwint, _ := strconv.Atoi(r.FormValue("pwd"))
+	if debug == true {
+		fmt.Println(pwint)
+	}
 	// Authentication goes here
 	if go_dev.Validate(r.FormValue("email"), pwint, db) == true {
 		session.Values["authenticated"] = true
@@ -181,6 +184,15 @@ func logout(w http.ResponseWriter, r *http.Request) {
 	session.Save(r, w)
 
 	IndexHandler(w, r)
+}
+
+func signup(w http.ResponseWriter, r *http.Request) {
+
+	if debug == true {
+		fmt.Println("Hit signup")
+	}
+
+	
 }
 
 //=====================================================================================

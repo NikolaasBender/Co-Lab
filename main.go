@@ -3,6 +3,7 @@ package main
 import (
 	//"fmt"
 	//"html/template"
+	"Co-Lab/go_dev"
 	"fmt"
 	"log"
 	"net/http"
@@ -39,6 +40,7 @@ func newRouter() *mux.Router {
 	r.HandleFunc("/secret", secret)
 	r.HandleFunc("/login", login)
 	r.HandleFunc("/logout", logout)
+	r.HandleFunc("/signup", logout)
 
 	//DEFAULT ROUTE WHEN SOMEONE HITS THE SITE
 	r.HandleFunc("/", IndexHandler)
@@ -50,6 +52,7 @@ func newRouter() *mux.Router {
 }
 
 func main() {
+	db = go_dev.Initialize()
 
 	//WE NEED A ROUTER
 	r := newRouter()
