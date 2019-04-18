@@ -23,3 +23,6 @@ env_variables:
   # If you're testing locally using the Cloud SQL proxy with TCP,
   # instead set this environment variable:
   # POSTGRES_CONNECTION="user=postgres password=pw dbname=db sslmode=disable"
+
+beta_settings:
+  cloud_sql_instances: "co-lab-237404:us-central1:co-lab-db"

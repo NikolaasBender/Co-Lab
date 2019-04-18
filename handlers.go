@@ -71,7 +71,7 @@ func FormHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	details := BigForm{
+	details := go_dev.BigForm{
 		nickname:  r.FormValue("nickname"),
 		email:     r.FormValue("email"),
 		password:  r.FormValue("password"),
