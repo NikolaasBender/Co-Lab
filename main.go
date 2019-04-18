@@ -52,7 +52,7 @@ func newRouter() *mux.Router {
 }
 
 func main() {
-	db = go_dev.Initialize()
+	go_dev.db = go_dev.Initialize()
 
 	//WE NEED A ROUTER
 	r := newRouter()

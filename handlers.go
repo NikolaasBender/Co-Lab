@@ -158,7 +158,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(pwint)
 	}
 	// Authentication goes here
-	if go_dev.Validate(r.FormValue("email"), pwint, db) == true {
+	if go_dev.Validate(r.FormValue("email"), pwint, go_dev.db) == true {
 		session.Values["authenticated"] = true
 		http.Redirect(w, r, "/view/index.html", http.StatusFound)
 	} else {
