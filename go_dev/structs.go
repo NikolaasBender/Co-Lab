@@ -1,8 +1,22 @@
 package go_dev
 
+import (
+	"database/sql"
+
+	_ "github.com/lib/pq"
+)
+
 type ContactDetails struct {
 	Username string
 	Password string
+}
+
+type UserInfo struct {
+	username   string
+	name       string
+	bio        sql.NullString
+	profileimg sql.NullString
+	bannerimg  sql.NullString
 }
 
 type BigForm struct {
