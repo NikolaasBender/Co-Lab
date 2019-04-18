@@ -159,9 +159,15 @@ func login(w http.ResponseWriter, r *http.Request) {
 	}
 	// Authentication goes here
 	if go_dev.Validate(r.FormValue("email"), pwint, db) == true {
+		if debug == true {
+			fmt.Println("user has been validated")
+		}
 		session.Values["authenticated"] = true
 		http.Redirect(w, r, "/view/index.html", http.StatusFound)
 	} else {
+		if debug == true {
+			fmt.Println("user has NOT been validated")
+		}
 		session.Values["authenticated"] = false
 		t.Execute(w, nil)
 	}
@@ -192,7 +198,6 @@ func signup(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Hit signup")
 	}
 
-	
 }
 
 //=====================================================================================
