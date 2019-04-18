@@ -127,7 +127,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(pwint)
 	}
 	// Authentication goes here
-	if go_dev.Validate(r.FormValue("email"), pwint, db) == true {
+	if go_dev.Validate(r.FormValue("usr"), pwint, db) == true {
 		if debug == true {
 			fmt.Println("user has been validated")
 		}

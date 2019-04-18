@@ -64,8 +64,10 @@ func Validate(username string, password int, db *sql.DB) bool {
 
 	if err == sql.ErrNoRows {
 		return false
+		fmt.Println("No Rows.")
 	} else if err != nil {
 		return false
+		fmt.Println("Other sql error.")
 	}
 
 	return true
