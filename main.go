@@ -4,6 +4,7 @@ import (
 	//"fmt"
 	//"html/template"
 	"Co-Lab/go_dev"
+	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
@@ -15,6 +16,8 @@ import (
 
 //ROUTER CONTSRUCTER
 //VERY IMPORTANT
+
+var db *sql.DB
 
 func newRouter() *mux.Router {
 	r := mux.NewRouter()
@@ -40,7 +43,7 @@ func newRouter() *mux.Router {
 	r.HandleFunc("/secret", secret)
 	r.HandleFunc("/login", login)
 	r.HandleFunc("/logout", logout)
-	r.HandleFunc("/signup", logout)
+	r.HandleFunc("/signup", signup)
 
 	//DEFAULT ROUTE WHEN SOMEONE HITS THE SITE
 	r.HandleFunc("/", IndexHandler)
@@ -52,7 +55,10 @@ func newRouter() *mux.Router {
 }
 
 func main() {
-	go_dev.db = go_dev.Initialize()
+	db = go_dev.Initialize()
+	if db == nil {
+		fmt.Println("db is bad")
+	}
 
 	//WE NEED A ROUTER
 	r := newRouter()

@@ -1,8 +1,4 @@
-package main
-
-import "database/sql"
-
-var db *sql.DB
+package go_dev
 
 type ContactDetails struct {
 	Username string

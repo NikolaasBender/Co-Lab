@@ -56,37 +56,6 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, t)
 }
 
-//just demo crap
-var titles = []string{"t1", "t2", "t3", "t4"}
-var contents = []string{"c1", "c2", "c3", "c4"}
-
-//=====================================================================================
-//DEMO FOR DEALING WITH FORMS
-//=====================================================================================
-func FormHandler(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-	t, _ := template.ParseFiles("formTest.html")
-	if r.Method != http.MethodPost {
-		t.Execute(w, nil)
-		return
-	}
-
-	details := go_dev.BigForm{
-		nickname:  r.FormValue("nickname"),
-		email:     r.FormValue("email"),
-		password:  r.FormValue("password"),
-		gender:    r.FormValue("gender"),
-		securityQ: r.FormValue("securityQuestion"),
-		languages: r.FormValue("Languages"),
-		textbox:   r.FormValue("textbox"),
-	}
-
-	fmt.Println(details)
-
-	t.Execute(w, struct{ Success bool }{true})
-
-}
-
 //=====================================================================================
 //VIEW HANDLER
 //=====================================================================================
@@ -158,10 +127,16 @@ func login(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(pwint)
 	}
 	// Authentication goes here
-	if go_dev.Validate(r.FormValue("email"), pwint, go_dev.db) == true {
+	if go_dev.Validate(r.FormValue("email"), pwint, db) == true {
+		if debug == true {
+			fmt.Println("user has been validated")
+		}
 		session.Values["authenticated"] = true
 		http.Redirect(w, r, "/view/index.html", http.StatusFound)
 	} else {
+		if debug == true {
+			fmt.Println("user has NOT been validated")
+		}
 		session.Values["authenticated"] = false
 		t.Execute(w, nil)
 	}
@@ -191,7 +166,6 @@ func signup(w http.ResponseWriter, r *http.Request) {
 	if debug == true {
 		fmt.Println("Hit signup")
 	}
-
 
 }
 
