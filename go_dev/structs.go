@@ -7,9 +7,7 @@ import (
 )
 
 type UserPage struct {
-	username  string
-	email string
-	bio  string
+	info 					UserInfo
 	feed          []Post
 	tasks         []Task
 	pins          []Post
@@ -24,7 +22,7 @@ type Post struct {
 
 type Project struct {
 	project_name string
-	id 			 int
+	id 			 			int
 	todo         []Task
 	working      []Task
 	done         []Task

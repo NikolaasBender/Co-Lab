@@ -53,14 +53,14 @@ func Exists(username string, db *sql.DB) bool {
 	return true
 }
 
-func Validate(info User, db *sql.DB) bool {
+func Validate(username, password string, db *sql.DB) bool {
 
 	sqlStatement := `SELECT username FROM user_login
   WHERE username = $1 AND password = $2;`
 
 	var uname string
 
-	err = db.QueryRow(sqlStatement, info.username, info.password).Scan(&uname)
+	err = db.QueryRow(sqlStatement, username, password).Scan(&uname)
 
 	if err == sql.ErrNoRows {
 		fmt.Println("No Rows.")
@@ -73,14 +73,14 @@ func Validate(info User, db *sql.DB) bool {
 	return true
 }
 
-func GetUserInfo(username string, db *sql.DB) (UserInfo) {
+func GetUserInfo(username string, db *sql.DB) (*UserInfo) {
 
 	sqlStatement := `SELECT * FROM user_info
   WHERE username = $1;`
 
-	var info UserInfo
+	var info *UserInfo
 
-	err = db.QueryRow(sqlStatement, username).Scan(&info.username, &info.bio, &info.profileimg, &info.bannerimg)
+	err = db.QueryRow(sqlStatement, username).Scan(info.username, info.bio, info.profileimg, info.bannerimg)
 
 	if err == sql.ErrNoRows {
 		fmt.Println(err)
