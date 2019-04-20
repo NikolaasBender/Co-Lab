@@ -1,7 +1,7 @@
 package main
 
 import (
-	"SoftwareDevProject/go_sql/go_dev"
+	// "SoftwareDevProject/go_sql/go_dev"
 	"encoding/gob"
 	"fmt"
 	"html/template"

@@ -36,7 +36,6 @@ func addContentPost(title, user, content, db *sql.DB) bool {
 	sqlStatement := `UPDATE posts
   	SET content = $1
   	WHERE title = $2 AND user = $3;`
-	var err error
 	_, err = db.Exec(sqlStatement, content, title, user)
 
 	if err != nil {
@@ -49,8 +48,6 @@ func addContentPost(title, user, content, db *sql.DB) bool {
 func deletePost(title, user, db *sql.DB) bool {
 	sqlStatement := `DELETE FROM posts
   	WHERE title = $1 AND users = $2;`
-
-	var err error
 
 	_, err = db.Exec(sqlStatement, title, user)
 
