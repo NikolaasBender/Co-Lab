@@ -132,7 +132,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("user has been validated")
 		}
 		session.Values["authenticated"] = true
-		http.Redirect(w, r, "/view/index.html", http.StatusFound)
+		http.Redirect(w, r, "/view/userpage.html", http.StatusFound)
 	} else {
 		if debug == true {
 			fmt.Println("user has NOT been validated")
@@ -166,6 +166,34 @@ func signup(w http.ResponseWriter, r *http.Request) {
 	if debug == true {
 		fmt.Println("Hit signup")
 	}
+
+	t, _ := template.ParseFiles("auth/signup.html")
+	if r.Method != http.MethodPost {
+		t.Execute(w, nil)
+		return
+	}
+
+	session, _ := store.Get(r, "cookie-name")
+
+	pwint, _ := strconv.Atoi(r.FormValue("pwd"))
+	if debug == true {
+		fmt.Println(pwint)
+	}
+	// Authentication goes here
+	if go_dev.Validate(r.FormValue("email"), pwint, db) == true {
+		if debug == true {
+			fmt.Println("user has been validated")
+		}
+		session.Values["authenticated"] = true
+		http.Redirect(w, r, "/view/userpage.html", http.StatusFound)
+	} else {
+		if debug == true {
+			fmt.Println("user has NOT been validated")
+		}
+		session.Values["authenticated"] = false
+		t.Execute(w, nil)
+	}
+
 
 }
 
