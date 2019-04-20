@@ -3,18 +3,14 @@ package go_dev
 import (
   "database/sql"
   _ "github.com/lib/pq"
-<<<<<<< HEAD
-  //"fmt"
-=======
   // "fmt"
->>>>>>> master
 )
 
 func createTask(project_name,project_owner, task_name string,db *sql.DB)(bool) {
   	sqlStatement1:= `SELECT id FROM projects WHERE owner = $1 AND name = $2;`
 
 
-	var parentID string
+	string parentID
   	var err error
 
 	err = db.QueryRow(sqlStatement1,project_owner,project_name).Scan(&parentID)
