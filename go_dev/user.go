@@ -7,14 +7,14 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func AddUser(username string, password int, email, name string, db *sql.DB) bool {
+var err error
+
+func AddUser(username, password, email, bio string, db *sql.DB) bool {
 
 	sqlStatement := `INSERT INTO user_login (username, password, email)
   VALUES ($1, $2, $3);`
-	sqlStatement2 := `INSERT INTO user_info (username, name)
+	sqlStatement2 := `INSERT INTO user_info (username, bio)
   VALUES ($1, $2);`
-
-	var err error
 
 	_, err = db.Exec(sqlStatement, username, password, email)
 
@@ -23,7 +23,7 @@ func AddUser(username string, password int, email, name string, db *sql.DB) bool
 		return false
 	}
 
-	_, err = db.Exec(sqlStatement2, username, name)
+	_, err = db.Exec(sqlStatement2, username, bio)
 
 	if err != nil {
 		fmt.Println(err)
@@ -39,49 +39,48 @@ func Exists(username string, db *sql.DB) bool {
     WHERE username = $1;`
 
 	var uname string
-	var err error
 
 	err = db.QueryRow(sqlStatement, username).Scan(&uname)
 
 	if err == sql.ErrNoRows {
+		fmt.Println("No Rows.")
 		return false
 	} else if err != nil {
+		fmt.Println("Other sql error.")
 		return false
 	}
 
 	return true
 }
 
-func Validate(username string, password int, db *sql.DB) bool {
+func Validate(info User, db *sql.DB) bool {
 
 	sqlStatement := `SELECT username FROM user_login
   WHERE username = $1 AND password = $2;`
 
 	var uname string
-	var err error
 
-	err = db.QueryRow(sqlStatement, username, password).Scan(&uname)
+	err = db.QueryRow(sqlStatement, info.username, info.password).Scan(&uname)
 
 	if err == sql.ErrNoRows {
-		return false
 		fmt.Println("No Rows.")
-	} else if err != nil {
 		return false
+	} else if err != nil {
 		fmt.Println("Other sql error.")
+		return false
 	}
 
 	return true
 }
 
-func GetUserInfo(username string, db *sql.DB) *UserInfo {
+func GetUserInfo(username string, db *sql.DB) (UserInfo) {
 
 	sqlStatement := `SELECT * FROM user_info
   WHERE username = $1;`
 
-	var info *UserInfo
-	var err error
+	var info UserInfo
 
-	err = db.QueryRow(sqlStatement, username).Scan(info.username, info.name, info.bio, info.profileimg, info.bannerimg)
+	err = db.QueryRow(sqlStatement, username).Scan(&info.username, &info.bio, &info.profileimg, &info.bannerimg)
 
 	if err == sql.ErrNoRows {
 		fmt.Println(err)

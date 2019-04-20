@@ -7,52 +7,41 @@ import (
 )
 
 type UserPage struct {
-	display_name  string
-	display_email string
-	display_info  string
+	username  string
+	email string
+	bio  string
 	feed          []Post
 	tasks         []Task
-	pins          []Task
+	pins          []Post
 	projects      []Project
 }
 
 type Post struct {
 	Title   string
 	Content string
+	username string
 }
 
 type Project struct {
 	project_name string
+	id 			 int
 	todo         []Task
 	working      []Task
 	done         []Task
-	users        []User
+	users        []string
 }
 
-type User struct {
-	username string
-	email    string
-}
-
-//WE WILL WANT TO GET MORE STUFF ABOUT EACH POST
 type Task struct {
-	task_name string
-	fill_task string
-	key       string
-	Comments  []Comment
+	name string
+	description string
+	comments  []Post
+	due_date string
+	status int
 }
 
-type Comment struct {
-	shmoo string
-}
-
-type Feed struct {
-	Tasks []Task
-}
-
-type Signup struct {
-	email             string
-	username          string
-	password          string
-	password_validate string
+type UserInfo struct {
+	username string
+	bio string
+	profileimg string
+	bannerimg string
 }

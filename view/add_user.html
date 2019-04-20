@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>[ProjectName] Log In</title>
+    <title>CoLab add user</title>
 
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../static/style.css">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
@@ -19,49 +19,28 @@
   </head>
   <body>
       <div class="container-fluid" id="main">
-        <div class="navbar-header" id="topbar">
+        <div class="nav fixed-top" id="topbar">
           <div class="navbar-brand">
-            <a href="../views/index.html" style="color:inherit !important;text-decoration:none;">
-              <h1 style="font-weight:900;">
-                Project
-                <span style="font-weight:700;color:#adadad;">
-                  Name
-                </span>
-                <i class='far fa-comment-alt' style='font-size:1.0em;color:#fff;'></i>
-              </h1>
+            <a href="../view/index.html" style="color:inherit !important;text-decoration:none;">
+              <a href="../view/index.html" style="color:inherit !important;text-decoration:none;">
+                <img src="../assets/colab_1.png" alt="">
+              </a>
             </a>
           </div>
         </div>
-        <div class="container-fluid" id="signinsheet" style="background-image: url('../assets/building_2.jpg') !important;">
+        <div class="container-fluid" id="signinsheet">
           <div class="container">
             <div class="jumbotron">
-              <h1>Sign up now to start your adventure!</h1>
+              <h1>Add a user to your project here</h1>
               <div class="info-form">
                 <form method="post" class="form-inlin justify-content-center" id="forms">
                   <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+                    <label for="comment">Users:</label>
+                    <textarea class="form-control" rows="5"  placeholder="Enter all users here, sepparated by commas."></textarea>
                   </div>
-                  <div class="form-group">
-                    <label for="name">Display Name:</label>
-                    <input type="name" class="form-control" id="name" placeholder="Enter your name" name="name">
-                  </div>
-                  <div class="form-group">
-                    <label for="pwd">Password:</label>
-                    <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pwd">
-                  </div>
-                  <div class="form-group">
-                    <label for="pwd">Re-Enter Password:</label>
-                    <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pwd2">
-                  </div>
-                  <div class="checkbox">
-                    <label><input type="checkbox"> Remember me</label>
-                  </div>
-                  <button type="submit" class="btn btn-login">Submit</button>
+                  <button type="submit" class="btn btn-login">Add User</button>
                 </form>
               </div>
-              <br></br>
-              <p>Already have a [ProjectName] account?<a href="../views/login.html"> log in here!</a></p>
             </div>
           </div>
         </div>
@@ -69,7 +48,7 @@
     <footer>
       <div class="container-fluid" id="Footer">
         <div class="container" style="padding:30px;">
-          <h1>Test Text</h1>
+          <h1>Get Productive. Get Social.</h1>
           <ul class="list-unstyled components">
             <li>Ben Singer</li>
             <li>Cooper Simpson</li>
