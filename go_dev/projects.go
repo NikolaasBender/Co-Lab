@@ -56,7 +56,7 @@ func GetProjects(owner string, db *sql.DB) ([]Project) {
   sqlStatement := `SELECT id, name FROM projects
   WHERE owner = $1 OR $1 = ANY(users);`
 
-  rows, err = db.Query(sqlStatement,owner)
+  rows, err := db.Query(sqlStatement,owner)
 
   if(err != nil) {
     //Do something
