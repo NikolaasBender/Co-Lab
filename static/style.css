@@ -503,6 +503,7 @@ a {
 }
 
 #project-name {
+  color: #7f7f7f !important;
   font-size: 1.5em;
 }
 
@@ -541,6 +542,27 @@ a {
   text-align: center;
 }
 
+.dropdown {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100px;
+}
+
+.dropdown-toggle {
+  width: 100% !important;
+  height: 100% !important;
+  text-decoration: none !important;
+}
+
+.dropdown-menu {
+  border-radius: 0px !important;
+  border: 3px solid #FF2D36 !important;
+  background-color: #fff !important;
+  color: #FF2D36 !important;
+  text-align: center !important;
+}
+
 .kanban-bar {
   /*background-image: linear-gradient(0deg,#FF2D36,#E0E0E0,#E0E0E0,#E0E0E0,#FFFFFF);*/
   background-color: #fff;
@@ -561,8 +583,37 @@ a {
 .task-area {
   overflow-y: scroll;
   height: 90% !important;
-  border: 1px solid black;
-  padding: 10px;
+  padding: 0px !important;
+}
+
+.mini-task {
+  border-top: 3px solid #4F323F;
+  border-bottom: 3px solid #4F323F;
+  height: 200px;
+  width: 100%;
+}
+
+.task-title-sm {
+  display: flex;
+  align-items: center;
+  font-size: 2.0em;
+  height: 30%;
+  color: #FF2D36;
+}
+
+.task-due-sm {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 10%;
+  color: #4F323F;
+}
+
+.task-details-sm {
+  height: 60%;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  color: #7f7f7f;
 }
 
 .button-project {

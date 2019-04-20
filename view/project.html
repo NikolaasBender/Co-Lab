@@ -24,8 +24,11 @@
       <a class="navbar-brand" href="#" id="project-logo"></a>
       <a class="navbar-brand" href="#" id="project-name">Project Name</a>
       <ul class="navbar-nav" id="project-toolbar">
-        <li class="nav-item project-nav-item">
-          <a class="nav-link project-taskbar-button" href="#" id="project-toolbar-button">Members</a>
+        <li class="nav-item dropdown project-nav-item">
+          <a class="dropdown-toggle project-taskbar-button" data-toggle="dropdown" href="#" id="project-toolbar-button">Members</a>
+          <ul class="dropdown-menu">
+            <li>Add Members Here</li>
+          </ul>
         </li>
         <li class="nav-item project-nav-item">
           <a class="nav-link project-taskbar-button" href="#" id="project-toolbar-button">My Page</a>
@@ -45,7 +48,7 @@
             <div class="container-fluid kanban-bar">
               <h1>Finished:</h1>
               <div class="container-fluid task-area" id="done">
-
+                
               </div>
             </div>
           </div>
