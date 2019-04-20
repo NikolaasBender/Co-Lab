@@ -43,5 +43,5 @@ type UserInfo struct {
 	username string
 	bio string
 	profileimg string
-
+	bannerimg string
 }
