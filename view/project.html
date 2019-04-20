@@ -20,18 +20,20 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
   </head>
   <body>
-    <div class="navbar navbar-expand-xl" id="taskbar">
+    <div class="container-fluid project-header">
       <a class="navbar-brand" href="#" id="project-logo"></a>
       <a class="navbar-brand" href="#" id="project-name">Project Name</a>
+    </div>
+    <div class="navbar navbar-expand-xl" id="taskbar">
       <ul class="navbar-nav" id="project-toolbar">
         <li class="nav-item dropdown project-nav-item">
           <a class="dropdown-toggle project-taskbar-button" data-toggle="dropdown" href="#" id="project-toolbar-button">Members</a>
           <ul class="dropdown-menu">
-            <li>Add Members Here</li>
+            <li><a href="../view/add_user.html" style="text-decoration: none !important;">Add Members Here</a></li>
           </ul>
         </li>
         <li class="nav-item project-nav-item">
-          <a class="nav-link project-taskbar-button" href="#" id="project-toolbar-button">My Page</a>
+          <a class="nav-link project-taskbar-button" href="../view/userpage.html" id="project-toolbar-button">My Page</a>
         </li>
         <li class="nav-item project-nav-item">
           <a class="nav-link project-taskbar-button" href="#" id="project-toolbar-button">My Tasks</a>
