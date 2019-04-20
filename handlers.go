@@ -4,7 +4,6 @@ import (
 	"encoding/gob"
 	"fmt"
 	"html/template"
-	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -14,7 +13,6 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
-	"golang.org/x/crypto/bcrypt"
 )
 
 // db = go_dev.Initialize()
@@ -116,11 +114,11 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 	session, _ := store.Get(r, "cookie-name")
 
-	pw, _ := r.FormValue("pwd")
-	hash, err := bcrypt.GenerateFromPassword(pw, bcrypt.MinCost)
-	if err != nil {
-		log.Println(err)
-	}
+	pw := r.FormValue("pwd")
+	// hash, err := bcrypt.GenerateFromPassword(pw, bcrypt.MinCost)
+	// if err != nil {
+	// 	log.Println(err)
+	// }
 
 	user := &User{
 		Username:      r.FormValue("usr"),
@@ -136,7 +134,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		user.Authenticated = true
 
 		session.Values["user"] = user
-		err = session.Save(r, w)
+		err := session.Save(r, w)
 
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -150,7 +148,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		}
 
 		session.Values["user"] = user
-		err = session.Save(r, w)
+		err := session.Save(r, w)
 
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -201,7 +199,7 @@ func signup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	session, _ := store.Get(r, "cookie-name")
+	//session, _ := store.Get(r, "cookie-name")
 
 }
 
@@ -223,7 +221,7 @@ func FeedHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Hit FeedHandler")
 	}
 
-	if heimdall(r) != true {
+	if heimdall(w, r) != true {
 		http.Redirect(w, r, "/login", http.StatusFound)
 		return
 	}
@@ -329,10 +327,10 @@ func heimdall(w http.ResponseWriter, r *http.Request) bool {
 	user := getUser(session)
 
 	if auth := user.Authenticated; !auth {
-		err = session.Save(r, w)
+		err := session.Save(r, w)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
+			return false
 		}
 		return false
 	}
