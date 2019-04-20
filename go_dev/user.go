@@ -7,8 +7,6 @@ import (
 	_ "github.com/lib/pq"
 )
 
-var err error
-
 func AddUser(username, password, email, bio string, db *sql.DB) bool {
 
 	sqlStatement := `INSERT INTO user_login (username, password, email)
@@ -73,7 +71,7 @@ func Validate(username, password string, db *sql.DB) bool {
 	return true
 }
 
-func GetUserInfo(username string, db *sql.DB) (*UserInfo) {
+func GetUserInfo(username string, db *sql.DB) *UserInfo {
 
 	sqlStatement := `SELECT * FROM user_info
   WHERE username = $1;`

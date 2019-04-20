@@ -9,7 +9,6 @@ import (
 
 func PopulateUserPage(username string, db *sql.DB) *UserPage {
 	var page *UserPage
-	var usr *UserInfo
 
 	page.info = *GetUserInfo(username, db)
 

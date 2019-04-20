@@ -21,7 +21,6 @@ func Initialize() *sql.DB {
 	// psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 	// 	"password=%s dbname=%s sslmode=disable",
 	// 	host, port, user, password, dbname)
-	var err error
 
 	psqlInfo := os.Getenv("POSTGRES_CONNECTION")
 	db, err := sql.Open("postgres", psqlInfo)
@@ -40,10 +39,7 @@ func Initialize() *sql.DB {
 
 func Build() bool {
 
-	var (
-		err    error
-		cmdOut []byte
-	)
+	cmdOut []byte
 
 	err = exec.Command("which", "psql").Run()
 

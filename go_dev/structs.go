@@ -6,23 +6,25 @@ import (
 	_ "github.com/lib/pq"
 )
 
+var err error
+
 type UserPage struct {
-	info 					UserInfo
-	feed          []Post
-	tasks         []Task
-	pins          []Post
-	projects      []Project
+	info     UserInfo
+	feed     []Post
+	tasks    []Task
+	pins     []Post
+	projects []Project
 }
 
 type Post struct {
-	Title   string
-	Content string
+	Title    string
+	Content  string
 	username string
 }
 
 type Project struct {
 	project_name string
-	id 			 			int
+	id           int
 	todo         []Task
 	working      []Task
 	done         []Task
@@ -30,16 +32,17 @@ type Project struct {
 }
 
 type Task struct {
+	project_name string
 	name string
 	description string
-	comments  []Post
-	due_date string
-	status int
+	comments    []Post
+	due_date    string
+	status      int
 }
 
 type UserInfo struct {
-	username string
-	bio string
+	username   string
+	bio        string
 	profileimg string
-	bannerimg string
+	bannerimg  string
 }
