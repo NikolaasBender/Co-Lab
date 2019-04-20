@@ -7,9 +7,7 @@ import (
 )
 
 type UserPage struct {
-	username  string
-	email string
-	bio  string
+	info 					UserInfo
 	feed          []Post
 	tasks         []Task
 	pins          []Post
