@@ -4,3 +4,6 @@ https://curtisvermeeren.github.io/2017/09/14/Golang-Templates-Cheatsheet
 Go templates can also be used with javascript. 
 Structs and maps will be expanded into JSON objects and quotes will 
 be added to strings for use in function parameters and as variable values.
+
+for fixing sessions
+https://curtisvermeeren.github.io/2018/05/13/Golang-Gorilla-Sessions

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/gob"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -11,6 +12,7 @@ import (
 	"Co-Lab/go_dev"
 
 	"github.com/gorilla/mux"
+	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
 )
 
@@ -18,12 +20,40 @@ import (
 
 // var templates = template.Must(template.ParseGlob("templates/*"))
 
-var (
-	// key must be 16, 24 or 32 bytes long (AES-128, AES-192 or AES-256)
-	//will eventually make random key generation
-	key   = []byte("super-secret-key")
-	store = sessions.NewCookieStore(key)
-)
+// var (
+// 	// key must be 16, 24 or 32 bytes long (AES-128, AES-192 or AES-256)
+// 	//will eventually make random key generation
+// 	key   = []byte("super-secret-key")
+// 	store = sessions.NewCookieStore(key)
+// )
+
+func init() {
+	authKeyOne := securecookie.GenerateRandomKey(64)
+	encryptionKeyOne := securecookie.GenerateRandomKey(32)
+
+	store = sessions.NewCookieStore(
+		authKeyOne,
+		encryptionKeyOne,
+	)
+
+	store.Options = &sessions.Options{
+		//TIMOUT ON THE COOKIE OF 90min
+		MaxAge: 60 * 90,
+		//true so the session cannot be altered by javascript.
+		HttpOnly: true,
+	}
+
+	gob.Register(User{})
+}
+
+// User holds a users account information
+type User struct {
+	Username      string
+	Authenticated bool
+}
+
+// store will hold all session data
+var store *sessions.CookieStore
 
 var debug = true
 
@@ -161,6 +191,9 @@ func logout(w http.ResponseWriter, r *http.Request) {
 	IndexHandler(w, r)
 }
 
+//=====================================================================================
+//THE SIGNUP HANDLER
+//=====================================================================================
 func signup(w http.ResponseWriter, r *http.Request) {
 
 	if debug == true {
@@ -174,26 +207,6 @@ func signup(w http.ResponseWriter, r *http.Request) {
 	}
 
 	session, _ := store.Get(r, "cookie-name")
-
-	pwint, _ := strconv.Atoi(r.FormValue("pwd"))
-	if debug == true {
-		fmt.Println(pwint)
-	}
-	// Authentication goes here
-	if go_dev.Validate(r.FormValue("email"), pwint, db) == true {
-		if debug == true {
-			fmt.Println("user has been validated")
-		}
-		session.Values["authenticated"] = true
-		http.Redirect(w, r, "/view/userpage.html", http.StatusFound)
-	} else {
-		if debug == true {
-			fmt.Println("user has NOT been validated")
-		}
-		session.Values["authenticated"] = false
-		t.Execute(w, nil)
-	}
-
 
 }
 
