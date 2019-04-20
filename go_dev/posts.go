@@ -3,7 +3,11 @@ package go_dev
 import (
   "database/sql"
   _ "github.com/lib/pq"
+<<<<<<< HEAD
+  //"fmt"
+=======
   // "fmt"
+>>>>>>> master
 )
 func createPost(parentTask_name, title, user, db *sql.DB) (bool){
 	sqlStatement1:= `SELECT id FROM tasks WHERE name = $1;`
@@ -35,7 +39,7 @@ func addContentPost(title, user, content, db *sql.DB)(bool){
 	sqlStatement:= `UPDATE posts
   	SET content = $1
   	WHERE title = $2 AND user = $3;`
-
+	var err error
 	_, err = db.Exec(sqlStatement,content, title, user)
 
   	if(err != nil) {
