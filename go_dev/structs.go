@@ -6,6 +6,8 @@ import (
 	_ "github.com/lib/pq"
 )
 
+var err error
+
 type UserPage struct {
 	info 					UserInfo
 	feed          []Post
@@ -30,6 +32,7 @@ type Project struct {
 }
 
 type Task struct {
+	project_name string
 	name string
 	description string
 	comments  []Post

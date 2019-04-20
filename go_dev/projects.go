@@ -6,8 +6,6 @@ import(
   _ "github.com/lib/pq"
 )
 
-var err error
-
 func CreateProject(owner, name string, db *sql.DB) (bool) {
 
   sqlStatement := `INSERT INTO projects(owner,name)
