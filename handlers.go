@@ -4,9 +4,9 @@ import (
 	"encoding/gob"
 	"fmt"
 	"html/template"
+	"log"
 	"net/http"
 	"os"
-	"strconv"
 	"strings"
 
 	"Co-Lab/go_dev"
@@ -14,6 +14,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // db = go_dev.Initialize()
@@ -115,9 +116,10 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 	session, _ := store.Get(r, "cookie-name")
 
-	pwint, _ := strconv.Atoi(r.FormValue("pwd"))
-	if debug == true {
-		fmt.Println(pwint)
+	pw, _ := r.FormValue("pwd")
+	hash, err := bcrypt.GenerateFromPassword(pw, bcrypt.MinCost)
+	if err != nil {
+		log.Println(err)
 	}
 
 	user := &User{
@@ -126,7 +128,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Authentication goes here
-	if go_dev.Validate(r.FormValue("usr"), pwint, db) == true {
+	if go_dev.Validate(r.FormValue("usr"), pw, db) == true {
 		if debug == true {
 			fmt.Println("user has been validated")
 		}
@@ -301,10 +303,22 @@ func file_finder(folder string, w http.ResponseWriter, r *http.Request) string {
 	}
 }
 
+// getUser returns a user from session s
+// on error returns an empty user
+func getUser(s *sessions.Session) User {
+	val := s.Values["user"]
+	var user = User{}
+	user, ok := val.(User)
+	if !ok {
+		return User{Authenticated: false}
+	}
+	return user
+}
+
 //=====================================================================================
 //THIS DEALS WITH CHECKING FOR AUTHORIZATION
 //=====================================================================================
-func heimdall(r *http.Request) bool {
+func heimdall(w http.ResponseWriter, r *http.Request) bool {
 
 	if debug == true {
 		fmt.Println("Opening the Bifröst")
