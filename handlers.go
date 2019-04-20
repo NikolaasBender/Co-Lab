@@ -14,7 +14,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
-	"golang.org/x/crypto/bcrypt"
+	// "golang.org/x/crypto/bcrypt"
 )
 
 // db = go_dev.Initialize()
@@ -38,6 +38,8 @@ type User struct {
 var store *sessions.CookieStore
 
 var debug = true
+
+var err error
 
 func init() {
 	authKeyOne := securecookie.GenerateRandomKey(64)
@@ -117,7 +119,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "cookie-name")
 
 	pw, _ := r.FormValue("pwd")
-	hash, err := bcrypt.GenerateFromPassword(pw, bcrypt.MinCost)
+	// hash, err := bcrypt.GenerateFromPassword(pw, bcrypt.MinCost)
 	if err != nil {
 		log.Println(err)
 	}
