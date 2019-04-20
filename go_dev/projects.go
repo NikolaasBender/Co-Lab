@@ -54,7 +54,15 @@ func DeleteProject(owner, name string, db *sql.DB) (bool) {
 func GetProjects(owner string, db *sql.DB) ([]Project) {
 
   sqlStatement := `SELECT id, name FROM projects
-  WHERE owner = $1 OR owner = ANY(users);`
+  WHERE owner = $1 OR $1 = ANY(users);`
 
-  _, err = db.
+  rows, err = db.Query(sqlStatement,owner)
+
+  if(err != nil) {
+    //Do something
+  }
+
+  usrProjects []Project
+
+  return usrProjects
 }
