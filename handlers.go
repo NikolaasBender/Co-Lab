@@ -83,7 +83,7 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Hit ViewHandler")
 	}
 
-	if heimdall(r) != true {
+	if heimdall(w, r) != true {
 		http.Redirect(w, r, "/login", http.StatusFound)
 		return
 	}
