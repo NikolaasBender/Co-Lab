@@ -13,6 +13,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
+	// "golang.org/x/crypto/bcrypt"
 )
 
 // db = go_dev.Initialize()
@@ -36,6 +37,8 @@ type User struct {
 var store *sessions.CookieStore
 
 var debug = true
+
+var err error
 
 func init() {
 	authKeyOne := securecookie.GenerateRandomKey(64)
