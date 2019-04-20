@@ -101,7 +101,6 @@ func EditUserInfo(username, field, edit string, db *sql.DB) bool {
   WHERE username = $3;`
 
 	var uname string
-	var err error
 
 	err = db.QueryRow(sqlStatement, field, edit, username).Scan(&uname)
 
