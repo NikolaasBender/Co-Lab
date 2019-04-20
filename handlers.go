@@ -1,6 +1,7 @@
 package main
 
 import (
+	"SoftwareDevProject/go_sql/go_dev"
 	"encoding/gob"
 	"fmt"
 	"html/template"
@@ -83,6 +84,8 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if heimdall(w, r) != true {
+		if debug == true {
+		fmt.Println("And we're sending you back to login", heimdall(w,r))
 		http.Redirect(w, r, "/login", http.StatusFound)
 		return
 	}
@@ -202,7 +205,31 @@ func signup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//session, _ := store.Get(r, "cookie-name")
+	session, _ := store.Get(r, "cookie-name")
+
+	pass := ""
+	if r.FormValue("password") == r.FormValue("passwordvalidate") {
+		pass = r.FormValue("password")
+	}
+
+	go_dev.AddUser(r.FormValue("username"), pass, "", db)
+
+	user := &User{
+		Username:      r.FormValue("usr"),
+		Authenticated: false,
+	}
+
+	user.Authenticated = true
+
+	session.Values["user"] = user
+	err := session.Save(r, w)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	http.Redirect(w, r, "/view/userpage.html", http.StatusFound)
 
 }
 
@@ -308,6 +335,9 @@ func file_finder(folder string, w http.ResponseWriter, r *http.Request) string {
 // on error returns an empty user
 func getUser(s *sessions.Session) User {
 	val := s.Values["user"]
+	if debug == true {
+		fmt.Println("getUser", val)
+	}
 	var user = User{}
 	user, ok := val.(User)
 	if !ok {
@@ -328,6 +358,10 @@ func heimdall(w http.ResponseWriter, r *http.Request) bool {
 	session, _ := store.Get(r, "cookie-name")
 
 	user := getUser(session)
+
+	if debug == true {
+		fmt.Println(user)
+	}
 
 	if auth := user.Authenticated; !auth {
 		err := session.Save(r, w)

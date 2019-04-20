@@ -40,7 +40,7 @@ func newRouter() *mux.Router {
 	// p.HandleFunc("/{key}", PostHandler)
 
 	//SESSIONS AND STUFF
-	r.HandleFunc("/secret", secret)
+	//r.HandleFunc("/secret", secret)
 	r.HandleFunc("/login", login)
 	r.HandleFunc("/logout", logout)
 	r.HandleFunc("/signup", signup)
