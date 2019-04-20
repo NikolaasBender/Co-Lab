@@ -62,7 +62,7 @@ func GetProjects(owner string, db *sql.DB) ([]Project) {
     //Do something
   }
 
-  usrProjects [2]Project
+  usrProjects = make([]Project, 5)
 
   defer rows.Close()
 
@@ -80,7 +80,7 @@ func GetProjects(owner string, db *sql.DB) ([]Project) {
     p.id = id
     p.project_name = name
 
-
+    usrProjects = append(usrProjects,p)
   }
 
   return usrProjects

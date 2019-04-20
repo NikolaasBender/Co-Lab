@@ -11,11 +11,9 @@ func PopulateUserPage(username string, db *sql.DB) *UserPage {
 	var page *UserPage
 	var usr *UserInfo
 
-	usr = GetUserInfo(username, db)
+	page.info = *GetUserInfo(username, db)
 
-	page.info = *usr
-
-	
+	page.projects = GetProjects(username,db)
 
 	return page
 }
