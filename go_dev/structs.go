@@ -22,7 +22,7 @@ type Post struct {
 
 type Project struct {
 	project_name string
-	id 			 int
+	id 			 			int
 	todo         []Task
 	working      []Task
 	done         []Task
