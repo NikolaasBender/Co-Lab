@@ -85,9 +85,11 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 
 	if heimdall(w, r) != true {
 		if debug == true {
-		fmt.Println("And we're sending you back to login", heimdall(w,r))
+			fmt.Println("And we're sending you back to login", heimdall(w, r))
+		}
 		http.Redirect(w, r, "/login", http.StatusFound)
 		return
+
 	}
 
 	page := file_finder("view/", w, r)
@@ -212,7 +214,7 @@ func signup(w http.ResponseWriter, r *http.Request) {
 		pass = r.FormValue("password")
 	}
 
-	go_dev.AddUser(r.FormValue("username"), pass, "", db)
+	go_dev.AddUser(r.FormValue("username"), pass, r.FormValue("email"), "", db)
 
 	user := &User{
 		Username:      r.FormValue("usr"),
