@@ -27,6 +27,17 @@ import (
 // 	store = sessions.NewCookieStore(key)
 // )
 
+// User holds a users account information
+type User struct {
+	Username      string
+	Authenticated bool
+}
+
+// store will hold all session data
+var store *sessions.CookieStore
+
+var debug = true
+
 func init() {
 	authKeyOne := securecookie.GenerateRandomKey(64)
 	encryptionKeyOne := securecookie.GenerateRandomKey(32)
@@ -44,32 +55,6 @@ func init() {
 	}
 
 	gob.Register(User{})
-}
-
-// User holds a users account information
-type User struct {
-	Username      string
-	Authenticated bool
-}
-
-// store will hold all session data
-var store *sessions.CookieStore
-
-var debug = true
-
-//THIS HANDLES ANYTHING IN THE TOP DIRECTORY
-func HomeHandler(w http.ResponseWriter, r *http.Request) {
-
-	if debug == true {
-		fmt.Println("Hit HomeHandler")
-	}
-
-	pathVariables := mux.Vars(r)
-	fmt.Println("HOME HANDLER: '" + pathVariables["page"] + "'" + "'" + r.URL.Path + "'")
-
-	t, _ := template.ParseFiles(pathVariables["page"])
-
-	t.Execute(w, t)
 }
 
 //=====================================================================================
@@ -94,9 +79,8 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 	if debug == true {
 		fmt.Println("Hit ViewHandler")
 	}
-	session, _ := store.Get(r, "cookie-name")
 
-	if session.Values["authenticated"] != true {
+	if heimdall(r) != true {
 		http.Redirect(w, r, "/login", http.StatusFound)
 		return
 	}
@@ -114,28 +98,7 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 //=====================================================================================
-//PFFFT I HAVE NO IDEA WHAT THIS IS FOR
-//=====================================================================================
-func secret(w http.ResponseWriter, r *http.Request) {
-
-	if debug == true {
-		fmt.Println("Hit secret")
-	}
-
-	session, _ := store.Get(r, "cookie-name")
-
-	// Check if user is authenticated
-	if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
-		http.Error(w, "Forbidden", http.StatusForbidden)
-		return
-	}
-
-	// Print secret message
-	fmt.Fprintln(w, "The cake is a lie!")
-}
-
-//=====================================================================================
-//THIS IS THE LOGIN HANDLER
+//THIS IS THE LOGIN HANDLER (he thicc)
 //=====================================================================================
 func login(w http.ResponseWriter, r *http.Request) {
 
@@ -156,18 +119,41 @@ func login(w http.ResponseWriter, r *http.Request) {
 	if debug == true {
 		fmt.Println(pwint)
 	}
+
+	user := &User{
+		Username:      r.FormValue("usr"),
+		Authenticated: false,
+	}
+
 	// Authentication goes here
 	if go_dev.Validate(r.FormValue("usr"), pwint, db) == true {
 		if debug == true {
 			fmt.Println("user has been validated")
 		}
-		session.Values["authenticated"] = true
+
+		user.Authenticated = true
+
+		session.Values["user"] = user
+		err = session.Save(r, w)
+
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
 		http.Redirect(w, r, "/view/userpage.html", http.StatusFound)
 	} else {
 		if debug == true {
 			fmt.Println("user has NOT been validated")
 		}
-		session.Values["authenticated"] = false
+
+		session.Values["user"] = user
+		err = session.Save(r, w)
+
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 		t.Execute(w, nil)
 	}
 
@@ -181,14 +167,21 @@ func logout(w http.ResponseWriter, r *http.Request) {
 	if debug == true {
 		fmt.Println("Hit logout")
 	}
+	session, err := store.Get(r, "cookie-name")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
-	session, _ := store.Get(r, "cookie-name")
+	session.Values["user"] = User{}
+	session.Options.MaxAge = -1
 
-	// Revoke users authentication
-	session.Values["authenticated"] = false
-	session.Save(r, w)
-
-	IndexHandler(w, r)
+	err = session.Save(r, w)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	http.Redirect(w, r, "/", http.StatusFound)
 }
 
 //=====================================================================================
@@ -220,16 +213,15 @@ func notFound(w http.ResponseWriter, r *http.Request) {
 }
 
 //=====================================================================================
-//ANAY SORT OF FEED WILL BE HANDLED WITH THIS
+//ANY SORT OF FEED WILL BE HANDLED WITH THIS
 //=====================================================================================
 func FeedHandler(w http.ResponseWriter, r *http.Request) {
 	//POPULATE THE FEED WITH THE RIGHT POSTS
 	if debug == true {
 		fmt.Println("Hit FeedHandler")
 	}
-	session, _ := store.Get(r, "cookie-name")
 
-	if session.Values["authenticated"] != true {
+	if heimdall(r) != true {
 		http.Redirect(w, r, "/login", http.StatusFound)
 		return
 	}
@@ -271,6 +263,9 @@ func FeedHandler(w http.ResponseWriter, r *http.Request) {
 
 // }
 
+//=====================================================================================
+//THIS DEALS WITH FINDING THE RIGHT FILES
+//=====================================================================================
 func file_finder(folder string, w http.ResponseWriter, r *http.Request) string {
 
 	pathVariables := mux.Vars(r)
@@ -304,4 +299,28 @@ func file_finder(folder string, w http.ResponseWriter, r *http.Request) string {
 		fmt.Println(err)
 		return ""
 	}
+}
+
+//=====================================================================================
+//THIS DEALS WITH CHECKING FOR AUTHORIZATION
+//=====================================================================================
+func heimdall(r *http.Request) bool {
+
+	if debug == true {
+		fmt.Println("Opening the Bifröst")
+	}
+
+	session, _ := store.Get(r, "cookie-name")
+
+	user := getUser(session)
+
+	if auth := user.Authenticated; !auth {
+		err = session.Save(r, w)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		return false
+	}
+	return true
 }
