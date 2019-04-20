@@ -6,6 +6,13 @@ import (
 	_ "github.com/lib/pq"
 )
 
+type UserInfo struct {
+	username string
+	bio string
+	profileimg string
+	bannerimg string
+}
+
 type UserPage struct {
 	display_name  string
 	display_email string
@@ -31,6 +38,7 @@ type Project struct {
 
 type User struct {
 	username string
+	password string
 	email    string
 }
 
@@ -50,9 +58,9 @@ type Feed struct {
 	Tasks []Task
 }
 
-type Signup struct {
-	email             string
-	username          string
-	password          string
-	password_validate string
-}
+// type Signup struct {
+// 	email             string
+// 	username          string
+// 	password          string
+// 	password_validate string
+// }

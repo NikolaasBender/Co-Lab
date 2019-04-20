@@ -7,7 +7,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func AddUser(username string, password int, email, name string, db *sql.DB) bool {
+func AddUser(info User, db *sql.DB) bool {
 
 	sqlStatement := `INSERT INTO user_login (username, password, email)
   VALUES ($1, $2, $3);`
@@ -16,14 +16,14 @@ func AddUser(username string, password int, email, name string, db *sql.DB) bool
 
 	var err error
 
-	_, err = db.Exec(sqlStatement, username, password, email)
+	_, err = db.Exec(sqlStatement, info.username, info.password, info.email)
 
 	if err != nil {
 		fmt.Println(err)
 		return false
 	}
 
-	_, err = db.Exec(sqlStatement2, username, name)
+	_, err = db.Exec(sqlStatement2, info.username, info.name)
 
 	if err != nil {
 		fmt.Println(err)
@@ -52,7 +52,7 @@ func Exists(username string, db *sql.DB) bool {
 	return true
 }
 
-func Validate(username string, password int, db *sql.DB) bool {
+func Validate(info User, db *sql.DB) bool {
 
 	sqlStatement := `SELECT username FROM user_login
   WHERE username = $1 AND password = $2;`
@@ -60,7 +60,7 @@ func Validate(username string, password int, db *sql.DB) bool {
 	var uname string
 	var err error
 
-	err = db.QueryRow(sqlStatement, username, password).Scan(&uname)
+	err = db.QueryRow(sqlStatement, info.username, info.password).Scan(&uname)
 
 	if err == sql.ErrNoRows {
 		return false
@@ -73,15 +73,15 @@ func Validate(username string, password int, db *sql.DB) bool {
 	return true
 }
 
-func GetUserInfo(username string, db *sql.DB) *UserInfo {
+func GetUserInfo(username string, db *sql.DB) UserInfo {
 
 	sqlStatement := `SELECT * FROM user_info
   WHERE username = $1;`
 
-	var info *UserInfo
+	var info UserInfo
 	var err error
 
-	err = db.QueryRow(sqlStatement, username).Scan(info.username, info.name, info.bio, info.profileimg, info.bannerimg)
+	err = db.QueryRow(sqlStatement, username).Scan(&info.username, &info.bio, &info.profileimg, &info.bannerimg)
 
 	if err == sql.ErrNoRows {
 		fmt.Println(err)
