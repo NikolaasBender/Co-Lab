@@ -12,13 +12,14 @@ type UserPage struct {
 	bio  string
 	feed          []Post
 	tasks         []Task
-	pins          []Task
+	pins          []Post
 	projects      []Project
 }
 
 type Post struct {
 	Title   string
 	Content string
+	username string
 }
 
 type Project struct {
@@ -35,4 +36,11 @@ type Task struct {
 	comments  []Post
 	due_date string
 	status int
+}
+
+type UserInfo struct {
+	username string
+	bio string
+	profileimg string
+
 }
