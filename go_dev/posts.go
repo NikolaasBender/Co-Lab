@@ -3,7 +3,7 @@ package go_dev
 import (
   "database/sql"
   _ "github.com/lib/pq"
-  "fmt"
+  // "fmt"
 )
 func createPost(parentTask_name, title, user, db *sql.DB) (bool){
 	sqlStatement1:= `SELECT id FROM tasks WHERE name = $1;`

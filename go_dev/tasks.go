@@ -3,7 +3,7 @@ package go_dev
 import (
   "database/sql"
   _ "github.com/lib/pq"
-  "fmt"
+  // "fmt"
 )
 
 func createTask(project_name,project_owner, task_name string,db *sql.DB)(bool) {
@@ -137,7 +137,7 @@ func dueDate(project_name,project_owner, task_name,dueDate,db *sql.DB)(bool) {
   	return true
 }
 
-func deleteTask(project_name,project_owner, task_name,db *sql.DB) {
+func deleteTask(project_name,project_owner, task_name,db *sql.DB) bool {
   	sqlStatement1:= `SELECT id FROM projects WHERE owner = $1 AND name = $2;`
 
 	var parentID string
@@ -152,8 +152,6 @@ func deleteTask(project_name,project_owner, task_name,db *sql.DB) {
 
 	sqlStatement := `DELETE FROM tasks
   	WHERE  project= $1 AND name = $2;`
-
-  	var err error
 
   	_, err = db.Exec(sqlStatement, parentID, task_name)
 
