@@ -1,9 +1,9 @@
 package go_dev
 
-import(
-  "database/sql"
-  //"fmt"
-  _ "github.com/lib/pq"
+import (
+	"database/sql"
+	//"fmt"
+	_ "github.com/lib/pq"
 )
 
 func CreateProject(owner, name string, db *sql.DB) (bool) {
@@ -11,75 +11,75 @@ func CreateProject(owner, name string, db *sql.DB) (bool) {
   sqlStatement := `INSERT INTO projects(owner,name)
   VALUES ($1, $2)`
 
-  _, err = db.Exec(sqlStatement,owner,name)
+	_, err = db.Exec(sqlStatement, owner, name)
 
-  if(err != nil) {
-    return false
-  }
+	if err != nil {
+		return false
+	}
 
-  return true
+	return true
 }
 
-func AddProjectMembers(owner, name, newuser string, db *sql.DB) (bool) {
+func AddProjectMembers(owner, name, newuser string, db *sql.DB) bool {
 
-  sqlStatement := `UPDATE projects
+	sqlStatement := `UPDATE projects
   SET users = users || '{$1}'
   WHERE owner = $2 AND name = $3;`
 
-  _, err = db.Exec(sqlStatement,newuser,owner,name)
+	_, err = db.Exec(sqlStatement, newuser, owner, name)
 
-  if(err != nil) {
-    return false
-  }
+	if err != nil {
+		return false
+	}
 
-  return true
+	return true
 }
 
-func DeleteProject(owner, name string, db *sql.DB) (bool) {
+func DeleteProject(owner, name string, db *sql.DB) bool {
 
-  sqlStatement := `DELETE FROM projects
+	sqlStatement := `DELETE FROM projects
   WHERE owner = $1 AND name = $2;`
 
-  _, err = db.Exec(sqlStatement, owner, name)
+	_, err = db.Exec(sqlStatement, owner, name)
 
-  if(err != nil) {
-    return false
-  }
+	if err != nil {
+		return false
+	}
 
-  return true
+	return true
 }
 
-func GetProjects(owner string, db *sql.DB) ([]Project) {
+func GetProjects(owner string, db *sql.DB) []Project {
 
-  sqlStatement := `SELECT id, name FROM projects
+	sqlStatement := `SELECT id, name FROM projects
   WHERE owner = $1 OR $1 = ANY(users);`
 
-  rows, err := db.Query(sqlStatement,owner)
+	rows, err := db.Query(sqlStatement, owner)
 
-  if(err != nil) {
-    //Do something
-  }
+	if err != nil {
+		//Do something
+	}
 
-  usrProjects = make([]Project, 5)
+	var usrProjects = make([]Project, 5)
 
-  defer rows.Close()
+	defer rows.Close()
 
-  for rows.Next() {
-    var id int
-    var name string
-    var p Project
+	for rows.Next() {
+		var id int
+		var name string
+		var p Project
 
-    err = rows.Scan(&id, &name)
+		err = rows.Scan(&id, &name)
 
-    if(err != nil) {
-      //Do something
-    }
+		if err != nil {
+			//Do something
+		}
 
-    p.id = id
-    p.project_name = name
+		p.id = id
+		p.project_name = name
 
-    usrProjects = append(usrProjects,p)
-  }
+		usrProjects = append(usrProjects, p)
+	}
 
-  return usrProjects
+	return usrProjects
 }

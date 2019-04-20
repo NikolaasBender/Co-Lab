@@ -71,7 +71,7 @@ func Validate(username, password string, db *sql.DB) bool {
 	return true
 }
 
-func GetUserInfo(username string, db *sql.DB) (*UserInfo) {
+func GetUserInfo(username string, db *sql.DB) *UserInfo {
 
 	sqlStatement := `SELECT * FROM user_info
   WHERE username = $1;`
