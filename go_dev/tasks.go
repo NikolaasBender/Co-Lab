@@ -3,11 +3,7 @@ package go_dev
 import (
   "database/sql"
   _ "github.com/lib/pq"
-<<<<<<< HEAD
-  //"fmt"
-=======
   // "fmt"
->>>>>>> master
 )
 
 func createTask(project_name,project_owner, task_name string,db *sql.DB)(bool) {
