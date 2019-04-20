@@ -33,4 +33,6 @@ type Task struct {
 	name string
 	description string
 	comments  []Post
+	due_date string
+	status int
 }
