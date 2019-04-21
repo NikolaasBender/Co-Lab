@@ -55,6 +55,10 @@ func newRouter() *mux.Router {
 }
 
 func main() {
+	if debug == true {
+		fmt.Println("Co-Lab core starting up")
+	}
+
 	db = go_dev.Initialize()
 	if db == nil {
 		fmt.Println("db is bad")
