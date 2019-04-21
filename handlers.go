@@ -211,7 +211,7 @@ func signup(w http.ResponseWriter, r *http.Request) {
 
 	pass := ""
 	if r.FormValue("pwd") == r.FormValue("pwdv") {
-		pass = r.FormValue("password")
+		pass = r.FormValue("pwd")
 	}
 
 	if debug == true {
