@@ -6,9 +6,9 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func CreateProject(owner, name string, db *sql.DB) (bool) {
+func CreateProject(owner, name string, db *sql.DB) bool {
 
-  sqlStatement := `INSERT INTO projects(owner,name)
+	sqlStatement := `INSERT INTO projects(owner,name)
   VALUES ($1, $2)`
 
 	_, err = db.Exec(sqlStatement, owner, name)
@@ -77,4 +77,18 @@ func GetProjects(owner string, db *sql.DB) []Project {
 	}
 
 	return usrProjects
+}
+
+func GetProjectMembers(id int, db *sql.DB) []string {
+	sqlStatement1 := `SELECT users FROM projects WHERE id = $1;`
+
+	var members []string
+
+	err = db.QueryRow(sqlStatement1, id).Scan(&members)
+
+	if err != nil {
+		//Do something
+	}
+
+	return members
 }

@@ -1,17 +1,24 @@
+package go_dev
 
+import (
+	"database/sql"
 
-	return true
-}
+	_ "github.com/lib/pq"
+	// "fmt"
+)
+
 func addContentPost(title, user, content, db *sql.DB) bool {
 	sqlStatement := `UPDATE posts
   	SET content = $1
   	WHERE title = $2 AND user = $3;`
 	_, err = db.Exec(sqlStatement, content, title, user)
 
-	"database/sql"
+	if err != nil {
+		return false
+	}
 
-	_ "github.com/lib/pq"
-	// "fmt"
+	return true
+}
 
 func deletePost(title, user, db *sql.DB) bool {
 	sqlStatement := `DELETE FROM posts
@@ -26,7 +33,7 @@ func deletePost(title, user, db *sql.DB) bool {
 	return true
 }
 
-func GetUserPins(username string, db *sql.DB) ([]Post) {
+func GetUserPins(username string, db *sql.DB) []Post {
 
 	sqlStatement := `SELECT title, content, users FROM posts
 	WHERE id = ANY(SELECT unnest(pins) FROM user_info WHERE username = $1);`
@@ -37,7 +44,7 @@ func GetUserPins(username string, db *sql.DB) ([]Post) {
 		//Do something
 	}
 
-	var usrPins = make([]Task, 5)
+	var userPins = make([]Post, 5)
 
 	defer rows.Close()
 
@@ -53,10 +60,10 @@ func GetUserPins(username string, db *sql.DB) ([]Post) {
 		userPins = append(userPins, pst)
 	}
 
-  return userPins
+	return userPins
 }
 
-func GetUserFeed(username string, db *sql.DB) ([]Post) {
+func GetUserFeed(username string, db *sql.DB) []Post {
 
 	sqlStatement := `SELECT p.title, p.content, p.users, t.name
 	FROM posts p INNER JOIN tasks t ON p.task = t.id
@@ -68,7 +75,7 @@ func GetUserFeed(username string, db *sql.DB) ([]Post) {
 		//Do something
 	}
 
-	var usrFeed = make([]Post, 5)
+	var userFeed = make([]Post, 5)
 
 	defer rows.Close()
 
@@ -84,5 +91,5 @@ func GetUserFeed(username string, db *sql.DB) ([]Post) {
 		userFeed = append(userFeed, pst)
 	}
 
-  return userFeed
+	return userFeed
 }
