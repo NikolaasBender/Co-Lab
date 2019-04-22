@@ -1,8 +1,8 @@
 package main
 
 import (
-	"SoftwareDevProject/go_sql/go_dev"
-	"encoding/gob"
+	// "SoftwareDevProject/go_sql/go_dev"
+	//"encoding/gob"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -12,7 +12,6 @@ import (
 	"Co-Lab/go_dev"
 
 	"github.com/gorilla/mux"
-	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
 	// "golang.org/x/crypto/bcrypt"
 )
@@ -28,37 +27,35 @@ import (
 // 	store = sessions.NewCookieStore(key)
 // )
 
-// User holds a users account information
-type User struct {
-	Username      string
-	Authenticated bool
-}
-
 // store will hold all session data
-var store *sessions.CookieStore
+var store = sessions.NewCookieStore([]byte("shhh_its_secret"))
+
+const appCookie = "DeleciousCoLabCookies"
 
 var debug = true
 
 var err error
 
-func init() {
-	authKeyOne := securecookie.GenerateRandomKey(64)
-	encryptionKeyOne := securecookie.GenerateRandomKey(32)
+//SOME COOKIE INITIALIZATION
+// func init() {
+// 	authKeyOne := securecookie.GenerateRandomKey(64)
+// 	encryptionKeyOne := securecookie.GenerateRandomKey(32)
 
-	store = sessions.NewCookieStore(
-		authKeyOne,
-		encryptionKeyOne,
-	)
+// 	store = sessions.NewCookieStore(
+// 		authKeyOne,
+// 		encryptionKeyOne,
+// 	)
 
-	store.Options = &sessions.Options{
-		//TIMOUT ON THE COOKIE OF 90min
-		MaxAge: 60 * 90,
-		//true so the session cannot be altered by javascript.
-		HttpOnly: true,
-	}
+// 	store.Options = &sessions.Options{
+// 		Domain: "localhost",
+// 		Path:   "/",
+// 		//TIMOUT ON THE COOKIE OF 90min
+// 		MaxAge: 60 * 90,
+// 		//true so the session cannot be altered by javascript.
+// 		HttpOnly: true,
+// 	}
 
-	gob.Register(User{})
-}
+// }
 
 //=====================================================================================
 //SUPER BASIC INDEX HANDLER
@@ -85,9 +82,11 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 
 	if heimdall(w, r) != true {
 		if debug == true {
-		fmt.Println("And we're sending you back to login", heimdall(w,r))
+			fmt.Println("And we're sending you back to login", heimdall(w, r))
+		}
 		http.Redirect(w, r, "/login", http.StatusFound)
 		return
+
 	}
 
 	page := file_finder("view/", w, r)
@@ -118,7 +117,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	session, _ := store.Get(r, "cookie-name")
+	session, _ := store.Get(r, appCookie)
 
 	pw := r.FormValue("pwd")
 	// hash, err := bcrypt.GenerateFromPassword(pw, bcrypt.MinCost)
@@ -126,21 +125,24 @@ func login(w http.ResponseWriter, r *http.Request) {
 	// 	log.Println(err)
 	// }
 
-	user := &User{
-		Username:      r.FormValue("usr"),
-		Authenticated: false,
-	}
-
 	// Authentication goes here
 	if go_dev.Validate(r.FormValue("usr"), pw, db) == true {
 		if debug == true {
 			fmt.Println("user has been validated")
 		}
 
-		user.Authenticated = true
+		session.Values["auth"] = true
+		session.Values["usr"] = r.FormValue("usr")
 
-		session.Values["user"] = user
+		if debug == true {
+			fmt.Println("getUser befor save", session.Values["auth"])
+		}
+
 		err := session.Save(r, w)
+
+		if debug == true {
+			fmt.Println("getUser after save", session.Values["auth"])
+		}
 
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -153,7 +155,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("user has NOT been validated")
 		}
 
-		session.Values["user"] = user
+		session.Values["auth"] = false
 		err := session.Save(r, w)
 
 		if err != nil {
@@ -173,13 +175,13 @@ func logout(w http.ResponseWriter, r *http.Request) {
 	if debug == true {
 		fmt.Println("Hit logout")
 	}
-	session, err := store.Get(r, "cookie-name")
+	session, err := store.Get(r, appCookie)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	session.Values["user"] = User{}
+	session.Values["auth"] = false
 	session.Options.MaxAge = -1
 
 	err = session.Save(r, w)
@@ -205,23 +207,23 @@ func signup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	session, _ := store.Get(r, "cookie-name")
+	session, _ := store.Get(r, appCookie)
 
 	pass := ""
-	if r.FormValue("password") == r.FormValue("passwordvalidate") {
-		pass = r.FormValue("password")
+	if r.FormValue("pwd") == r.FormValue("pwdv") {
+		pass = r.FormValue("pwd")
 	}
 
-	go_dev.AddUser(r.FormValue("username"), pass, "", db)
-
-	user := &User{
-		Username:      r.FormValue("usr"),
-		Authenticated: false,
+	if debug == true {
+		fmt.Println(r.FormValue("pwd"), r.FormValue("pwdv"), r.FormValue("name"), r.FormValue("email"))
 	}
 
-	user.Authenticated = true
+	errcheck := go_dev.AddUser(r.FormValue("name"), pass, r.FormValue("email"), "", db)
+	if errcheck != true {
+		fmt.Println("Hey, the user wasn't added")
+	}
 
-	session.Values["user"] = user
+	session.Values["auth"] = true
 	err := session.Save(r, w)
 
 	if err != nil {
@@ -229,7 +231,7 @@ func signup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.Redirect(w, r, "/view/userpage.html", http.StatusFound)
+	http.Redirect(w, r, "/login", http.StatusFound)
 
 }
 
@@ -331,21 +333,6 @@ func file_finder(folder string, w http.ResponseWriter, r *http.Request) string {
 	}
 }
 
-// getUser returns a user from session s
-// on error returns an empty user
-func getUser(s *sessions.Session) User {
-	val := s.Values["user"]
-	if debug == true {
-		fmt.Println("getUser", val)
-	}
-	var user = User{}
-	user, ok := val.(User)
-	if !ok {
-		return User{Authenticated: false}
-	}
-	return user
-}
-
 //=====================================================================================
 //THIS DEALS WITH CHECKING FOR AUTHORIZATION
 //=====================================================================================
@@ -355,15 +342,13 @@ func heimdall(w http.ResponseWriter, r *http.Request) bool {
 		fmt.Println("Opening the Bifröst")
 	}
 
-	session, _ := store.Get(r, "cookie-name")
-
-	user := getUser(session)
+	session, _ := store.Get(r, appCookie)
 
 	if debug == true {
-		fmt.Println(user)
+		fmt.Println("Bifröst: ", session, session.Values["auth"])
 	}
 
-	if auth := user.Authenticated; !auth {
+	if session.Values["auth"] != true {
 		err := session.Save(r, w)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -372,4 +357,10 @@ func heimdall(w http.ResponseWriter, r *http.Request) bool {
 		return false
 	}
 	return true
+}
+
+func foo(w http.ResponseWriter, r *http.Request) {
+	session, _ := store.Get(r, appCookie)
+	session.Values["bar"] = "bar"
+	session.Save(r, w)
 }

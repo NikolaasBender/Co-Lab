@@ -73,7 +73,7 @@ func Validate(username, password string, db *sql.DB) bool {
 
 func GetUserInfo(username string, db *sql.DB) *UserInfo {
 
-	sqlStatement := `SELECT * FROM user_info
+	sqlStatement := `SELECT username, bio, profile_image, banner_image FROM user_info
   WHERE username = $1;`
 
 	var info *UserInfo

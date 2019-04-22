@@ -489,25 +489,32 @@ a {
 /*~~~~~~~~~~~~ PROJECTPAGE CSS STARTS HERE ~~~~~~~~~~~~*/
 
 #taskbar {
-  height: 13vh;
-  border-bottom: 3px solid #FF2D36;
+  height: 75px;
+
   padding-top: 0px;
   padding-bottom: 0px;
 }
 
 #project-logo {
-  height: 80px;
-  width: 80px;
+  position:relative;
+  bottom: -50px;
+  margin: 0px !important;
+  height: 150px;
+  width: 150px;
   background-image: linear-gradient(127deg,#FFC24C,#FF9551,#F66B61,#D84975,#AA3884,#6D3489,#003281);
-  border-left: 10px solid #FF2D36;
+  border: 10px solid #fff;
 }
 
 #project-name {
-  color: #7f7f7f !important;
-  font-size: 1.5em;
+  color: #fff !important;
+  font-size: 2.0em;
+  margin-left: 50px;
+
 }
 
 #project-toolbar {
+  position: relative;
+  left: 220px;
   width: 100%;
 }
 
@@ -516,12 +523,14 @@ a {
   justify-content: center;
   width: 200px;
   height: 100vh;
-  background-color: #fff;
   border-right: 3px solid #FF2D36;
+  background: #fff;
+
 }
 
 #project-body {
-  background-image: linear-gradient(0deg,#e0e0e0,#a0a0a0);
+  /*background-image: linear-gradient(127deg,#FFC24C,#FF9551,#F66B61,#D84975,#AA3884,#6D3489,#003281);*/
+  background: #fff;
   margin: 0px;
   padding: 20px;
   width: 100vw;
@@ -529,6 +538,15 @@ a {
 #kanban {
   font-family: "Raleway";
 
+}
+
+.project-header {
+  display: flex;
+  align-items: flex-end;
+  height: 200px;
+  padding-left: 50px !important;
+  padding-right: 50px !important;
+  background-image: linear-gradient(127deg,#FFC24C,#FF9551,#F66B61,#D84975,#AA3884,#6D3489,#003281);
 }
 
 .project-nav-item {
@@ -566,14 +584,14 @@ a {
 .kanban-bar {
   /*background-image: linear-gradient(0deg,#FF2D36,#E0E0E0,#E0E0E0,#E0E0E0,#FFFFFF);*/
   background-color: #fff;
-  color: #fff;
+  color: #4F323F;
   height: 85vh;
-  border: 5px solid #FF2D36;
+  /*border: 3px solid #e0e0e0;*/
   padding: 0px !important;
 }
 
 .kanban-bar h1 {
-  background-color: #FF2D36;
+  background-color: #fff;
   font-weight: lighter;
   padding: 10px;
   padding-top: 0px !important;
@@ -582,15 +600,16 @@ a {
 
 .task-area {
   overflow-y: scroll;
+  scrollbar-width: thin;
   height: 90% !important;
   padding: 0px !important;
 }
 
 .mini-task {
-  border-top: 3px solid #4F323F;
-  border-bottom: 3px solid #4F323F;
-  height: 200px;
+  border-bottom: 3px solid #e0e0e0;
+  height: 150px;
   width: 100%;
+  margin-bottom: 10px;
 }
 
 .task-title-sm {

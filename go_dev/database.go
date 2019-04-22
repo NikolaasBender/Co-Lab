@@ -3,7 +3,7 @@ package go_dev
 import (
 	"database/sql"
 	//"fmt"
-	"os/exec"
+	// "os/exec"
 	"os"
 
 	_ "github.com/lib/pq"
@@ -37,42 +37,42 @@ func Initialize() *sql.DB {
 	return db
 }
 
-func Build() bool {
-
-	cmdOut []byte
-
-	err = exec.Command("which", "psql").Run()
-
-	if err == nil {
-		cmdOut, err = exec.Command("echo", "$?").Output()
-	} else {
-		return false
-	}
-
-	exit := ""
-
-	if err == nil {
-		exit = string(cmdOut)
-	} else {
-		return false
-	}
-
-	if exit == "1" {
-		err = exec.Command("sudo", "apt-get", "update").Run()
-		cmdOut, err = exec.Command("sudo", "apt-get", "install", "postgresql", "postgresql-contrib").Output()
-		exit := string(cmdOut)
-
-		if err != nil || exit != "0" {
-			return false
-		}
-	}
-
-	err = exec.Command("sudo", "-u", "postgres", "psql").Run()
-
-	if err != nil {
-		return false
-	}
-
-	//err = exec.Command()
-	return true
-}
+// func Build() bool {
+//
+// 	var cmdOut []byte
+//
+// 	_, err = exec.Command("which", "psql").Run()
+//
+// 	if err == nil {
+// 		cmdOut, err = exec.Command("echo", "$?").Output()
+// 	} else {
+// 		return false
+// 	}
+//
+// 	exit := ""
+//
+// 	if err == nil {
+// 		exit = string(cmdOut)
+// 	} else {
+// 		return false
+// 	}
+//
+// 	if exit == "1" {
+// 		err = exec.Command("sudo", "apt-get", "update").Run()
+// 		cmdOut, err = exec.Command("sudo", "apt-get", "install", "postgresql", "postgresql-contrib").Output()
+// 		exit := string(cmdOut)
+//
+// 		if err != nil || exit != "0" {
+// 			return false
+// 		}
+// 	}
+//
+// 	err = exec.Command("sudo", "-u", "postgres", "psql").Run()
+//
+// 	if err != nil {
+// 		return false
+// 	}
+//
+// 	//err = exec.Command()
+// 	return true
+// }

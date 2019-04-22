@@ -17,9 +17,10 @@ type UserPage struct {
 }
 
 type Post struct {
-	Title    string
-	Content  string
+	title    string
+	content  string
 	username string
+	task string
 }
 
 type Project struct {
