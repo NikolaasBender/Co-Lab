@@ -65,18 +65,13 @@ func GetProjects(owner string, db *sql.DB) []Project {
 	defer rows.Close()
 
 	for rows.Next() {
-		var id int
-		var name string
 		var p Project
 
-		err = rows.Scan(&id, &name)
+		err = rows.Scan(&p.id, &p.project_name)
 
 		if err != nil {
 			//Do something
 		}
-
-		p.id = id
-		p.project_name = name
 
 		usrProjects = append(usrProjects, p)
 	}

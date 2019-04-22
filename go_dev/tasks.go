@@ -187,7 +187,33 @@ func deleteTask(project_name,project_owner, task_name,db *sql.DB) bool {
   	return true
 }
 
-// func GetUserTasks(username string, db *sql.DB) ([]Task) {
-//
-//   sqlStatement := `SELECT name, description`
-// }
+func GetUserTasks(username string, db *sql.DB) ([]Task) {
+
+  sqlStatement := `SELECT p.name, t.name, t.description, t.due_date, t.status
+  FROM tasks t INNER JOIN  projects p ON t.project = p.id
+  WHERE $1 = ANY(t.users) ORDER BY due_date ASC;`
+
+  rows, err := db.Query(sqlStatement, username)
+
+	if err != nil {
+		//Do something
+	}
+
+	var usrTasks = make([]Task, 5)
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var tsk Task
+
+		err = rows.Scan(&tsk.project_name, &tsk.name, &tsk.description, &tsk.due_date, &tsk.status)
+
+		if err != nil {
+			//Do something
+		}
+
+		userTasks = append(userTasks, tsk)
+	}
+
+  return userTasks
+}

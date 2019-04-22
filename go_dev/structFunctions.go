@@ -12,7 +12,13 @@ func PopulateUserPage(username string, db *sql.DB) *UserPage {
 
 	page.info = *GetUserInfo(username, db)
 
-	page.projects = GetProjects(username,db)
+	page.projects = GetProjects(username, db)
+
+	page.tasks = GetUserTasks(username, db)
+
+	page.pins = GetUserPins(username, db)
+
+	page.feed = GetUserFeed(username, db)
 
 	return page
 }
