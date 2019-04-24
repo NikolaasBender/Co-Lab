@@ -21,7 +21,7 @@ var db *sql.DB
 
 func newRouter() *mux.Router {
 	r := mux.NewRouter()
-
+	http.HandleFunc("/favicon.ico", faviconHandler)
 	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	//THIS IS 100% VOODOO - DONT FUCKING TOUCH THIS UNDER ANY CIRCUMSTANCES
 	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -36,8 +36,14 @@ func newRouter() *mux.Router {
 
 	//THE POST HANDLER
 	// p := r.PathPrefix("/post").Subrouter()
-	// p.HandleFunc("/", PostHandler)
 	// p.HandleFunc("/{key}", PostHandler)
+
+	t := r.PathPrefix("/task").Subrouter()
+	t.HandleFunc("/{key}", TaskHandler)
+
+	//THE PROJECT HANDLER
+	pj := r.PathPrefix("/project").Subrouter()
+	pj.HandleFunc("/{key}", ProjectHandler)
 
 	//SESSIONS AND STUFF
 	// r.HandleFunc("/secret", secret)

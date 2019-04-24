@@ -5,6 +5,7 @@ import (
 	//"encoding/gob"
 	"fmt"
 	"html/template"
+	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -12,8 +13,9 @@ import (
 	"Co-Lab/go_dev"
 
 	"github.com/gorilla/mux"
+	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
-	// "golang.org/x/crypto/bcrypt"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // db = go_dev.Initialize()
@@ -28,7 +30,7 @@ import (
 // )
 
 // store will hold all session data
-var store = sessions.NewCookieStore([]byte("shhh_its_secret"))
+var store = sessions.NewCookieStore([]byte(securecookie.GenerateRandomKey(64)))
 
 const appCookie = "DeleciousCoLabCookies"
 
@@ -36,26 +38,12 @@ var debug = true
 
 var err error
 
-//SOME COOKIE INITIALIZATION
-// func init() {
-// 	authKeyOne := securecookie.GenerateRandomKey(64)
-// 	encryptionKeyOne := securecookie.GenerateRandomKey(32)
-
-// 	store = sessions.NewCookieStore(
-// 		authKeyOne,
-// 		encryptionKeyOne,
-// 	)
-
-// 	store.Options = &sessions.Options{
-// 		Domain: "localhost",
-// 		Path:   "/",
-// 		//TIMOUT ON THE COOKIE OF 90min
-// 		MaxAge: 60 * 90,
-// 		//true so the session cannot be altered by javascript.
-// 		HttpOnly: true,
-// 	}
-
-// }
+//=====================================================================================
+//FAVICON HANDLER
+//=====================================================================================
+func faviconHandler(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "/favicon.ico")
+}
 
 //=====================================================================================
 //SUPER BASIC INDEX HANDLER
@@ -66,8 +54,10 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Hit IndexHandler")
 	}
 
+	//PARSE THE INDEX FILE
 	t, _ := template.ParseFiles("view/index.html")
 
+	//SERVE INDEX
 	t.Execute(w, t)
 }
 
@@ -80,6 +70,7 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Hit ViewHandler")
 	}
 
+	//CHECK IF THE USER IS LOGGED IN
 	if heimdall(w, r) != true {
 		if debug == true {
 			fmt.Println("And we're sending you back to login", heimdall(w, r))
@@ -89,14 +80,22 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 
 	}
 
+	//FIND THE RIGHT PAGE, JUST TO DEAL WITH ".html" MAYBE NOT BEING THERE
 	page := file_finder("view/", w, r)
 
-	if strings.Contains(page, "feed") == true {
-		FeedHandler(w, r)
+	//PARSE THE FOUND FILE
+	t, _ := template.ParseFiles(page)
+
+	//GET OUR APP COOKIE FOR USE LATER
+	session, _ := store.Get(r, appCookie)
+
+	if strings.Contains(page, "userpage") == true {
+		//ASK SQL TEAM FOR ALL THE USER PAGE STUFF
+		p := go_dev.PopulateUserPage(session.Values["usr"].(string), db)
+		t.Execute(w, p)
 		return
 	}
 
-	t, _ := template.ParseFiles(page)
 	t.Execute(w, nil)
 
 }
@@ -111,33 +110,39 @@ func login(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(r.Method)
 	}
 
+	//PARSE THE LOGIN PAGE
 	t, _ := template.ParseFiles("auth/login.html")
+	//A CHECK FOR A POST METHOD THAT MIGHT NOT BE NECESSARY ANYMORE
 	if r.Method != http.MethodPost {
 		t.Execute(w, nil)
 		return
 	}
 
+	//MAKEING A NEW COOKIE FOR THE USER
 	session, _ := store.Get(r, appCookie)
 
+	//READ IN THE PASSWORD ENTERED
 	pw := r.FormValue("pwd")
-	// hash, err := bcrypt.GenerateFromPassword(pw, bcrypt.MinCost)
-	// if err != nil {
-	// 	log.Println(err)
-	// }
+	//PASSWORD ENCRYPTION
+	hash, err := bcrypt.GenerateFromPassword([]byte(pw), bcrypt.MinCost)
+	if err != nil {
+		log.Println(err)
+	}
 
-	// Authentication goes here
-	if go_dev.Validate(r.FormValue("usr"), pw, db) == true {
+	//ALL OF THE AUTH
+	if go_dev.Validate(r.FormValue("usr"), string(hash), db) == true {
 		if debug == true {
 			fmt.Println("user has been validated")
 		}
-
+		//SET THE USER AS LOGGED IN AND PUT THE USERNAME IN THE COOKIE
 		session.Values["auth"] = true
-		session.Values["usr"] = r.FormValue("usr")
+		session.Values["usr"] = string(r.FormValue("usr"))
 
 		if debug == true {
 			fmt.Println("getUser befor save", session.Values["auth"])
 		}
 
+		//SAVE THE COOKIE TO THE USER'S BROWSER
 		err := session.Save(r, w)
 
 		if debug == true {
@@ -149,19 +154,23 @@ func login(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		//SEND THEM ALONG TO THEIR USERPAGE
 		http.Redirect(w, r, "/view/userpage.html", http.StatusFound)
 	} else {
 		if debug == true {
 			fmt.Println("user has NOT been validated")
 		}
 
+		//EXPLICITLY SET LOGIN STATUS TO FALSE
 		session.Values["auth"] = false
+		//SAVE THAT COOKIE TO PERSON'S BROWSER
 		err := session.Save(r, w)
 
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+		//JUST RELOAD THE PAGE
 		t.Execute(w, nil)
 	}
 
@@ -175,20 +184,24 @@ func logout(w http.ResponseWriter, r *http.Request) {
 	if debug == true {
 		fmt.Println("Hit logout")
 	}
+	//GET THE USER'S COOKIE
 	session, err := store.Get(r, appCookie)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
+	//SETTING LOGIN STATUS TO FALSE AND DELETING THE COOKIE
 	session.Values["auth"] = false
 	session.Options.MaxAge = -1
 
+	//SAVING THE SESSION
 	err = session.Save(r, w)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	//SENDING THE USER BACK TO THE INDEX PAGE
 	http.Redirect(w, r, "/", http.StatusFound)
 }
 
@@ -201,30 +214,44 @@ func signup(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Hit signup")
 	}
 
+	//READ IN THE SIGNUP PAGE
 	t, _ := template.ParseFiles("auth/signup.html")
+
+	//IF ITS A GET REQUEST IT JUST SERVES THE PAGE
 	if r.Method != http.MethodPost {
 		t.Execute(w, nil)
 		return
 	}
 
+	//MAKE THE USER A NEW COOKIE
 	session, _ := store.Get(r, appCookie)
 
+	//COMPARE THE TWO PASSWORDS
 	pass := ""
 	if r.FormValue("pwd") == r.FormValue("pwdv") {
 		pass = r.FormValue("pwd")
+	} else {
+
+	}
+
+	hash, err := bcrypt.GenerateFromPassword([]byte(pass), bcrypt.MinCost)
+	if err != nil {
+		log.Println(err)
 	}
 
 	if debug == true {
 		fmt.Println(r.FormValue("pwd"), r.FormValue("pwdv"), r.FormValue("name"), r.FormValue("email"))
 	}
 
-	errcheck := go_dev.AddUser(r.FormValue("name"), pass, r.FormValue("email"), "", db)
+	//ADD THE USER TO THE DATABASE
+	errcheck := go_dev.AddUser(r.FormValue("name"), string(hash), r.FormValue("email"), "", db)
 	if errcheck != true {
 		fmt.Println("Hey, the user wasn't added")
 	}
 
-	session.Values["auth"] = true
-	err := session.Save(r, w)
+	//MAKING SURE THE USER IS LOGGED OUT TO ENSURE THEY
+	session.Values["auth"] = false
+	err = session.Save(r, w)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -239,38 +266,14 @@ func signup(w http.ResponseWriter, r *http.Request) {
 //THIS DISPLAYS THE CUSTOM 404 PAGE
 //=====================================================================================
 func notFound(w http.ResponseWriter, r *http.Request) {
-	t, _ := template.ParseFiles("404.html")
+	t, _ := template.ParseFiles("/view/404errorpage.html")
 
 	t.Execute(w, nil)
 }
 
 //=====================================================================================
-//ANY SORT OF FEED WILL BE HANDLED WITH THIS
+//ANY SORT OF POST WILL BE HANDLED HERE
 //=====================================================================================
-func FeedHandler(w http.ResponseWriter, r *http.Request) {
-	//POPULATE THE FEED WITH THE RIGHT POSTS
-	if debug == true {
-		fmt.Println("Hit FeedHandler")
-	}
-
-	if heimdall(w, r) != true {
-		http.Redirect(w, r, "/login", http.StatusFound)
-		return
-	}
-
-	//page := file_finder("view/", w, r)
-
-	//GET POSTS FOR USER
-	// feedposts = go_dev.getTasks(session.Values["name"])
-
-	// p := Feed{Title: session.Values["name"], Posts: feedposts}
-	// t, _ := template.ParseFiles(page)
-
-}
-
-// //=====================================================================================
-// //ANY SORT OF POST WILL BE HANDLED HERE
-// //=====================================================================================
 // func PostHnadler(w http.ResponseWriter, r *http.Request) {
 // 	if debug == true {
 // 		fmt.Println("Hit PostHandler")
@@ -288,12 +291,78 @@ func FeedHandler(w http.ResponseWriter, r *http.Request) {
 
 // 	//GET THE POST FROM THE DB
 
-// 	// p := get from db in the post struct postGet(k)
+// 	p := go_dev.postGet(k)
 
 // 	t, _ := template.ParseFiles("/view/post.html")
 // 	t.Execute(w, p)
 
 // }
+
+//=====================================================================================
+//ANY SORT OF POST WILL BE HANDLED HERE
+//=====================================================================================
+func ProjectHandler(w http.ResponseWriter, r *http.Request) {
+	if debug == true {
+		fmt.Println("Hit ProjectHandler")
+	}
+	session, _ := store.Get(r, "cookie-name")
+
+	if heimdall(w, r) != true {
+		http.Redirect(w, r, "/login", http.StatusFound)
+		return
+	}
+
+	page := file_finder("view/", w, r)
+
+	if strings.Contains(page, "create") == true {
+
+		t, _ := template.ParseFiles("/view/project_create.html")
+		//WE JUST NEED TO SERVE THE PAGE WHE ITS FIRST LOADED
+		if r.Method != http.MethodPost {
+			t.Execute(w, nil)
+			return
+		}
+		//THIS NEED STO BE CHANGED TO THE FORM VALUE KEY
+		pj := go_dev.CreateProject(string(session.Values["usr"], r.FormValue[""]))
+	}
+
+	pathVariables := mux.Vars(r)
+
+	k := pathVariables["key"]
+
+	//GET THE POST FROM THE DB
+
+	p := go_dev.GetProject(k)
+
+	t, _ := template.ParseFiles("/view/project.html")
+	t.Execute(w, p)
+
+}
+
+func TaskHandler(w http.ResponseWriter, r *http.Request) {
+	if debug == true {
+		fmt.Println("Hit TaskHandler")
+	}
+	//session, _ := store.Get(r, "cookie-name")
+
+	if heimdall(w, r) != true {
+		http.Redirect(w, r, "/login", http.StatusFound)
+		return
+	}
+	//
+	t, _ := template.ParseFiles("/view/task.html")
+
+	pathVariables := mux.Vars(r)
+
+	k := pathVariables["key"]
+
+	//GET THE POST FROM THE DB
+
+	p := go_dev.GetTask(k)
+
+	t.Execute(w, p)
+
+}
 
 //=====================================================================================
 //THIS DEALS WITH FINDING THE RIGHT FILES
@@ -357,10 +426,4 @@ func heimdall(w http.ResponseWriter, r *http.Request) bool {
 		return false
 	}
 	return true
-}
-
-func foo(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, appCookie)
-	session.Values["bar"] = "bar"
-	session.Save(r, w)
 }
