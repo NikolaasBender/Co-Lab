@@ -9,41 +9,41 @@ import (
 var err error
 
 type UserPage struct {
-	info     UserInfo
-	feed     []Post
-	tasks    []Task
-	pins     []Post
-	projects []Project
+	Info     UserInfo
+	Feed     []Post
+	Tasks    []Task
+	Pins     []Post
+	Projects []Project
 }
 
 type Post struct {
-	title    string
-	content  string
-	username string
-	task string
+	Title    string
+	Content  string
+	Username string
+	Task     string
 }
 
 type Project struct {
-	project_name string
-	id           int
-	todo         []Task
-	working      []Task
-	done         []Task
-	users        []string
+	Project_name string
+	Id           int
+	Todo         []Task
+	Working      []Task
+	Done         []Task
+	Users        []string
 }
 
 type Task struct {
-	project_name string
-	name string
-	description string
-	comments    []Post
-	due_date    string
-	status      int
+	Project_name string
+	Name         string
+	Description  string
+	Comments     []Post
+	Due_date     string
+	Status       int
 }
 
 type UserInfo struct {
-	username   string
-	bio        string
-	profileimg string
-	bannerimg  string
+	Username   string
+	Bio        string
+	Profileimg string
+	Bannerimg  string
 }

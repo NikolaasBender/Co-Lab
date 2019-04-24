@@ -9,15 +9,15 @@ import (
 func PopulateUserPage(username string, db *sql.DB) *UserPage {
 	var page *UserPage
 
-	page.info = *GetUserInfo(username, db)
+	page.Info = *GetUserInfo(username, db)
 
-	page.projects = GetProjects(username, db)
+	page.Projects = GetProjects(username, db)
 
-	page.tasks = GetUserTasks(username, db)
+	page.Tasks = GetUserTasks(username, db)
 
-	page.pins = GetUserPins(username, db)
+	page.Pins = GetUserPins(username, db)
 
-	page.feed = GetUserFeed(username, db)
+	page.Feed = GetUserFeed(username, db)
 
 	return page
 }
@@ -25,15 +25,15 @@ func PopulateUserPage(username string, db *sql.DB) *UserPage {
 func PopulateProjectPage(id int, db *sql.DB) *Project {
 	var thing *Project
 
-	thing.id = id
+	thing.Id = id
 
-	thing.todo = GetProjectTasks(id, 0, db)
+	thing.Todo = GetProjectTasks(id, 0, db)
 
-	thing.working = GetProjectTasks(id, 1, db)
+	thing.Working = GetProjectTasks(id, 1, db)
 
-	thing.done = GetProjectTasks(id, 2, db)
+	thing.Done = GetProjectTasks(id, 2, db)
 
-	thing.users = GetProjectMembers(id, db)
+	thing.Users = GetProjectMembers(id, db)
 
 	return thing
 }

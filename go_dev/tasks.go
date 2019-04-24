@@ -210,7 +210,7 @@ func GetUserTasks(username string, db *sql.DB) []Task {
 	for rows.Next() {
 		var tsk Task
 
-		err = rows.Scan(&tsk.project_name, &tsk.name, &tsk.description, &tsk.due_date, &tsk.status)
+		err = rows.Scan(&tsk.Project_name, &tsk.Name, &tsk.Description, &tsk.Due_date, &tsk.Status)
 
 		if err != nil {
 			//Do something
@@ -250,10 +250,10 @@ func GetProjectTasks(id int, status int, db *sql.DB) []Task {
 	for rows.Next() {
 		var tsk Task
 
-		err = rows.Scan(&tsk.name, &tsk.description, &tsk.due_date)
+		err = rows.Scan(&tsk.Name, &tsk.Description, &tsk.Due_date)
 
-		tsk.status = status
-		tsk.project_name = projectName
+		tsk.Status = status
+		tsk.Project_name = projectName
 
 		if err != nil {
 			//Do something

@@ -67,7 +67,7 @@ func GetProjects(owner string, db *sql.DB) []Project {
 	for rows.Next() {
 		var p Project
 
-		err = rows.Scan(&p.id, &p.project_name)
+		err = rows.Scan(&p.Id, &p.Project_name)
 
 		if err != nil {
 			//Do something

@@ -78,7 +78,7 @@ func GetUserInfo(username string, db *sql.DB) *UserInfo {
 
 	var info *UserInfo
 
-	err = db.QueryRow(sqlStatement, username).Scan(info.username, info.bio, info.profileimg, info.bannerimg)
+	err = db.QueryRow(sqlStatement, username).Scan(info.Username, info.Bio, info.Profileimg, info.Bannerimg)
 
 	if err == sql.ErrNoRows {
 		fmt.Println(err)

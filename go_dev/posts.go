@@ -51,7 +51,7 @@ func GetUserPins(username string, db *sql.DB) []Post {
 	for rows.Next() {
 		var pst Post
 
-		err = rows.Scan(&pst.title, &pst.content, &pst.username)
+		err = rows.Scan(&pst.Title, &pst.Content, &pst.Username)
 
 		if err != nil {
 			//Do something
@@ -82,7 +82,7 @@ func GetUserFeed(username string, db *sql.DB) []Post {
 	for rows.Next() {
 		var pst Post
 
-		err = rows.Scan(&pst.title, &pst.content, &pst.username, &pst.task)
+		err = rows.Scan(&pst.Title, &pst.Content, &pst.Username, &pst.Task)
 
 		if err != nil {
 			//Do something

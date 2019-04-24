@@ -323,7 +323,35 @@ func ProjectHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		//THIS NEED STO BE CHANGED TO THE FORM VALUE KEY
-		pj := go_dev.CreateProject(string(session.Values["usr"], r.FormValue[""]))
+		pj := go_dev.CreateProject(session.Values["usr"].(string), string(r.FormValue("pjn")), db)
+		if pj != true {
+			//THIS IS THE BEST I COULD COME UP WITH FOR DEALING WITH A POTENTIAL ERROR
+			varmap := map[string]interface{}{
+				"var1": "Sorry, there was an issue creating your project",
+			}
+			t.Execute(w, varmap)
+			return
+		}
+		if string(r.FormValue("addusrs")) != "" {
+			//MIGHT HAVE TO MODIFY IF DB TEAM ONLY ADDS ONE MEMBER AT A TIME
+			adu := go_dev.AddProjectMembers(session.Values["usr"].(string), string(r.FormValue("pjn")), string(r.FormValue("addusrs")), db)
+
+			if adu != true {
+				//THIS IS THE BEST I COULD COME UP WITH FOR DEALING WITH A POTENTIAL ERROR
+				varmap := map[string]interface{}{
+					"var1": "Sorry, there was an issue adding users to your project",
+				}
+				t.Execute(w, varmap)
+				return
+			}
+		}
+		//I I THINK THERE IS A BETTER WAY TO DO THIS
+		varmap := map[string]interface{}{
+			"var1": "Your project was successfuly created! ",
+		}
+		t.Execute(w, varmap)
+		return
+
 	}
 
 	pathVariables := mux.Vars(r)
