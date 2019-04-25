@@ -33,16 +33,9 @@ func newRouter() *mux.Router {
 	s := r.PathPrefix("/view").Subrouter()
 	s.HandleFunc("/", ViewHandler)
 	s.HandleFunc("/{page}", ViewHandler)
-
-	//THE POST HANDLER
-	//p := r.PathPrefix("/post").Subrouter()
-	//p.HandleFunc("/{key}", PostHandler)
-
-	// t := r.PathPrefix("/task").Subrouter()
-	// t.HandleFunc("/{key}", TaskHandler)
+	s.HandleFunc("/{page}/{key}", ViewHandler)
 
 	//SESSIONS AND STUFF
-	// r.HandleFunc("/secret", secret)
 	r.HandleFunc("/login", login)
 	r.HandleFunc("/logout", logout)
 	r.HandleFunc("/signup", signup)
