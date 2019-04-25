@@ -70,9 +70,15 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 
 	//FIND THE RIGHT PAGE, JUST TO DEAL WITH ".html" MAYBE NOT BEING THERE
 	page := file_finder("view/", w, r)
+	if debug == true {
+		fmt.Println("FOUND THE RIGHT PAGE", page)
+	}
 
 	//PARSE THE FOUND FILE
 	t, _ := template.ParseFiles(page)
+	if debug == true {
+		fmt.Println("PARSED THE PAGE CORRECTLY")
+	}
 
 	//GET OUR APP COOKIE FOR USE LATER
 	session, _ := store.Get(r, appCookie)
@@ -80,14 +86,22 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 	if strings.Contains(page, "userpage") == true {
 		//ASK SQL TEAM FOR ALL THE USER PAGE STUFF
 		p := go_dev.PopulateUserPage(session.Values["usr"].(string), db)
+		if debug == true {
+			fmt.Println("POPULATED THE USER PAGE CORRECTLY")
+		}
+
 		t.Execute(w, p)
+
+		if debug == true {
+			fmt.Println("EXECUTED THE USERPAGE")
+		}
+
 		return
 	}
 
 	t.Execute(w, nil)
 
 }
-
 
 //=====================================================================================
 //THIS DISPLAYS THE CUSTOM 404 PAGE
@@ -159,30 +173,24 @@ func ProjectCreateHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	session, _ := store.Get(r, "cookie-name")
 
-	new_info := map[string]interface{}{
-		"Info": "",
-	}
-
 	if heimdall(w, r) != true {
 		http.Redirect(w, r, "/login", http.StatusFound)
 		return
 	}
 
-	t, _ := template.ParseFiles("/view/project.html")
+	t, _ := template.ParseFiles("/view/project_create.html")
 
 	if r.Method != http.MethodPost {
-		t.Execute(w, new_info)
+		t.Execute(w, nil)
 		return
 	}
 
 	worked := go_dev.CreateProject(session.Values["usr"].(string), string(r.FormValue("pjn")), db)
 	if worked != true {
-		new_info["Info"] = "Sorry There was an error creating your project"
-	} else {
-		new_info["Info"] = "SUCCESS!! Your project was successfully created"
+		fmt.Println("Error creating a project")
 	}
 
-	t.Execute(w, new_info)
+	t.Execute(w, nil)
 
 }
 
