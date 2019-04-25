@@ -71,21 +71,21 @@ func Validate(username, password string, db *sql.DB) bool {
 	return true
 }
 
-func GetUserInfo(username string, db *sql.DB) *UserInfo {
+func GetUserInfo(username string, db *sql.DB) UserInfo {
 
 	sqlStatement := `SELECT username, bio, profile_image, banner_image FROM user_info
   WHERE username = $1;`
 
-	var info *UserInfo
+	var info UserInfo
 
-	err = db.QueryRow(sqlStatement, username).Scan(info.Username, info.Bio, info.Profileimg, info.Bannerimg)
+	err = db.QueryRow(sqlStatement, username).Scan(&info.Username, &info.Bio, &info.Profileimg, &info.Bannerimg)
 
 	if err == sql.ErrNoRows {
 		fmt.Println(err)
-		return nil
+		return info
 	} else if err != nil {
 		fmt.Println(err)
-		return nil
+		return info
 	}
 
 	return info

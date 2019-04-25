@@ -193,9 +193,9 @@ func deleteTask(project_name, project_owner, task_name, db *sql.DB) bool {
 
 func GetUserTasks(username string, db *sql.DB) []Task {
 
-	sqlStatement := `SELECT p.name, t.name, t.description, t.due_date, t.status
+	sqlStatement := `SELECT p.name, t.name, t.description, EXTRACT(MONTH FROM t.due_date) as month, EXTRACT(DAY FROM t.due_date) as day, t.status
   FROM tasks t INNER JOIN  projects p ON t.project = p.id
-  WHERE $1 = ANY(t.users) ORDER BY due_date ASC;`
+  WHERE $1 = ANY(t.users) ORDER BY t.due_date ASC;`
 
 	rows, err := db.Query(sqlStatement, username)
 
@@ -204,17 +204,20 @@ func GetUserTasks(username string, db *sql.DB) []Task {
 	}
 
 	var userTasks = make([]Task, 5)
+	var day, month string
 
 	defer rows.Close()
 
 	for rows.Next() {
 		var tsk Task
 
-		err = rows.Scan(&tsk.Project_name, &tsk.Name, &tsk.Description, &tsk.Due_date, &tsk.Status)
+		err = rows.Scan(&tsk.Project_name, &tsk.Name, &tsk.Description, &month, &day, &tsk.Status)
 
 		if err != nil {
 			//Do something
 		}
+
+		tsk.due_date = month + '-' + day
 
 		userTasks = append(userTasks, tsk)
 	}

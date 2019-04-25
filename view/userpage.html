@@ -33,11 +33,14 @@
         </div>
         <div class="container" id="sidebar-contents">
           <h1>{{.Info.Username}}</h1 id="username">
-          <h3>//</h3 id="user-description-short">
+          <h3></h3 id="user-description-short">
           <p id="user-description-long">
             {{.Info.Bio}}
           </p>
           <a class="btn button-project" href="/view/project_create.html" onmouseover="new_project_mouse_in()" onmouseout="new_project_mouse_out()" id="new-project">New Project</a>
+          {{range .Projects}}
+            {{.Project_name}}
+          {{end}}
         </div>
       </div>
       <div class="container-fluid" id="body-container">

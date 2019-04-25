@@ -50,60 +50,6 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 //=====================================================================================
-//VIEW HANDLER
-//=====================================================================================
-func ViewHandler(w http.ResponseWriter, r *http.Request) {
-
-	if debug == true {
-		fmt.Println("Hit ViewHandler")
-	}
-
-	//CHECK IF THE USER IS LOGGED IN
-	if heimdall(w, r) != true {
-		if debug == true {
-			fmt.Println("And we're sending you back to login", heimdall(w, r))
-		}
-		http.Redirect(w, r, "/login", http.StatusFound)
-		return
-
-	}
-
-	//FIND THE RIGHT PAGE, JUST TO DEAL WITH ".html" MAYBE NOT BEING THERE
-	page := file_finder("view/", w, r)
-	if debug == true {
-		fmt.Println("FOUND THE RIGHT PAGE", page)
-	}
-
-	//PARSE THE FOUND FILE
-	t, _ := template.ParseFiles(page)
-	if debug == true {
-		fmt.Println("PARSED THE PAGE CORRECTLY")
-	}
-
-	//GET OUR APP COOKIE FOR USE LATER
-	session, _ := store.Get(r, appCookie)
-
-	if strings.Contains(page, "userpage") == true {
-		//ASK SQL TEAM FOR ALL THE USER PAGE STUFF
-		p := go_dev.PopulateUserPage(session.Values["usr"].(string), db)
-		if debug == true {
-			fmt.Println("POPULATED THE USER PAGE CORRECTLY")
-		}
-
-		t.Execute(w, p)
-
-		if debug == true {
-			fmt.Println("EXECUTED THE USERPAGE")
-		}
-
-		return
-	}
-
-	t.Execute(w, nil)
-
-}
-
-//=====================================================================================
 //THIS DISPLAYS THE CUSTOM 404 PAGE
 //=====================================================================================
 func notFound(w http.ResponseWriter, r *http.Request) {
@@ -111,32 +57,6 @@ func notFound(w http.ResponseWriter, r *http.Request) {
 
 	t.Execute(w, nil)
 }
-
-//=====================================================================================
-//THIS DEALS WITH VIEWING POSTS
-//=====================================================================================
-// func PostViewHandler(w http.ResponseWriter, r *http.Request) {
-// 	if debug == true {
-// 		fmt.Println("Hit PostViewHandler")
-// 	}
-// 	//session, _ := store.Get(r, "cookie-name")
-
-// 	if heimdall(w, r) != true {
-// 		http.Redirect(w, r, "/login", http.StatusFound)
-// 		return
-// 	}
-
-// 	pathVariables := mux.Vars(r)
-
-// 	id, _ := strconv.Atoi(string(pathVariables["key"]))
-
-// 	p := go_dev.PopulateProjectPage(id, db)
-
-// 	t, _ := template.ParseFiles("/view/task_view.html")
-
-// 	t.Execute(w, p)
-
-// }
 
 //=====================================================================================
 //THIS DEALS WITH VIEWING PROJECTS
@@ -158,39 +78,35 @@ func ProjectViewHandler(w http.ResponseWriter, r *http.Request) {
 
 	p := go_dev.PopulateProjectPage(id, db)
 
-	t, _ := template.ParseFiles("/view/project.html")
+	t, _ := template.ParseFiles("/view/project_view.html")
 
 	t.Execute(w, p)
 
 }
 
 //=====================================================================================
-//THIS DEALS WITH CREATING PROJECTS
+//THIS DEALS WITH VIEWING TASKS
 //=====================================================================================
-func ProjectCreateHandler(w http.ResponseWriter, r *http.Request) {
+func TaskViewHandler(w http.ResponseWriter, r *http.Request) {
 	if debug == true {
-		fmt.Println("Hit ProjectCreateHandler")
+		fmt.Println("Hit TaskViewHandler")
 	}
-	session, _ := store.Get(r, "cookie-name")
+	//session, _ := store.Get(r, "cookie-name")
 
 	if heimdall(w, r) != true {
 		http.Redirect(w, r, "/login", http.StatusFound)
 		return
 	}
 
-	t, _ := template.ParseFiles("/view/project_create.html")
+	pathVariables := mux.Vars(r)
 
-	if r.Method != http.MethodPost {
-		t.Execute(w, nil)
-		return
-	}
+	id, _ := strconv.Atoi(string(pathVariables["key"]))
 
-	worked := go_dev.CreateProject(session.Values["usr"].(string), string(r.FormValue("pjn")), db)
-	if worked != true {
-		fmt.Println("Error creating a project")
-	}
+	p := go_dev.PopulateProjectPage(id, db)
 
-	t.Execute(w, nil)
+	t, _ := template.ParseFiles("/view/task_view.html")
+
+	t.Execute(w, p)
 
 }
 
