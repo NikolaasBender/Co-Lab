@@ -35,15 +35,15 @@ func newRouter() *mux.Router {
 	s.HandleFunc("/{page}", ViewHandler)
 
 	//THE POST HANDLER
-	p := r.PathPrefix("/post").Subrouter()
-	p.HandleFunc("/{key}", PostHandler)
+	//p := r.PathPrefix("/post").Subrouter()
+	//p.HandleFunc("/{key}", PostHandler)
 
 	// t := r.PathPrefix("/task").Subrouter()
 	// t.HandleFunc("/{key}", TaskHandler)
 
 	//THE PROJECT HANDLER
 	pj := r.PathPrefix("/project").Subrouter()
-	pj.HanHandleFunc("/create", ProjectCreateHandler)
+	pj.HandleFunc("/create", ProjectCreateHandler)
 	pj.HandleFunc("/view/{key}", ProjectViewHandler)
 
 	//SESSIONS AND STUFF
