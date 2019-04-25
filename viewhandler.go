@@ -72,6 +72,9 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 			worked := go_dev.CreateProject(session.Values["usr"].(string), string(r.FormValue("pjn")), db)
 			if worked != true {
 				fmt.Println("Error creating a project")
+			} else {
+				//IF CREATION WAS SUCCESSFUL THEN REDIRECT TO USER PAGE
+				http.Redirect(w, r, "/view/userpage.html", http.StatusFound)
 			}
 		}
 		//A SUCCESS MESSAGE WOULD BE BETTER
