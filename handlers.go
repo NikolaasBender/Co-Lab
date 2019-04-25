@@ -49,7 +49,6 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, t)
 }
 
-
 //=====================================================================================
 //THIS DISPLAYS THE CUSTOM 404 PAGE
 //=====================================================================================
@@ -58,8 +57,6 @@ func notFound(w http.ResponseWriter, r *http.Request) {
 
 	t.Execute(w, nil)
 }
-
-
 
 //=====================================================================================
 //THIS DEALS WITH VIEWING PROJECTS
@@ -81,44 +78,35 @@ func ProjectViewHandler(w http.ResponseWriter, r *http.Request) {
 
 	p := go_dev.PopulateProjectPage(id, db)
 
-	t, _ := template.ParseFiles("/view/project.html")
+	t, _ := template.ParseFiles("/view/project_view.html")
 
 	t.Execute(w, p)
 
 }
 
 //=====================================================================================
-//THIS DEALS WITH CREATING PROJECTS
+//THIS DEALS WITH VIEWING TASKS
 //=====================================================================================
-func ProjectCreateHandler(w http.ResponseWriter, r *http.Request) {
+func TaskViewHandler(w http.ResponseWriter, r *http.Request) {
 	if debug == true {
-		fmt.Println("Hit ProjectCreateHandler")
+		fmt.Println("Hit TaskViewHandler")
 	}
-	session, _ := store.Get(r, "cookie-name")
+	//session, _ := store.Get(r, "cookie-name")
 
 	if heimdall(w, r) != true {
 		http.Redirect(w, r, "/login", http.StatusFound)
 		return
 	}
 
-	
-	t, _ := template.ParseFiles("/view/project_create.html")
-	if debug == true {
-		fmt.Println("PARSED PROJECT CREATE CORRECTLY")
-	}
+	pathVariables := mux.Vars(r)
 
+	id, _ := strconv.Atoi(string(pathVariables["key"]))
 
-	if r.Method != http.MethodPost {
-		t.Execute(w, nil)
-		return
-	}
+	p := go_dev.PopulateProjectPage(id, db)
 
-	worked := go_dev.CreateProject(session.Values["usr"].(string), string(r.FormValue("pjn")), db)
-	if worked != true {
-		fmt.Println("Error creating a project")
-	}
+	t, _ := template.ParseFiles("/view/task_view.html")
 
-	t.Execute(w, nil)
+	t.Execute(w, p)
 
 }
 
