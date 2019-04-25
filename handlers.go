@@ -295,102 +295,101 @@ func notFound(w http.ResponseWriter, r *http.Request) {
 
 // 	t, _ := template.ParseFiles("/view/post.html")
 // 	t.Execute(w, p)
-
 // }
 
 //=====================================================================================
 //ANY SORT OF POST WILL BE HANDLED HERE
 //=====================================================================================
-func ProjectHandler(w http.ResponseWriter, r *http.Request) {
-	if debug == true {
-		fmt.Println("Hit ProjectHandler")
-	}
-	session, _ := store.Get(r, "cookie-name")
+// func ProjectHandler(w http.ResponseWriter, r *http.Request) {
+// 	if debug == true {
+// 		fmt.Println("Hit ProjectHandler")
+// 	}
+// 	session, _ := store.Get(r, "cookie-name")
 
-	if heimdall(w, r) != true {
-		http.Redirect(w, r, "/login", http.StatusFound)
-		return
-	}
+// 	if heimdall(w, r) != true {
+// 		http.Redirect(w, r, "/login", http.StatusFound)
+// 		return
+// 	}
 
-	page := file_finder("view/", w, r)
+// 	page := file_finder("view/", w, r)
 
-	if strings.Contains(page, "create") == true {
+// 	if strings.Contains(page, "create") == true {
 
-		t, _ := template.ParseFiles("/view/project_create.html")
-		//WE JUST NEED TO SERVE THE PAGE WHE ITS FIRST LOADED
-		if r.Method != http.MethodPost {
-			t.Execute(w, nil)
-			return
-		}
-		//THIS NEED STO BE CHANGED TO THE FORM VALUE KEY
-		pj := go_dev.CreateProject(session.Values["usr"].(string), string(r.FormValue("pjn")), db)
-		if pj != true {
-			//THIS IS THE BEST I COULD COME UP WITH FOR DEALING WITH A POTENTIAL ERROR
-			varmap := map[string]interface{}{
-				"var1": "Sorry, there was an issue creating your project",
-			}
-			t.Execute(w, varmap)
-			return
-		}
-		if string(r.FormValue("addusrs")) != "" {
-			//MIGHT HAVE TO MODIFY IF DB TEAM ONLY ADDS ONE MEMBER AT A TIME
-			adu := go_dev.AddProjectMembers(session.Values["usr"].(string), string(r.FormValue("pjn")), string(r.FormValue("addusrs")), db)
+// 		t, _ := template.ParseFiles("/view/project_create.html")
+// 		//WE JUST NEED TO SERVE THE PAGE WHE ITS FIRST LOADED
+// 		if r.Method != http.MethodPost {
+// 			t.Execute(w, nil)
+// 			return
+// 		}
+// 		//THIS NEED STO BE CHANGED TO THE FORM VALUE KEY
+// 		pj := go_dev.CreateProject(session.Values["usr"].(string), string(r.FormValue("pjn")), db)
+// 		if pj != true {
+// 			//THIS IS THE BEST I COULD COME UP WITH FOR DEALING WITH A POTENTIAL ERROR
+// 			varmap := map[string]interface{}{
+// 				"var1": "Sorry, there was an issue creating your project",
+// 			}
+// 			t.Execute(w, varmap)
+// 			return
+// 		}
+// 		if string(r.FormValue("addusrs")) != "" {
+// 			//MIGHT HAVE TO MODIFY IF DB TEAM ONLY ADDS ONE MEMBER AT A TIME
+// 			adu := go_dev.AddProjectMembers(session.Values["usr"].(string), string(r.FormValue("pjn")), string(r.FormValue("addusrs")), db)
 
-			if adu != true {
-				//THIS IS THE BEST I COULD COME UP WITH FOR DEALING WITH A POTENTIAL ERROR
-				varmap := map[string]interface{}{
-					"var1": "Sorry, there was an issue adding users to your project",
-				}
-				t.Execute(w, varmap)
-				return
-			}
-		}
-		//I I THINK THERE IS A BETTER WAY TO DO THIS
-		varmap := map[string]interface{}{
-			"var1": "Your project was successfuly created! ",
-		}
-		t.Execute(w, varmap)
-		return
+// 			if adu != true {
+// 				//THIS IS THE BEST I COULD COME UP WITH FOR DEALING WITH A POTENTIAL ERROR
+// 				varmap := map[string]interface{}{
+// 					"var1": "Sorry, there was an issue adding users to your project",
+// 				}
+// 				t.Execute(w, varmap)
+// 				return
+// 			}
+// 		}
+// 		//I I THINK THERE IS A BETTER WAY TO DO THIS
+// 		varmap := map[string]interface{}{
+// 			"var1": "Your project was successfuly created! ",
+// 		}
+// 		t.Execute(w, varmap)
+// 		return
 
-	}
+// 	}
 
-	pathVariables := mux.Vars(r)
+// 	pathVariables := mux.Vars(r)
 
-	k := pathVariables["key"]
+// 	k := pathVariables["key"]
 
-	//GET THE POST FROM THE DB
+// 	//GET THE POST FROM THE DB
 
-	p := go_dev.GetProject(k)
+// 	p := go_dev.GetProject(k)
 
-	t, _ := template.ParseFiles("/view/project.html")
-	t.Execute(w, p)
+// 	t, _ := template.ParseFiles("/view/project.html")
+// 	t.Execute(w, p)
 
-}
+// }
 
-func TaskHandler(w http.ResponseWriter, r *http.Request) {
-	if debug == true {
-		fmt.Println("Hit TaskHandler")
-	}
-	//session, _ := store.Get(r, "cookie-name")
+// func TaskHandler(w http.ResponseWriter, r *http.Request) {
+// 	if debug == true {
+// 		fmt.Println("Hit TaskHandler")
+// 	}
+// 	//session, _ := store.Get(r, "cookie-name")
 
-	if heimdall(w, r) != true {
-		http.Redirect(w, r, "/login", http.StatusFound)
-		return
-	}
-	//
-	t, _ := template.ParseFiles("/view/task.html")
+// 	if heimdall(w, r) != true {
+// 		http.Redirect(w, r, "/login", http.StatusFound)
+// 		return
+// 	}
+// 	//
+// 	t, _ := template.ParseFiles("/view/task.html")
 
-	pathVariables := mux.Vars(r)
+// 	pathVariables := mux.Vars(r)
 
-	k := pathVariables["key"]
+// 	k := pathVariables["key"]
 
-	//GET THE POST FROM THE DB
+// 	//GET THE POST FROM THE DB
 
-	p := go_dev.GetTask(k)
+// 	p := go_dev.GetTask(k)
 
-	t.Execute(w, p)
+// 	t.Execute(w, p)
 
-}
+// }
 
 //=====================================================================================
 //THIS DEALS WITH FINDING THE RIGHT FILES

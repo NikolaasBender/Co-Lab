@@ -83,7 +83,6 @@ func GetUserFeed(username string, db *sql.DB) []Post {
 		var pst Post
 
 		err = rows.Scan(&pst.Title, &pst.Content, &pst.Username, &pst.Task)
-
 		if err != nil {
 			//Do something
 		}

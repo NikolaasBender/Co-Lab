@@ -5,10 +5,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- MAKE THIS DYNAMIC AT SOME POINT-->
-    <title>[Username] at CoLab</title>
+    <title>{{.Info.Username}} at CoLab</title>
 
-    <link rel="stylesheet" href="../static/style.css">
-    <script src="../static/main.js"></script>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="/static/main.js"></script>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
@@ -32,12 +32,12 @@
           </a>
         </div>
         <div class="container" id="sidebar-contents">
-          <h1>User Name</h1 id="username">
-          <h3>User @ ProjectName.com</h3 id="user-description-short">
+          <h1>{{.Info.Username}}</h1 id="username">
+          <h3>//</h3 id="user-description-short">
           <p id="user-description-long">
-            No description set.
+            {{.Info.Bio}}
           </p>
-          <a class="btn button-project" href="../view/project_create.html" onmouseover="new_project_mouse_in()" onmouseout="new_project_mouse_out()" id="new-project">New Project</a>
+          <a class="btn button-project" href="/view/project_create.html" onmouseover="new_project_mouse_in()" onmouseout="new_project_mouse_out()" id="new-project">New Project</a>
         </div>
       </div>
       <div class="container-fluid" id="body-container">
@@ -45,12 +45,37 @@
           <ul class="navbar-nav" id="user-navbar">
             <li class="nav-item" id="user-navbar-button">
               <a class="nav-link" href="#" >My Feed</a>
+              {{range .Feed}}
+                {{.Title}}
+                {{.Content}}
+                {{.Username}}
+                {{.Task}}
+              {{end}}
             </li>
             <li class="nav-item" id="user-navbar-button">
               <a class="nav-link" href="#" >My Tasks</a>
+              {{range .Tasks}}
+                  {{.Project_name}}
+                  {{.Name}}
+                  {{.Description}} 
+                  {{range .Comments}}
+                      {{.Title}}
+                      {{.Content}}
+                      {{.Username}}
+                      {{.Task}}
+                  {{end}}
+                  {{.Due_date}}
+                  {{.Status}}
+              {{end}}
             </li>
             <li class="nav-item" id="user-navbar-button">
               <a class="nav-link" href="#" >My Pins</a>
+              {{range .Pins}}
+                {{.Title}}
+                {{.Content}}
+                {{.Username}}
+                {{.Task}}
+              {{end}}
             </li>
             <li class="nav-item">
               <a class="nav-link nav-options" href="#"><i class="fas fa-cog"></i></a>

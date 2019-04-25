@@ -38,12 +38,12 @@ func newRouter() *mux.Router {
 	// p := r.PathPrefix("/post").Subrouter()
 	// p.HandleFunc("/{key}", PostHandler)
 
-	t := r.PathPrefix("/task").Subrouter()
-	t.HandleFunc("/{key}", TaskHandler)
+	// t := r.PathPrefix("/task").Subrouter()
+	// t.HandleFunc("/{key}", TaskHandler)
 
 	//THE PROJECT HANDLER
-	pj := r.PathPrefix("/project").Subrouter()
-	pj.HandleFunc("/{key}", ProjectHandler)
+	// pj := r.PathPrefix("/project").Subrouter()
+	// pj.HandleFunc("/{key}", ProjectHandler)
 
 	//SESSIONS AND STUFF
 	// r.HandleFunc("/secret", secret)
