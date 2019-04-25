@@ -6,10 +6,10 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func PopulateUserPage(username string, db *sql.DB) *UserPage {
-	var page *UserPage
+func PopulateUserPage(username string, db *sql.DB) UserPage {
+	var page UserPage
 
-	page.Info = *GetUserInfo(username, db)
+	page.Info = GetUserInfo(username, db)
 
 	page.Projects = GetProjects(username, db)
 
