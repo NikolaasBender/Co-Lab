@@ -1,1 +1,73 @@
 <!DOCTYPE html>
+<!--
+
+{{.Title}}
+{{.Content}}
+{{.Username}}
+{{.Task}}
+
+HAS:
+
+{{.Project_name}} - associated project name? (has nowhere to go)
+{{.Name}} - task name
+{{.Description}} - subtasks?
+
+{{.Due_date}} - Due date string
+{{.Status}} - ? (has nowhere to go)
+
+DOES NOT HAVE:
+ - Members
+-->
+<div class="container" id="post">
+  <div class="container" id="post-header">
+
+  </div>
+  <div class="container" id="post-box">
+
+  </div>
+  <div class="container" id="post-title">
+    <h1>{{.Name}}</h1>
+    <h5>Due at: {{.Due_date}}</h5>
+  </div>
+  <div class="container" id="post-body">
+    <div class="row" id="post-contents">
+      <div class="col-sm-4" id="lhs">
+        <ul>
+          <li>Theres Nothing Here!</li>
+        </ul>
+      </div>
+      <div class="col-sm-8" id="rhs">
+        <ul>
+          <li>{{.Status}}</li>
+        </ul>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <button type="submit" class="btn btn-pin"><i class="fas fa-thumbtack" style="font-size: 1.5em;"></i></button>
+        <button type="submit" class="btn btn-comment"><i class="fas fa-comment" style="font-size: 1.5em;"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+{{range .Comments}}
+<div class="container" id="comment">
+  <div class="container" id="comment-header">
+
+  </div>
+  <div class="container" id="comment-box">
+
+  </div>
+  <div class="container" id="comment-title">
+    <h1>{{.Username}}</h1>
+    <h5>Posted at: 0:00 00/00/0000</h5>
+  </div>
+  <div class="container" id="comment-contents">
+    <p>
+      {{.Content}}
+    </p>
+    <button type="submit" class="btn btn-pin"><i class="fas fa-thumbtack" style="font-size: 1.5em;"></i></button>
+    <button type="submit" class="btn btn-comment"><i class="fas fa-comment" style="font-size: 1.5em;"></i></button>
+  </div>
+</div>
+{{end}}

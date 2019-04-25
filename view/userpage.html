@@ -7,7 +7,7 @@
     <!-- MAKE THIS DYNAMIC AT SOME POINT-->
     <title>{{.Info.Username}} at CoLab</title>
 
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="../static/style.css">
     <script src="/static/main.js"></script>
 
     <!-- Bootstrap CSS -->
@@ -45,46 +45,75 @@
           <ul class="navbar-nav" id="user-navbar">
             <li class="nav-item" id="user-navbar-button">
               <a class="nav-link" href="#" >My Feed</a>
-              {{range .Feed}}
-                {{.Title}}
-                {{.Content}}
-                {{.Username}}
-                {{.Task}}
-              {{end}}
             </li>
             <li class="nav-item" id="user-navbar-button">
               <a class="nav-link" href="#" >My Tasks</a>
-              {{range .Tasks}}
-                  {{.Project_name}}
-                  {{.Name}}
-                  {{.Description}} 
-                  {{range .Comments}}
-                      {{.Title}}
-                      {{.Content}}
-                      {{.Username}}
-                      {{.Task}}
-                  {{end}}
-                  {{.Due_date}}
-                  {{.Status}}
-              {{end}}
             </li>
             <li class="nav-item" id="user-navbar-button">
               <a class="nav-link" href="#" >My Pins</a>
-              {{range .Pins}}
-                {{.Title}}
-                {{.Content}}
-                {{.Username}}
-                {{.Task}}
-              {{end}}
             </li>
             <li class="nav-item">
               <a class="nav-link nav-options" href="#"><i class="fas fa-cog"></i></a>
             </li>
           </ul>
         </div>
-        <!-- FILLED DYNAMICALLY -->
-        <div class="container" id="placeholder">
-          <h1>There's Nothing Here Yet!</h1>
+        <div class="container">
+          <!-- FILLED DYNAMICALLY -->
+          {{range .Tasks}}
+            <div class="container" id="post">
+              <div class="container" id="post-header">
+
+              </div>
+              <div class="container" id="post-box">
+
+              </div>
+              <div class="container" id="post-title">
+                <h1>{{.Name}}</h1>
+                <h5>Due at: {{.Due_date}}</h5>
+              </div>
+              <div class="container" id="post-body">
+                <div class="row" id="post-contents">
+                  <div class="col-sm-4" id="lhs">
+                    <ul>
+                      <li>Theres Nothing Here!</li>
+                    </ul>
+                  </div>
+                  <div class="col-sm-8" id="rhs">
+                    <ul>
+                      <li>{{.Status}}</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <button type="submit" class="btn btn-pin"><i class="fas fa-thumbtack" style="font-size: 1.5em;"></i></button>
+                    <button type="submit" class="btn btn-comment"><i class="fas fa-comment" style="font-size: 1.5em;"></i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {{range .Comments}}
+            <div class="container" id="comment">
+              <div class="container" id="comment-header">
+
+              </div>
+              <div class="container" id="comment-box">
+
+              </div>
+              <div class="container" id="comment-title">
+                <h1>{{.Username}}</h1>
+                <h5>Posted at: 0:00 00/00/0000</h5>
+              </div>
+              <div class="container" id="comment-contents">
+                <p>
+                  {{.Content}}
+                </p>
+                <button type="submit" class="btn btn-pin"><i class="fas fa-thumbtack" style="font-size: 1.5em;"></i></button>
+                <button type="submit" class="btn btn-comment"><i class="fas fa-comment" style="font-size: 1.5em;"></i></button>
+              </div>
+            </div>
+            {{end}}
+          {{end}}
         </div>
       </div>
     </div>
