@@ -82,10 +82,10 @@ func GetUserInfo(username string, db *sql.DB) UserInfo {
 
 	if err == sql.ErrNoRows {
 		fmt.Println(err)
-		return nil
+		return info
 	} else if err != nil {
 		fmt.Println(err)
-		return nil
+		return info
 	}
 
 	return info
