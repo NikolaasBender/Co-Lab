@@ -195,7 +195,7 @@ func GetUserTasks(username string, db *sql.DB) []Task {
 
 	sqlStatement := `SELECT p.name, t.name, t.description, EXTRACT(MONTH FROM t.due_date) as month, EXTRACT(DAY FROM t.due_date) as day, t.status
   FROM tasks t INNER JOIN  projects p ON t.project = p.id
-  WHERE $1 = ANY(t.users) ORDER BY due_date ASC;`
+  WHERE $1 = ANY(t.users) ORDER BY t.due_date ASC;`
 
 	rows, err := db.Query(sqlStatement, username)
 
