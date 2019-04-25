@@ -76,6 +76,13 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 				//IF CREATION WAS SUCCESSFUL THEN REDIRECT TO USER PAGE
 				http.Redirect(w, r, "/view/userpage.html", http.StatusFound)
 			}
+
+		}
+		if strings.Contains(page, "task") == true {
+			// worked := go_dev.CreateTask(session.Values["usr"].(string), string(r.FormValue("pjn")), db)
+			// if worked != true {
+			// 	fmt.Println("Error creating task")
+			// }
 		}
 		//A SUCCESS MESSAGE WOULD BE BETTER
 		t.Execute(w, nil)
