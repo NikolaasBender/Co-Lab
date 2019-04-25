@@ -178,7 +178,12 @@ func ProjectCreateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	
 	t, _ := template.ParseFiles("/view/project_create.html")
+	if debug == true {
+		fmt.Println("PARSED PROJECT CREATE CORRECTLY")
+	}
+
 
 	if r.Method != http.MethodPost {
 		t.Execute(w, nil)
