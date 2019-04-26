@@ -30,7 +30,7 @@ var err error
 //FAVICON HANDLER
 //=====================================================================================
 func faviconHandler(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "favicon.ico")
+	http.ServeFile(w, r, "/favicon.ico")
 }
 
 //=====================================================================================

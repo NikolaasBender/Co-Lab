@@ -217,7 +217,7 @@ func GetUserTasks(username string, db *sql.DB) []Task {
 			//Do something
 		}
 
-		tsk.due_date = month + '-' + day
+		tsk.Due_date = month + "-" + day
 
 		userTasks = append(userTasks, tsk)
 	}
