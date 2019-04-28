@@ -43,7 +43,11 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//PARSE THE INDEX FILE
-	t, _ := template.ParseFiles("view/index.html")
+	t, err := template.ParseFiles("view/index.html")
+
+	if err != nil {
+		fmt.Println("IndexHandler parsing error", err)
+	}
 
 	//SERVE INDEX
 	t.Execute(w, t)
@@ -53,7 +57,11 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 //THIS DISPLAYS THE CUSTOM 404 PAGE
 //=====================================================================================
 func notFound(w http.ResponseWriter, r *http.Request) {
-	t, _ := template.ParseFiles("/view/404errorpage.html")
+	t, err := template.ParseFiles("/view/404errorpage.html")
+
+	if err != nil {
+		fmt.Println("404 Handler parsing error", err)
+	}
 
 	t.Execute(w, nil)
 }
@@ -78,7 +86,11 @@ func ProjectViewHandler(w http.ResponseWriter, r *http.Request) {
 
 	p := go_dev.PopulateProjectPage(id, db)
 
-	t, _ := template.ParseFiles("/view/project_view.html")
+	t, err := template.ParseFiles("/view/project_view.html")
+
+	if err != nil {
+		fmt.Println("project page Handler parsing error", err)
+	}
 
 	t.Execute(w, p)
 
@@ -104,7 +116,11 @@ func TaskViewHandler(w http.ResponseWriter, r *http.Request) {
 
 	p := go_dev.PopulateProjectPage(id, db)
 
-	t, _ := template.ParseFiles("/view/task_view.html")
+	t, err := template.ParseFiles("/view/task_view.html")
+
+	if err != nil {
+		fmt.Println("task view Handler parsing error", err)
+	}
 
 	t.Execute(w, p)
 

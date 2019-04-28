@@ -37,11 +37,14 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//PARSE THE FOUND FILE
-	t, _ := template.ParseFiles(page)
+	t, err := template.ParseFiles(page)
 	if debug == true {
-		fmt.Println("PARSED THE PAGE CORRECTLY")
+		fmt.Println("PASSED PAGE PARSING")
 	}
+	if err != nil {
+		fmt.Println("PARSED THE PAGE INCORRECTLY", err)
 
+	}
 	//GET OUR APP COOKIE FOR USE LATER
 	session, _ := store.Get(r, appCookie)
 

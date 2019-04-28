@@ -18,7 +18,10 @@ func login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//PARSE THE LOGIN PAGE
-	t, _ := template.ParseFiles("auth/login.html")
+	t, err := template.ParseFiles("auth/login.html")
+	if err != nil {
+		fmt.Println("Login Handler parsing error", err)
+	}
 	//A CHECK FOR A POST METHOD THAT MIGHT NOT BE NECESSARY ANYMORE
 	if r.Method != http.MethodPost {
 		t.Execute(w, nil)
@@ -126,7 +129,10 @@ func signup(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//READ IN THE SIGNUP PAGE
-	t, _ := template.ParseFiles("auth/signup.html")
+	t, err := template.ParseFiles("auth/signup.html")
+	if err != nil {
+		fmt.Println("task view Handler parsing error", err)
+	}
 
 	//IF ITS A GET REQUEST IT JUST SERVES THE PAGE
 	if r.Method != http.MethodPost {
