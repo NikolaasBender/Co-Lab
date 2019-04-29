@@ -5,7 +5,33 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+
+	"github.com/gorilla/sessions"
 )
+
+// type Person struct {
+// 	usr  string
+// 	auth bool
+// }
+
+// store will hold all session data
+// securecookie.GenerateRandomKey(64)
+var store = sessions.NewCookieStore([]byte("super-secret-key"))
+
+const appCookie = "DeleciousCoLabCookies"
+
+//=====================================================================================
+//THIS INITIALIZES COOKIE STUFF
+//=====================================================================================
+func init() {
+	//gob.Register(&Person{})
+
+	store.Options = &sessions.Options{
+		// Domain: "localhost",
+		MaxAge:   3600 * 72, // 3days
+		HttpOnly: true,
+	}
+}
 
 //=====================================================================================
 //THIS IS THE LOGIN HANDLER (he thicc)
@@ -17,6 +43,11 @@ func login(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(r.Method)
 	}
 
+	//MAKEING A NEW COOKIE FOR THE USER
+	session, err := store.Get(r, appCookie)
+	if err != nil {
+		fmt.Println("ERROR WITH store.Get", err)
+	}
 	//PARSE THE LOGIN PAGE
 	t, err := template.ParseFiles("auth/login.html")
 	if err != nil {
@@ -27,9 +58,6 @@ func login(w http.ResponseWriter, r *http.Request) {
 		t.Execute(w, nil)
 		return
 	}
-
-	//MAKEING A NEW COOKIE FOR THE USER
-	session, _ := store.Get(r, appCookie)
 
 	//READ IN THE PASSWORD ENTERED
 	pw := r.FormValue("pwd")
@@ -59,6 +87,12 @@ func login(w http.ResponseWriter, r *http.Request) {
 		//SAVE THE COOKIE TO THE USER'S BROWSER
 		err := session.Save(r, w)
 
+		//SANITY CHECK TO MAKE SURE THE COOKIE WAS ACTUALLY SAVED
+		session, err := store.Get(r, appCookie)
+		if err != nil {
+			fmt.Println("ERROR WITH store.Get", err)
+		}
+
 		if debug == true {
 			fmt.Println("getUser after save", session.Values["auth"])
 		}
@@ -69,7 +103,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		}
 
 		//SEND THEM ALONG TO THEIR USERPAGE
-		http.Redirect(w, r, "/view/userpage.html", http.StatusFound)
+		http.Redirect(w, r, "/view/userpage.html", 302)
 	} else {
 		if debug == true {
 			fmt.Println("user has NOT been validated")
@@ -107,7 +141,6 @@ func logout(w http.ResponseWriter, r *http.Request) {
 
 	//SETTING LOGIN STATUS TO FALSE AND DELETING THE COOKIE
 	session.Values["auth"] = false
-	session.Options.MaxAge = -1
 
 	//SAVING THE SESSION
 	err = session.Save(r, w)
@@ -196,12 +229,15 @@ func heimdall(w http.ResponseWriter, r *http.Request) bool {
 	}
 
 	if session.Values["auth"] != true {
+		session.Values["auth"] = false
 		err := session.Save(r, w)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			fmt.Println("Error saving cookie")
 			return false
 		}
 		return false
 	}
+	//session.Values["auth"] = true
 	return true
 }

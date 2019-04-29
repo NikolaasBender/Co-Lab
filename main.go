@@ -21,7 +21,7 @@ var db *sql.DB
 
 func newRouter() *mux.Router {
 	r := mux.NewRouter()
-	http.HandleFunc("/favicon.ico", faviconHandler)
+	//http.HandleFunc("/favicon.ico", faviconHandler)
 	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	//THIS IS 100% VOODOO - DONT FUCKING TOUCH THIS UNDER ANY CIRCUMSTANCES
 	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

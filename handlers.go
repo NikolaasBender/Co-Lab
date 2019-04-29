@@ -13,14 +13,8 @@ import (
 	"Co-Lab/go_dev"
 
 	"github.com/gorilla/mux"
-	"github.com/gorilla/securecookie"
-	"github.com/gorilla/sessions"
+	
 )
-
-// store will hold all session data
-var store = sessions.NewCookieStore([]byte(securecookie.GenerateRandomKey(64)))
-
-const appCookie = "DeleciousCoLabCookies"
 
 var debug = true
 
@@ -29,9 +23,9 @@ var err error
 //=====================================================================================
 //FAVICON HANDLER
 //=====================================================================================
-func faviconHandler(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "/favicon.ico")
-}
+// func faviconHandler(w http.ResponseWriter, r *http.Request) {
+// 	http.ServeFile(w, r, "favicon.ico")
+// }
 
 //=====================================================================================
 //SUPER BASIC INDEX HANDLER
@@ -57,7 +51,7 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 //THIS DISPLAYS THE CUSTOM 404 PAGE
 //=====================================================================================
 func notFound(w http.ResponseWriter, r *http.Request) {
-	t, err := template.ParseFiles("/view/404errorpage.html")
+	t, err := template.ParseFiles("404.html")
 
 	if err != nil {
 		fmt.Println("404 Handler parsing error", err)
@@ -155,6 +149,7 @@ func file_finder(folder string, w http.ResponseWriter, r *http.Request) string {
 	} else if os.IsNotExist(err) {
 		// path/to/whatever does *not* exist
 		fmt.Println("Can't find file")
+		notFound(w, r)
 		return ""
 	} else {
 		// Schrodinger: file may or may not exist. See err for details.
@@ -162,4 +157,5 @@ func file_finder(folder string, w http.ResponseWriter, r *http.Request) string {
 		fmt.Println(err)
 		return ""
 	}
+	return ""
 }

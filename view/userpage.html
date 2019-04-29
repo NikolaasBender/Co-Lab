@@ -2,125 +2,131 @@
 <html lang="en" dir="ltr">
 
 <head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <title>{{.Info.Username}} at CoLab</title>
-  <link rel="stylesheet" href="../static/style.css">
-  <script src="/static/main.js"></script>
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
-    integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-  <!-- additional CSS -->
-  <!-- fonts -->
-  <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet'>
-  <!-- icons -->
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
-    integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>{{.Info.Username}} at CoLab</title>
+	<link rel="stylesheet" href="../static/style.css">
+	<script src="/static/main.js"></script>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+		integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+	<!-- additional CSS -->
+	<!-- fonts -->
+	<link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet'>
+	<!-- icons -->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+		integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 </head>
 
 <body>
-  <div class="container-fluid" id="header-container">
-    <div class="wrapper">
-      <div class="sidenav" id="sidebar-container">
-        <div class="container" id="profile-img">
-          <a href="#">
-            <img src="" alt=""></img>
-          </a>
-        </div>
-        <div class="container" id="sidebar-contents">
-          <h1>{{.Info.Username}}</h1 id="username">
-          <h3></h3 id="user-description-short">
-          <p id="user-description-long">
-            {{.Info.Bio}}
-          </p>
-          <a class="btn button-project" href="/view/project_create.html" onmouseover="new_project_mouse_in()"
-            onmouseout="new_project_mouse_out()" id="new-project">New Project</a>
-          {{range .Projects}}
-            <a class="nav-link" href="#" >{{.Project_name}}</a>
-          {{end}}
-        </div>
-      </div>
-      <div class="container-fluid" id="body-container">
-        <div class="navbar navbar-expand-xl nav-fill">
-          <ul class="navbar-nav" id="user-navbar">
-            <li class="nav-item" id="user-navbar-button">
-              <a class="nav-link" href="#">My Feed</a>
-            </li>
-            <li class="nav-item" id="user-navbar-button">
-              <a class="nav-link" href="#">My Tasks</a>
-            </li>
-            <li class="nav-item" id="user-navbar-button">
-              <a class="nav-link" href="#">My Pins</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link nav-options" href="#"><i class="fas fa-cog"></i></a>
-            </li>
-          </ul>
-        </div>
-        <div class="container" id="task_container">
-          <!-- FILLED DYNAMICALLY -->
-          {{range .Tasks}}
-          <div class="container" id="post">
-            <div class="container" id="post-title">
-              <h1>{{.Name}}</h1>
-              <h5>Due at: {{.Due_date}}</h5>
-            </div>
-            <div class="container" id="post-body">
-              <div class="row" id="post-contents">
-                <div class="col-sm-4" id="lhs">
-                  <ul>
-                    <li>{{.Description}}</li>
-                  </ul>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col">
-                  <button type="submit" class="btn btn-pin"><i class="fas fa-thumbtack"
-                      style="font-size: 1.5em;"></i></button>
-                  <button type="submit" class="btn btn-comment"><i class="fas fa-comment"
-                      style="font-size: 1.5em;"></i></button>
-                </div>
-              </div>
-            </div>
-          </div>
-          {{range .Comments}}
-          <div class="container" id="comment">
-            <div class="container" id="comment-header">
+	<div class="container-fluid" id="header-container">
+		<div class="wrapper">
+			<div class="sidenav" id="sidebar-container">
+				<div class="container" id="profile-img">
+					<a href="#">
+						<img src="" alt=""></img>
+					</a>
+				</div>
+				<div class="container" id="sidebar-contents">
+					<h1>{{.Info.Username}}</h1 id="username">
+					<h3></h3 id="user-description-short">
+					<p id="user-description-long">
+						{{.Info.Bio}}
+					</p>
+					<a class="btn button-project" href="/view/project_create.html" onmouseover="new_project_mouse_in()"
+						onmouseout="new_project_mouse_out()" id="new-project">New Project</a>
+					{{range .Projects}}
+					<a class="nav-link" href="#">{{.Project_name}}</a>
+					{{end}}
+				</div>
+			</div>
+			<div class="container-fluid" id="body-container">
+				<div class="navbar navbar-expand-xl nav-fill">
+					<ul class="navbar-nav" id="user-navbar">
+						<li class="nav-item" id="user-navbar-button">
+							<a class="nav-link" href="#">My Feed</a>
+						</li>
+						<li class="nav-item" id="user-navbar-button">
+							<a class="nav-link" href="#">My Tasks</a>
+						</li>
+						<li class="nav-item" id="user-navbar-button">
+							<a class="nav-link" href="#">My Pins</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link nav-options" href="#"><i class="fas fa-cog"></i></a>
+						</li>
+					</ul>
+				</div>
+				<div class="container" id="task_container">
+					<!-- FILLED DYNAMICALLY -->
+					{{range .Tasks}}
+					{{if (ne .Task.Name "")}}
+					<div class="container" id="post">
+						<div class="container" id="post-title">
+							<h1>{{.Name}}</h1>
+							<h5>Due at: {{.Due_date}}</h5>
+						</div>
+						<div class="container" id="post-body">
+							<div class="row" id="post-contents">
+								<div class="col-sm-4" id="lhs">
+									<ul>
+										<li>{{.Description}}</li>
+									</ul>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									<button type="submit" class="btn btn-pin"><i class="fas fa-thumbtack"
+											style="font-size: 1.5em;"></i></button>
+									<button type="submit" class="btn btn-comment"><i class="fas fa-comment"
+											style="font-size: 1.5em;"></i></button>
+								</div>
+							</div>
+						</div>
+						
+						{{range .Comments}}
+						<div class="container" id="comment">
+							<div class="container" id="comment-header">
 
-            </div>
-            <div class="container" id="comment-box">
+							</div>
+							<div class="container" id="comment-box">
 
-            </div>
-            <div class="container" id="comment-title">
-              <h1>{{.Username}}</h1>
-            </div>
-            <div class="container" id="comment-contents">
-              <p>
-                {{.Content}}
-              </p>
-              <button type="submit" class="btn btn-pin"><i class="fas fa-thumbtack"
-                  style="font-size: 1.5em;"></i></button>
-              <button type="submit" class="btn btn-comment"><i class="fas fa-comment"
-                  style="font-size: 1.5em;"></i></button>
-            </div>
-          </div>
-          {{end}}
-          {{end}}
-        </div>
-      </div>
-    </div>
-  </div>
+							</div>
+							<div class="container" id="comment-title">
+								<h1>{{.Username}}</h1>
+							</div>
+							<div class="container" id="comment-contents">
+								<p>
+									{{.Content}}
+								</p>
+								<button type="submit" class="btn btn-pin"><i class="fas fa-thumbtack"
+										style="font-size: 1.5em;"></i></button>
+								<button type="submit" class="btn btn-comment"><i class="fas fa-comment"
+										style="font-size: 1.5em;"></i></button>
+							</div>
+						</div>
+						{{end}}
+					{{end}}
+					{{end}}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
 </body>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-  integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+	crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
-  integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+	integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+	crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"
-  integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+	integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
+	crossorigin="anonymous"></script>
 
 <!-- additional js -->
 
