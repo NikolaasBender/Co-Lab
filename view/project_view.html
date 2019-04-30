@@ -5,10 +5,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- MAKE THIS DYNAMIC AT SOME POINT-->
-    <title>[Project] at [ProjectName]</title>
+    <title>{{.Project_name}} at Co Lab</title>
 
-    <link rel="stylesheet" href="../static/style.css">
-    <script src="../static/main.js"></script>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="/static/main.js"></script>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
 
@@ -21,22 +21,22 @@
   </head>
   <body>
     <div class="container-fluid project-header">
-      <a class="navbar-brand" href="#" id="project-logo"></a>
-      <a class="navbar-brand" href="#" id="project-name">Project Name</a>
+      <a class="navbar-brand" href="/" id="project-logo"></a>
+      <a class="navbar-brand" href="/" id="project-name">Co Lab</a>
     </div>
     <div class="navbar navbar-expand-xl" id="taskbar">
       <ul class="navbar-nav" id="project-toolbar">
         <li class="nav-item dropdown project-nav-item">
           <a class="dropdown-toggle project-taskbar-button" data-toggle="dropdown" href="#" id="project-toolbar-button">Members</a>
           <ul class="dropdown-menu">
-            <li><a href="../view/add_user.html" style="text-decoration: none !important;">Add Members Here</a></li>
+            <li><a href="/view/add_user.html" style="text-decoration: none !important;">Add Members Here</a></li>
           </ul>
         </li>
         <li class="nav-item project-nav-item">
-          <a class="nav-link project-taskbar-button" href="../view/userpage.html" id="project-toolbar-button">My Page</a>
+          <a class="nav-link project-taskbar-button" href="/view/userpage.html" id="project-toolbar-button">My Page</a>
         </li>
         <li class="nav-item project-nav-item">
-          <a class="nav-link project-taskbar-button" href="#" id="project-toolbar-button">My Tasks</a>
+          <a class="nav-link project-taskbar-button" href="/view/allMyTasks.html" id="project-toolbar-button">My Tasks</a>
         </li>
       </ul>
     </div>
@@ -50,7 +50,15 @@
             <div class="container-fluid kanban-bar">
               <h1>Finished:</h1>
               <div class="container-fluid task-area" id="done">
-                
+                {{range .Done}}
+                  {{.Name}}
+                  {{.Due_Date}}
+                  {{range .Comments}}
+                    {{.Title}}
+                    {{.Content}}
+                    {{.Username}}
+                  {{end}}
+                {{end}}
               </div>
             </div>
           </div>
@@ -58,7 +66,15 @@
             <div class="container-fluid kanban-bar">
               <h1>In-Progress:</h1>
               <div class="container-fluid task-area" id="working">
-
+                {{range .Working}}
+                  {{.Name}}
+                  {{.Due_Date}}
+                  {{range .Comments}}
+                    {{.Title}}
+                    {{.Content}}
+                    {{.Username}}
+                  {{end}}
+                {{end}}
               </div>
             </div>
           </div>
@@ -66,7 +82,15 @@
             <div class="container-fluid kanban-bar">
               <h1>To do:</h1>
               <div class="container-fluid task-area" id="todo">
-
+                {{range .Todo}}
+                  {{.Name}}
+                  {{.Due_Date}}
+                  {{range .Comments}}
+                    {{.Title}}
+                    {{.Content}}
+                    {{.Username}}
+                  {{end}}
+                {{end}}
               </div>
             </div>
           </div>

@@ -13,7 +13,6 @@ import (
 	"Co-Lab/go_dev"
 
 	"github.com/gorilla/mux"
-	
 )
 
 var debug = true
@@ -74,18 +73,15 @@ func ProjectViewHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	pathVariables := mux.Vars(r)
-
-	id, _ := strconv.Atoi(string(pathVariables["key"]))
-
-	p := go_dev.PopulateProjectPage(id, db)
-
 	t, err := template.ParseFiles("/view/project_view.html")
-
 	if err != nil {
-		fmt.Println("project page Handler parsing error", err)
+		fmt.Println("THERE WAS AN ERROR PARSING project_view.html")
 	}
 
+	//HANDLING VIEWING
+	pathVariables := mux.Vars(r)
+	id, _ := strconv.Atoi(string(pathVariables["key"]))
+	p := go_dev.PopulateProjectPage(id, db)
 	t.Execute(w, p)
 
 }

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>{{.Info.Username}} at CoLab</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="/static/main.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+        integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <!-- additional CSS -->
+    <!-- fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet'>
+    <!-- icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+        integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+</head>
+
+<body>
+
+    <h1> all your tasks</h1>
+    <div class="flex-container">
+        <div class="main">
+            {{range .Tasks}}
+            {{if (ne .Task.Name "")}}
+            <div class="card">
+                <div class="container">
+                    {{.Project_name}}
+                    <h4><b>{{.Name}}</b></h4>
+                    <p>{{.Description}}</p>
+                    {{.Due_date}}
+                    {{.Status}}
+                </div>
+            </div>
+            {{end}}
+            {{end}}
+        </div>
+
+    </div>
+
+
+</body>
+
+</html>

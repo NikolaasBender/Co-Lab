@@ -5,10 +5,7 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
-	"strconv"
 	"strings"
-
-	"github.com/gorilla/mux"
 )
 
 //=====================================================================================
@@ -76,30 +73,32 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 			worked := go_dev.CreateProject(session.Values["usr"].(string), string(r.FormValue("pjn")), db)
 			if worked != true {
 				fmt.Println("Error creating a project")
+				t.Execute(w, nil)
 			} else {
 				//IF CREATION WAS SUCCESSFUL THEN REDIRECT TO USER PAGE
 				http.Redirect(w, r, "/view/userpage.html", http.StatusFound)
+				return
 			}
 
 		}
-		if strings.Contains(page, "task") == true {
-			// worked := go_dev.CreateTask(session.Values["usr"].(string), string(r.FormValue("pjn")), db)
-			// if worked != true {
-			// 	fmt.Println("Error creating task")
-			// }
-		}
+		// if strings.Contains(page, "task") == true {
+		// 	pathVariables := mux.Vars(r)
+		// 	id, _ := strconv.Atoi(string(pathVariables["key"]))
+		// 	worked := go_dev.createTask(id, session.Values["usr"].(string), string(r.FormValue("pjn")), db)
+		// 	if worked != true {
+		// 		fmt.Println("Error creating task")
+		// 	}
+		// }
 		//A SUCCESS MESSAGE WOULD BE BETTER
 		t.Execute(w, nil)
-	}
 
-	//HANDLING VIEWING
-	if strings.Contains(page, "_view") == true {
-		if strings.Contains(page, "project") == true {
-			pathVariables := mux.Vars(r)
-			id, _ := strconv.Atoi(string(pathVariables["key"]))
-			p := go_dev.PopulateProjectPage(id, db)
-			t.Execute(w, p)
-		}
+		return
+	}
+	if strings.Contains(page, "allMyTasks") == true {
+		
+		tasks := go_dev.GetUserTasks(session.Values["usr"].(string), db)
+		t.Execute(w, tasks)
+		return
 	}
 
 	//THE DEFAULT FOR THE VIEW HANDLER

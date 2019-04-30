@@ -37,7 +37,7 @@
 					<a class="btn button-project" href="/view/project_create.html" onmouseover="new_project_mouse_in()"
 						onmouseout="new_project_mouse_out()" id="new-project">New Project</a>
 					{{range .Projects}}
-					<a class="nav-link" href="#">{{.Project_name}}</a>
+					<a class="nav-link" href="/view/project_view/{{.Id}}">{{.Project_name}}</a>
 					{{end}}
 				</div>
 			</div>

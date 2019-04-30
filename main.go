@@ -33,6 +33,7 @@ func newRouter() *mux.Router {
 	s := r.PathPrefix("/view").Subrouter()
 	s.HandleFunc("/", ViewHandler)
 	s.HandleFunc("/{page}", ViewHandler)
+	
 
 	r.HandleFunc("/project_view/{key}", ProjectViewHandler)
 	r.HandleFunc("/task_view/{key}", TaskViewHandler)
