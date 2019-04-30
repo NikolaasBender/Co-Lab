@@ -10,6 +10,7 @@ import (
 
 //=====================================================================================
 //VIEW HANDLER
+//THIS STARTED REALLY LEAN THEN IT GOT TO FINALS AND STRESS ATE LOGIC
 //=====================================================================================
 func ViewHandler(w http.ResponseWriter, r *http.Request) {
 
@@ -71,6 +72,17 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		if strings.Contains(page, "project") == true {
 			worked := go_dev.CreateProject(session.Values["usr"].(string), string(r.FormValue("pjn")), db)
+			adusr := string(r.FormValue("addusrs"))
+			if adusr != "" {
+				usrs := strings.Split(adusr, ",")
+				for _, usr := range usrs {
+					err := go_dev.AddProjectMembers(session.Values["usr"].(string), string(r.FormValue("pjn")), usr, db)
+					if err != true {
+						fmt.Println("Error adding ", usr, " to project")
+					}
+				}
+			}
+
 			if worked != true {
 				fmt.Println("Error creating a project")
 				t.Execute(w, nil)
@@ -95,7 +107,7 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if strings.Contains(page, "allMyTasks") == true {
-		
+
 		tasks := go_dev.GetUserTasks(session.Values["usr"].(string), db)
 		t.Execute(w, tasks)
 		return

@@ -35,9 +35,9 @@
 						{{.Info.Bio}}
 					</p>
 					<a class="btn button-project" href="/view/project_create.html" onmouseover="new_project_mouse_in()"
-						onmouseout="new_project_mouse_out()" id="new-project">New Project</a>
+						onmouseout="new_project_mouse_out()" id="new-project">Create Project</a>
 					{{range .Projects}}
-					<a class="nav-link" href="/view/project_view/{{.Id}}">{{.Project_name}}</a>
+						<a class="nav-link" href="/project_view/{{.Id}}">{{.Project_name}}</a>
 					{{end}}
 				</div>
 			</div>
@@ -58,6 +58,7 @@
 						</li>
 					</ul>
 				</div>
+<!-- ////////////////////////////////////////////////////////////////////////////////////////////// -->
 				<div class="container" id="task_container">
 					<!-- FILLED DYNAMICALLY -->
 					{{range .Tasks}}
@@ -111,6 +112,76 @@
 					{{end}}
 					</div>
 				</div>
+
+<!-- ////////////////////////////////////////////////////////////////////////////////////////////// -->
+				
+				<div class="container" id="pin_container">
+					<!-- FILLED DYNAMICALLY -->
+					{{range .Pins}}
+					{{if (ne .Post.Title "")}}
+					<div class="container" id="post">
+						<div class="container" id="post-title">
+							<h1>{{.Name}}</h1>
+						</div>
+						<div class="container" id="post-body">
+							<div class="row" id="post-contents">
+								<div class="col-sm-4" id="lhs">
+									<ul>
+										<li>{{.Content}}</li>
+										<li>{{.Task}}</li>
+									</ul>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									<button type="submit" class="btn btn-pin"><i class="fas fa-thumbtack"
+											style="font-size: 1.5em;"></i></button>
+									<button type="submit" class="btn btn-comment"><i class="fas fa-comment"
+											style="font-size: 1.5em;"></i></button>
+								</div>
+							</div>
+						</div>
+				
+						
+						{{end}}
+						{{end}}
+					</div>
+				</div>
+
+<!-- ////////////////////////////////////////////////////////////////////////////////////////////// -->
+				<div class="container" id="feed_container">
+					<!-- FILLED DYNAMICALLY -->
+					{{range .Feed}}
+					{{if (ne .Post.Title "")}}
+					<div class="container" id="post">
+						<div class="container" id="post-title">
+							<h1>{{.Name}}</h1>
+						</div>
+						<div class="container" id="post-body">
+							<div class="row" id="post-contents">
+								<div class="col-sm-4" id="lhs">
+									<ul>
+										<li>{{.Content}}</li>
+										<li>{{.Task}}</li>
+									</ul>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									<button type="submit" class="btn btn-pin"><i class="fas fa-thumbtack"
+											style="font-size: 1.5em;"></i></button>
+									<button type="submit" class="btn btn-comment"><i class="fas fa-comment"
+											style="font-size: 1.5em;"></i></button>
+								</div>
+							</div>
+						</div>
+				
+				
+						{{end}}
+						{{end}}
+					</div>
+				</div>
+
 			</div>
 		</div>
 	</div>
