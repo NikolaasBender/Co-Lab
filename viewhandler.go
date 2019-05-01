@@ -2,7 +2,6 @@ package main
 
 import (
 	"Co-Lab/go_dev"
-	"SoftwareDevProject/go_sql/go_dev"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -108,15 +107,15 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 			nam := string(r.FormValue("name"))
 			due := string(r.FormValue("dd"))
 			des := string(r.FormValue("des"))
-			ok := go_dev.createTask(pjs, user, nam, db)
+			ok := go_dev.CreateTask(pjs, user, nam, db)
 			if ok != true {
 				fmt.Println("error creating task")
 			}
-			ok = go_dev.addDescription(pjs, user, nam, des, db)
+			ok = go_dev.AddDescription(pjs, user, nam, des, db)
 			if ok != true {
 				fmt.Println("error adding description to task")
 			}
-			ok = go_dev.dueDate(pjs, user, nam, due, db)
+			ok = go_dev.DueDate(pjs, user, nam, due, db)
 			if ok != true {
 				fmt.Println("error adding due date to task")
 			}

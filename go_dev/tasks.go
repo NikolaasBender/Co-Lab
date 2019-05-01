@@ -7,7 +7,7 @@ import (
 	// "fmt"
 )
 
-func createTask(project_name, project_owner, task_name string, db *sql.DB) bool {
+func CreateTask(project_name, project_owner, task_name string, db *sql.DB) bool {
 	sqlStatement1 := `SELECT id FROM projects WHERE owner = $1 AND name = $2;`
 
 	var parentID string
@@ -32,7 +32,7 @@ func createTask(project_name, project_owner, task_name string, db *sql.DB) bool 
 	return true
 }
 
-func addTaskMembers(project_name, project_owner, task_name, newMember, db *sql.DB) bool {
+func AddTaskMembers(project_name, project_owner, task_name, newMember, db *sql.DB) bool {
 	sqlStatement1 := `SELECT id FROM projects WHERE owner = $1 AND name = $2;`
 
 	var parentID string
@@ -57,7 +57,7 @@ func addTaskMembers(project_name, project_owner, task_name, newMember, db *sql.D
 	return true
 }
 
-func updateStatus(project_name, project_owner, task_name, status int, db *sql.DB) bool {
+func UpdateStatus(project_name, project_owner, task_name, status int, db *sql.DB) bool {
 	sqlStatement1 := `SELECT id FROM projects WHERE owner = $1 AND name = $2;`
 
 	var parentID string
@@ -117,7 +117,7 @@ func updateStatus(project_name, project_owner, task_name, status int, db *sql.DB
 	return true
 }
 
-func addDescription(project_name, project_owner, task_name, description, db *sql.DB) bool {
+func AddDescription(project_name, project_owner, task_name, description string, db *sql.DB) bool {
 	sqlStatement1 := `SELECT id FROM projects WHERE owner = $1 AND name = $2;`
 
 	var parentID string
@@ -142,7 +142,7 @@ func addDescription(project_name, project_owner, task_name, description, db *sql
 	return true
 }
 
-func dueDate(project_name, project_owner, task_name, dueDate, db *sql.DB) bool {
+func DueDate(project_name, project_owner, task_name, dueDate string, db *sql.DB) bool {
 	sqlStatement1 := `SELECT id FROM projects WHERE owner = $1 AND name = $2;`
 
 	var parentID string
@@ -167,7 +167,7 @@ func dueDate(project_name, project_owner, task_name, dueDate, db *sql.DB) bool {
 	return true
 }
 
-func deleteTask(project_name, project_owner, task_name, db *sql.DB) bool {
+func DeleteTask(project_name, project_owner, task_name, db *sql.DB) bool {
 	sqlStatement1 := `SELECT id FROM projects WHERE owner = $1 AND name = $2;`
 
 	var parentID string
