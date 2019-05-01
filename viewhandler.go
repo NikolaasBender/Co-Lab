@@ -2,6 +2,7 @@ package main
 
 import (
 	"Co-Lab/go_dev"
+	"SoftwareDevProject/go_sql/go_dev"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -64,19 +65,23 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//SPECIFYING THE USERNAME UP HERE BECAUSE IT'S USED SO MUCH
+	user := session.Values["usr"].(string)
+
 	//HANDLING CREATION
 	if strings.Contains(page, "_create") == true {
-		if r.Method != http.MethodPost {
-			t.Execute(w, nil)
-			return
-		}
+
 		if strings.Contains(page, "project") == true {
-			worked := go_dev.CreateProject(session.Values["usr"].(string), string(r.FormValue("pjn")), db)
+			if r.Method != http.MethodPost {
+				t.Execute(w, nil)
+				return
+			}
+			worked := go_dev.CreateProject(user, string(r.FormValue("pjn")), db)
 			adusr := string(r.FormValue("addusrs"))
 			if adusr != "" {
 				usrs := strings.Split(adusr, ",")
 				for _, usr := range usrs {
-					err := go_dev.AddProjectMembers(session.Values["usr"].(string), string(r.FormValue("pjn")), usr, db)
+					err := go_dev.AddProjectMembers(user, string(r.FormValue("pjn")), usr, db)
 					if err != true {
 						fmt.Println("Error adding ", usr, " to project")
 					}
@@ -93,14 +98,31 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 			}
 
 		}
-		// if strings.Contains(page, "task") == true {
-		// 	pathVariables := mux.Vars(r)
-		// 	id, _ := strconv.Atoi(string(pathVariables["key"]))
-		// 	worked := go_dev.createTask(id, session.Values["usr"].(string), string(r.FormValue("pjn")), db)
-		// 	if worked != true {
-		// 		fmt.Println("Error creating task")
-		// 	}
-		// }
+		if strings.Contains(page, "task") == true {
+			pjcts := go_dev.GetProjects(user, db)
+			if r.Method != http.MethodPost {
+				t.Execute(w, pjcts)
+				return
+			}
+			pjs := string(r.FormValue("pjc_sel"))
+			nam := string(r.FormValue("name"))
+			due := string(r.FormValue("dd"))
+			des := string(r.FormValue("des"))
+			ok := go_dev.createTask(pjs, user, nam, db)
+			if ok != true {
+				fmt.Println("error creating task")
+			}
+			ok = go_dev.addDescription(pjs, user, nam, des, db)
+			if ok != true {
+				fmt.Println("error adding description to task")
+			}
+			ok = go_dev.dueDate(pjs, user, nam, due, db)
+			if ok != true {
+				fmt.Println("error adding due date to task")
+			}
+			t.Execute(w, pjcts)
+			return
+		}
 		//A SUCCESS MESSAGE WOULD BE BETTER
 		t.Execute(w, nil)
 

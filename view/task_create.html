@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Sign up for CoLab!</title>
+    
+        <link rel="stylesheet" href="/static/style.css">
+    
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+            integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    
+        <!-- additional CSS -->
+    
+        <!-- fonts -->
+        <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet'>
+        <!-- icons -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+            integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    </head>
+
+    <body>
+
+        <!-- THIS WILL SUBMIT TO /view/task_create.html -->
+        <form action="/view/task_create.html" method="post" class="form-inlin justify-content-center" id="forms" >
+            <div class="form-group">
+                <select id="pjc_sel">
+                    {{range .}}
+                    <option value="{{ .Project_name }}">{{ .Project_name }}</option>
+                    {{end}}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Task Name:</label>
+                <input class="form-control" id="name" placeholder="Task Name" name="name">
+            </div>
+            <div class="form-group">
+                <label>Description:</label>
+                <textarea class="form-control" rows="5" id="des" placeholder="This task has some purpouse... we hope" name="des"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Due date:</label>
+                <input class="form-control" id="dd" placeholder="Yesterday!" name="dd">
+            </div>
+            
+            <a href="/view/allMyTasks.html" class="btn btn-login">Create!</a>
+            <a href="/view/task_create.html" class="btn btn-login">Create another task</a>
+        </form>
+        </div>
+
+    </body>
+
+</html>

@@ -34,7 +34,7 @@ func newRouter() *mux.Router {
 	s.HandleFunc("/", ViewHandler)
 	s.HandleFunc("/{page}", ViewHandler)
 	
-
+	//SOME SPECIFIC VIEWING HANDLERS
 	r.HandleFunc("/project_view/{key}", ProjectViewHandler)
 	r.HandleFunc("/task_view/{key}", TaskViewHandler)
 

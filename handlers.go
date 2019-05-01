@@ -73,9 +73,9 @@ func ProjectViewHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	t, err := template.ParseFiles("/view/project_view.html")
+	t, err := template.ParseFiles("view/project_view.html")
 	if err != nil {
-		fmt.Println("THERE WAS AN ERROR PARSING project_view.html")
+		fmt.Println("THERE WAS AN ERROR PARSING project_view.html ", err)
 	}
 
 	//HANDLING VIEWING
