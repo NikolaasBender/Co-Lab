@@ -17,6 +17,10 @@ import (
 // 	dbname   = "sdev_db"
 // )
 
+/*Initializes connection to database
+If succesful, return database object
+If failed, return nil and throw error
+*/
 func Initialize() *sql.DB {
 	// psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 	// 	"password=%s dbname=%s sslmode=disable",
