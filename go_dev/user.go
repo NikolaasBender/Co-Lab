@@ -7,6 +7,11 @@ import (
 	_ "github.com/lib/pq"
 )
 
+/*
+Adds a new user to the database
+If succesful, returns true
+Otherwise, returns false
+*/
 func AddUser(username, password, email, bio string, db *sql.DB) bool {
 
 	sqlStatement := `INSERT INTO user_login (username, password, email)
@@ -31,6 +36,11 @@ func AddUser(username, password, email, bio string, db *sql.DB) bool {
 	return true
 }
 
+/*
+Checks if a user is in the database
+If the user is in the databse, return true
+If user not found, return false
+*/
 func Exists(username string, db *sql.DB) bool {
 
 	sqlStatement := `SELECT username FROM user_login
@@ -51,6 +61,11 @@ func Exists(username string, db *sql.DB) bool {
 	return true
 }
 
+/*
+Validates a user login
+If user entered correct password, return true
+If user password combination not present in databse, return false
+*/
 func Validate(username, password string, db *sql.DB) bool {
 
 	sqlStatement := `SELECT username FROM user_login
@@ -71,6 +86,11 @@ func Validate(username, password string, db *sql.DB) bool {
 	return true
 }
 
+/*
+Gets all necessary user info
+If succesful, returns array of all user info
+If user has no info, everything except for username will be null
+*/
 func GetUserInfo(username string, db *sql.DB) UserInfo {
 
 	sqlStatement := `SELECT username, bio, profile_image, banner_image FROM user_info
@@ -92,6 +112,11 @@ func GetUserInfo(username string, db *sql.DB) UserInfo {
 	//Need to figure out the best way to return some of this information.
 }
 
+/*
+Updates user info in the database
+If succesful, returns true
+Otherwise, returns false
+*/
 func EditUserInfo(username, field, edit string, db *sql.DB) bool {
 
 	sqlStatement := `UPDATE user_info
