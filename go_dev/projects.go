@@ -6,6 +6,11 @@ import (
 	_ "github.com/lib/pq"
 )
 
+/*
+Initializes a new project and adds it to the database
+If succesful, return true
+Otherwise, return false
+*/
 func CreateProject(owner, name string, db *sql.DB) bool {
 
 	sqlStatement := `INSERT INTO projects(owner,name)
@@ -20,6 +25,11 @@ func CreateProject(owner, name string, db *sql.DB) bool {
 	return true
 }
 
+/*
+Adds a new user to an existing project
+If succesful, return true
+Otherwise, return false
+*/
 func AddProjectMembers(owner, name, newuser string, db *sql.DB) bool {
 
 	sqlStatement := `UPDATE projects
@@ -35,6 +45,11 @@ func AddProjectMembers(owner, name, newuser string, db *sql.DB) bool {
 	return true
 }
 
+/*
+Removes an existing project from the datbase
+If succesful, return true
+Otherwise, return false
+*/
 func DeleteProject(owner, name string, db *sql.DB) bool {
 
 	sqlStatement := `DELETE FROM projects
@@ -49,6 +64,11 @@ func DeleteProject(owner, name string, db *sql.DB) bool {
 	return true
 }
 
+/*
+Gets all projects specific to a user
+If succesful, returns all projects a user is a part of
+If a user has no projects, the usrProjects array returned will be empty
+*/
 func GetProjects(owner string, db *sql.DB) []Project {
 
 	sqlStatement := `SELECT id, name FROM projects
@@ -79,6 +99,11 @@ func GetProjects(owner string, db *sql.DB) []Project {
 	return usrProjects
 }
 
+/*
+Gets all users specific to a project
+If succesful, returns all project members
+If no project members, members will be returned empty
+*/
 func GetProjectMembers(id int, db *sql.DB) []string {
 	sqlStatement1 := `SELECT users FROM projects WHERE id = $1;`
 
