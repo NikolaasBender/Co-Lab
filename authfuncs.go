@@ -17,7 +17,7 @@ import (
 // store will hold all session data
 // securecookie.GenerateRandomKey(64)
 var store = sessions.NewCookieStore([]byte("super-secret-key"))
-
+//appCookie is the cookie name we will be checking for
 const appCookie = "DeleciousCoLabCookies"
 
 //=====================================================================================
@@ -28,13 +28,14 @@ func init() {
 
 	store.Options = &sessions.Options{
 		// Domain: "localhost",
-		MaxAge:   3600 * 72, // 3days
+		MaxAge:   3600 * 72, // Cookie will expire after 3 days
 		HttpOnly: true,
 	}
 }
 
 //=====================================================================================
-//THIS IS THE LOGIN HANDLER (he thicc)
+//This handler is called when the user enters the login page
+//This function handles all of the user login requests as well
 //=====================================================================================
 func login(w http.ResponseWriter, r *http.Request) {
 
@@ -125,7 +126,9 @@ func login(w http.ResponseWriter, r *http.Request) {
 }
 
 //=====================================================================================
-//THE LOG OUT HANDLER
+//This function will log a user out
+//Logout occurs by updating session authentication value to false
+//After logout, user is redirected to the homepage
 //=====================================================================================
 func logout(w http.ResponseWriter, r *http.Request) {
 
@@ -153,7 +156,10 @@ func logout(w http.ResponseWriter, r *http.Request) {
 }
 
 //=====================================================================================
-//THE SIGNUP HANDLER
+//This handler is called when the user enters the signup page
+//When the user hits the signup button, their information will be added to the database
+//They will not be logged in
+//They will be redirected to the signin page
 //=====================================================================================
 func signup(w http.ResponseWriter, r *http.Request) {
 
@@ -214,7 +220,9 @@ func signup(w http.ResponseWriter, r *http.Request) {
 }
 
 //=====================================================================================
-//THIS DEALS WITH CHECKING FOR AUTHORIZATION
+//This function checks if the user is authenticated
+//If the user's session authentication key is true, they are logged in and true is returned
+//Otherwise, they are not logged in and false is returned
 //=====================================================================================
 func heimdall(w http.ResponseWriter, r *http.Request) bool {
 
