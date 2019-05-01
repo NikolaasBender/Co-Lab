@@ -6,6 +6,10 @@ import (
 	_ "github.com/lib/pq"
 )
 
+/*
+Gets everything necesary to populate the user page
+Returns a page object that will be used with templating
+*/
 func PopulateUserPage(username string, db *sql.DB) UserPage {
 	var page UserPage
 
@@ -22,6 +26,10 @@ func PopulateUserPage(username string, db *sql.DB) UserPage {
 	return page
 }
 
+/*
+Gets everything necesary to populate a project page
+Returns a "thing" object to be used with templating
+*/
 func PopulateProjectPage(id int, db *sql.DB) *Project {
 	var thing *Project
 
