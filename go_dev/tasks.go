@@ -7,6 +7,11 @@ import (
 	// "fmt"
 )
 
+/*
+Initializes a new task for a project and adds it to the database
+If succesful, returns true
+Otherwise, returns false
+*/
 func CreateTask(project_name, project_owner, task_name string, db *sql.DB) bool {
 	sqlStatement1 := `SELECT id FROM projects WHERE owner = $1 AND name = $2;`
 
@@ -32,6 +37,11 @@ func CreateTask(project_name, project_owner, task_name string, db *sql.DB) bool 
 	return true
 }
 
+/*
+Adds a new member to an existing task
+If succesful, returns true
+Otherwise, returns false
+*/
 func AddTaskMembers(project_name, project_owner, task_name, newMember, db *sql.DB) bool {
 	sqlStatement1 := `SELECT id FROM projects WHERE owner = $1 AND name = $2;`
 
@@ -57,6 +67,11 @@ func AddTaskMembers(project_name, project_owner, task_name, newMember, db *sql.D
 	return true
 }
 
+/*
+Updates a tasks status and then populates the corresponding project task lisk
+If succesful, returns true
+Otherwise, returns false
+*/
 func UpdateStatus(project_name, project_owner, task_name, status int, db *sql.DB) bool {
 	sqlStatement1 := `SELECT id FROM projects WHERE owner = $1 AND name = $2;`
 
@@ -117,6 +132,11 @@ func UpdateStatus(project_name, project_owner, task_name, status int, db *sql.DB
 	return true
 }
 
+/*
+Adds a description to a task
+If succesful, returns true
+Otherwise, returns false
+*/
 func AddDescription(project_name, project_owner, task_name, description string, db *sql.DB) bool {
 	sqlStatement1 := `SELECT id FROM projects WHERE owner = $1 AND name = $2;`
 
@@ -142,6 +162,11 @@ func AddDescription(project_name, project_owner, task_name, description string, 
 	return true
 }
 
+/*
+Changes the due date on a task
+If succesful, returns true
+Otherwise, returns false
+*/
 func DueDate(project_name, project_owner, task_name, dueDate string, db *sql.DB) bool {
 	sqlStatement1 := `SELECT id FROM projects WHERE owner = $1 AND name = $2;`
 
@@ -167,6 +192,11 @@ func DueDate(project_name, project_owner, task_name, dueDate string, db *sql.DB)
 	return true
 }
 
+/*
+Removes a task from the project database
+If succesful, returns true
+Otherwise, returns false
+*/
 func DeleteTask(project_name, project_owner, task_name, db *sql.DB) bool {
 	sqlStatement1 := `SELECT id FROM projects WHERE owner = $1 AND name = $2;`
 
@@ -191,6 +221,11 @@ func DeleteTask(project_name, project_owner, task_name, db *sql.DB) bool {
 	return true
 }
 
+/*
+Returns all tasks specific to a user
+If succesful, returns array of all tasks
+If user has no tasks, then the userTasks array returned will be empty
+*/
 func GetUserTasks(username string, db *sql.DB) []Task {
 
 	sqlStatement := `SELECT p.name, t.name, t.description, EXTRACT(MONTH FROM t.due_date) as month, EXTRACT(DAY FROM t.due_date) as day, t.status
@@ -225,6 +260,11 @@ func GetUserTasks(username string, db *sql.DB) []Task {
 	return userTasks
 }
 
+/*
+Gets all tasks specific to a project
+If succesful, returns array of all tasks
+If user has no tasks, then the ProjectTasks array returned will be empty
+*/
 func GetProjectTasks(id int, status int, db *sql.DB) []Task {
 
 	sqlStatement1 := `SELECT name FROM projects WHERE id = $1;`
