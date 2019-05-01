@@ -27,7 +27,8 @@ var err error
 // }
 
 //=====================================================================================
-//SUPER BASIC INDEX HANDLER
+//This handler is called when the user enters the home page
+//It simply just displays the homepage using a template
 //=====================================================================================
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
 
@@ -47,7 +48,8 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 //=====================================================================================
-//THIS DISPLAYS THE CUSTOM 404 PAGE
+//This is called when we get a 404 error
+//When a user enters a restricted or unfound url on our site, the 404 page is served
 //=====================================================================================
 func notFound(w http.ResponseWriter, r *http.Request) {
 	t, err := template.ParseFiles("404.html")
@@ -60,7 +62,10 @@ func notFound(w http.ResponseWriter, r *http.Request) {
 }
 
 //=====================================================================================
-//THIS DEALS WITH VIEWING PROJECTS
+//This is called when a project page is entered
+//First it checks if the user is logged in
+//If the user is logged in and is part of the project then the project data is pulled
+//The project data is passed into a templated which then populates the page
 //=====================================================================================
 func ProjectViewHandler(w http.ResponseWriter, r *http.Request) {
 	if debug == true {
@@ -87,7 +92,10 @@ func ProjectViewHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 //=====================================================================================
-//THIS DEALS WITH VIEWING TASKS
+//This is called when a task page needs to be displayed
+//First it verifies that the user is logged in
+//Then it pulls the necessary task info from the database
+//Then it passes the task info into a template and populates the page
 //=====================================================================================
 func TaskViewHandler(w http.ResponseWriter, r *http.Request) {
 	if debug == true {
@@ -117,7 +125,9 @@ func TaskViewHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 //=====================================================================================
-//THIS DEALS WITH FINDING THE RIGHT FILES
+//This is called for finding a file
+//It checks if path/to/whatever exists
+//It does not check if whatever actually exists
 //=====================================================================================
 func file_finder(folder string, w http.ResponseWriter, r *http.Request) string {
 
