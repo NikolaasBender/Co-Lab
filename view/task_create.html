@@ -27,7 +27,9 @@
             <div class="form-group">
                 <select id="pjc_sel">
                     {{range .}}
+                    {{if (ne .Project_name "")}}
                     <option value="{{ .Project_name }}">{{ .Project_name }}</option>
+                    {{end}}
                     {{end}}
                 </select>
             </div>
