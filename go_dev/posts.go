@@ -7,6 +7,10 @@ import (
 	// "fmt"
 )
 
+/*Pushes new post to the database
+If succesful, return true
+Otherwise, return false
+*/
 func addContentPost(title, user, content, db *sql.DB) bool {
 	sqlStatement := `UPDATE posts
   	SET content = $1
@@ -20,6 +24,10 @@ func addContentPost(title, user, content, db *sql.DB) bool {
 	return true
 }
 
+/*Removes post from the database
+If succesful, return true
+Otherwise, return false
+*/
 func deletePost(title, user, db *sql.DB) bool {
 	sqlStatement := `DELETE FROM posts
   	WHERE title = $1 AND users = $2;`
@@ -33,6 +41,11 @@ func deletePost(title, user, db *sql.DB) bool {
 	return true
 }
 
+/*
+Gets all of the posts that a user has pinned from the databse
+If succesful, return all of the user's pinned posts
+If there are no pinned posts, then the userPins array returned will be empty
+*/
 func GetUserPins(username string, db *sql.DB) []Post {
 
 	sqlStatement := `SELECT title, content, users FROM posts
@@ -63,6 +76,11 @@ func GetUserPins(username string, db *sql.DB) []Post {
 	return userPins
 }
 
+/*
+Pulls all posts and tasks specific to the user
+If succesful, will return everything needed to populate the user feed
+If user has nothing, then the returned userFeed will be empty
+*/
 func GetUserFeed(username string, db *sql.DB) []Post {
 
 	sqlStatement := `SELECT p.title, p.content, p.users, t.name
