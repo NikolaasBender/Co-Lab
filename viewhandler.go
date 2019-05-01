@@ -11,6 +11,11 @@ import (
 //=====================================================================================
 //VIEW HANDLER
 //THIS STARTED REALLY LEAN THEN IT GOT TO FINALS AND STRESS ATE LOGIC
+//First checks if user is logged in
+//Then finds the page
+//Then parses the file
+//After, it gets our cookie for the user
+//Then it populates the user page in a way only Nick Bender understands
 //=====================================================================================
 func ViewHandler(w http.ResponseWriter, r *http.Request) {
 
