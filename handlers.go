@@ -96,9 +96,9 @@ func ProjectViewHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	p := go_dev.PopulateProjectPage(id, db)
 	if debug == true {
-		fmt.Println("POPULATING THE PROJECT PAGE RETURNED: ", *p)
+		fmt.Println("POPULATING THE PROJECT PAGE RETURNED: ", p)
 	}
-	t.Execute(w, *p)
+	t.Execute(w, p)
 
 }
 

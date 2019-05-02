@@ -23,7 +23,7 @@
     <body>
 
         <!-- THIS WILL SUBMIT TO /view/task_create.html -->
-        <form action="/view/task_create.html" method="post" class="form-inlin justify-content-center" id="forms" >
+        <form method="post" class="form-inlin justify-content-center" id="forms" >
             <div class="form-group">
                 <select id="pjc_sel">
                     {{range .}}
@@ -48,6 +48,8 @@
             
             <a href="/view/allMyTasks.html" class="btn btn-login">Create!</a>
             <a href="/view/task_create.html" class="btn btn-login">Create another task</a>
+            <button type="submit" class="btn btn-login">Create!</button>
+
         </form>
         </div>
 
