@@ -16,14 +16,14 @@ Otherwise, returns false
 */
 func AddUser(username, password, email, bio string, db *sql.DB) bool {
 
-	pss_hash, err := bcrypt.GenerateFromPassword([]byte(password),MinCost)
+	pss_hash, err := bcrypt.GenerateFromPassword([]byte(password),bcrypt.MinCost)
 
 	sqlStatement := `INSERT INTO user_login (username, password, email)
   VALUES ($1, $2, $3);`
 	sqlStatement2 := `INSERT INTO user_info (username, bio)
   VALUES ($1, $2);`
 
-	_, err = db.Exec(sqlStatement, username, pss_hash, email)
+	_, err = db.Exec(sqlStatement, username, string(pss_hash), email)
 
 	if err != nil {
 		fmt.Println(err)
@@ -75,7 +75,7 @@ func Validate(username, password string, db *sql.DB) bool {
 	sqlStatement := `SELECT password FROM user_login
   WHERE username = $1;`
 
-	var pss []byte
+	var pss string
 
 	err = db.QueryRow(sqlStatement, username).Scan(&pss)
 
@@ -87,9 +87,10 @@ func Validate(username, password string, db *sql.DB) bool {
 		return false
 	}
 
-	err = bycrypt.CompareHashAndPassword(pss,[]byte(password))
+	err = bcrypt.CompareHashAndPassword([]byte(pss),[]byte(password))
 
 	if(err != nil) {
+		fmt.Println(string(pss)+" "+password)
 		return false
 	} else {
 		return true
