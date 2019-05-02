@@ -240,11 +240,11 @@ func GetUserTasks(username string, db *sql.DB) []Task {
 
 	var userTasks = make([]Task, 5)
 	var day, month string
+	var tsk Task
 
 	defer rows.Close()
 
 	for rows.Next() {
-		var tsk Task
 
 		err = rows.Scan(&tsk.Project_name, &tsk.Name, &tsk.Description, &month, &day, &tsk.Status)
 
