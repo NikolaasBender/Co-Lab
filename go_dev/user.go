@@ -5,6 +5,8 @@ import (
 	"fmt"
 
 	_ "github.com/lib/pq"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 /*
@@ -14,12 +16,14 @@ Otherwise, returns false
 */
 func AddUser(username, password, email, bio string, db *sql.DB) bool {
 
+	pss_hash, err := bcrypt.GenerateFromPassword([]byte(password),MinCost)
+
 	sqlStatement := `INSERT INTO user_login (username, password, email)
   VALUES ($1, $2, $3);`
 	sqlStatement2 := `INSERT INTO user_info (username, bio)
   VALUES ($1, $2);`
 
-	_, err = db.Exec(sqlStatement, username, password, email)
+	_, err = db.Exec(sqlStatement, username, pss_hash, email)
 
 	if err != nil {
 		fmt.Println(err)
@@ -68,12 +72,12 @@ If user password combination not present in databse, return false
 */
 func Validate(username, password string, db *sql.DB) bool {
 
-	sqlStatement := `SELECT username FROM user_login
-  WHERE username = $1 AND password = $2;`
+	sqlStatement := `SELECT password FROM user_login
+  WHERE username = $1;`
 
-	var uname string
+	var pss []byte
 
-	err = db.QueryRow(sqlStatement, username, password).Scan(&uname)
+	err = db.QueryRow(sqlStatement, username).Scan(&pss)
 
 	if err == sql.ErrNoRows {
 		fmt.Println("No Rows.")
@@ -83,7 +87,13 @@ func Validate(username, password string, db *sql.DB) bool {
 		return false
 	}
 
-	return true
+	err = bycrypt.CompareHashAndPassword(pss,[]byte(password))
+
+	if(err != nil) {
+		return false
+	} else {
+		return true
+	}
 }
 
 /*
