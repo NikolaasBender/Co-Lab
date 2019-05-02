@@ -122,7 +122,7 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 			des := string(r.FormValue("des"))
 			ok := go_dev.CreateTask(pjs, user, nam, db)
 			if ok != true {
-				fmt.Println("error creating task")
+				fmt.Println("error creating task", pjs, nam, due, des, user)
 			}
 			ok = go_dev.AddDescription(pjs, user, nam, des, db)
 			if ok != true {
