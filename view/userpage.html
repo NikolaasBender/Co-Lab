@@ -84,12 +84,11 @@
 											style="font-size: 1.5em;"></i></button>
 								</div>
 							</div>
-						</div>
 
 						{{range .Comments}}
 						<div class="container" id="comment">
 							<div class="container" id="comment-header">
-
+								<h1>{{.Title}}
 							</div>
 							<div class="container" id="comment-box">
 
@@ -108,6 +107,7 @@
 							</div>
 						</div>
 						{{end}}
+					</div>
 					</div>
 					{{end}}
 					{{end}}
