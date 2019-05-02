@@ -35,6 +35,8 @@ func PopulateProjectPage(id int, db *sql.DB) *Project {
 
 	thing.Id = id
 
+	thing.Name = GetProjectName(id, db)
+
 	thing.Todo = GetProjectTasks(id, 0, db)
 
 	thing.Working = GetProjectTasks(id, 1, db)
