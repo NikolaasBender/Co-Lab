@@ -116,10 +116,15 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 				t.Execute(w, pjcts)
 				return
 			}
-			pjs := string(r.FormValue("pjc_sel"))
-			nam := string(r.FormValue("name"))
-			due := string(r.FormValue("dd"))
-			des := string(r.FormValue("des"))
+			r.ParseForm()
+			// pjs := string(r.FormValue("pjc_sel"))
+			// nam := string(r.FormValue("name"))
+			// due := string(r.FormValue("dd"))
+			// des := string(r.FormValue("des"))
+			pjs := r.Form["pjc_sel"][0]
+			nam := r.Form["name"][0]
+			due := r.Form["dd"][0]
+			des := r.Form["des"][0]
 			ok := go_dev.CreateTask(pjs, user, nam, db)
 			if ok != true {
 				fmt.Println("error creating task", pjs, nam, due, des, user)
