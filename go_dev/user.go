@@ -23,7 +23,7 @@ func AddUser(username, password, email, bio string, db *sql.DB) bool {
 	sqlStatement2 := `INSERT INTO user_info (username, bio)
   VALUES ($1, $2);`
 
-	_, err = db.Exec(sqlStatement, username, string(pss_hash), email)
+	_, err = db.Exec(sqlStatement, username, string(pss_hash[:]), email)
 
 	if err != nil {
 		fmt.Println(err)
