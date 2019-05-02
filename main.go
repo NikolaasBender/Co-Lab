@@ -33,15 +33,15 @@ func newRouter() *mux.Router {
 	s := r.PathPrefix("/view").Subrouter()
 	s.HandleFunc("/", ViewHandler)
 	s.HandleFunc("/{page}", ViewHandler)
-	
+
 	//SOME SPECIFIC VIEWING HANDLERS
 	r.HandleFunc("/project_view/{key}", ProjectViewHandler)
 	r.HandleFunc("/task_view/{key}", TaskViewHandler)
 
 	//SESSIONS AND STUFF
-	r.HandleFunc("/login", login)
-	r.HandleFunc("/logout", logout)
-	r.HandleFunc("/signup", signup)
+	r.HandleFunc("/login", Login)
+	r.HandleFunc("/logout", Logout)
+	r.HandleFunc("/signup", Signup)
 
 	//DEFAULT ROUTE WHEN SOMEONE HITS THE SITE
 	r.HandleFunc("/", IndexHandler)

@@ -81,12 +81,17 @@ func ProjectViewHandler(w http.ResponseWriter, r *http.Request) {
 	t, err := template.ParseFiles("view/project_view.html")
 	if err != nil {
 		fmt.Println("THERE WAS AN ERROR PARSING project_view.html ", err)
+	} else {
+		fmt.Println("THERE WAS *NO* ERROR IN  PARSING project_view.html ")
 	}
 
 	//HANDLING VIEWING
 	pathVariables := mux.Vars(r)
 	id, _ := strconv.Atoi(string(pathVariables["key"]))
 	p := go_dev.PopulateProjectPage(id, db)
+	if debug == true {
+		fmt.Println("POPULATING THE PROJECT PAGE RETURNED: ", p)
+	}
 	t.Execute(w, p)
 
 }
