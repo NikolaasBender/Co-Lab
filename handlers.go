@@ -87,7 +87,13 @@ func ProjectViewHandler(w http.ResponseWriter, r *http.Request) {
 
 	//HANDLING VIEWING
 	pathVariables := mux.Vars(r)
-	id, _ := strconv.Atoi(string(pathVariables["key"]))
+	id, err := strconv.Atoi(string(pathVariables["key"]))
+	if debug == true {
+		fmt.Println("PROJECT ID IS: ", id)
+	}
+	if err != nil {
+		fmt.Println("THERE WAS AN ISSUE TURNING THE KEY INTO AN INT ", err)
+	}
 	p := go_dev.PopulateProjectPage(id, db)
 	if debug == true {
 		fmt.Println("POPULATING THE PROJECT PAGE RETURNED: ", p)

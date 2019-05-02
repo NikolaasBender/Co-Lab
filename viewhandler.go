@@ -15,7 +15,7 @@ import (
 //Then finds the page
 //Then parses the file
 //After, it gets our cookie for the user
-//Then it populates the user page in a way only Nick Bender understands
+//Then it decides if the route needs any special treatment and decides how to fill the page or ingest a form
 //=====================================================================================
 func ViewHandler(w http.ResponseWriter, r *http.Request) {
 
@@ -135,6 +135,9 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 	if strings.Contains(page, "allMyTasks") == true {
 
 		tasks := go_dev.GetUserTasks(session.Values["usr"].(string), db)
+		if debug == true {
+			fmt.Println("POPULATING THE USER TASK PAGE RETURNED: ", tasks)
+		}
 		t.Execute(w, tasks)
 		return
 	}
