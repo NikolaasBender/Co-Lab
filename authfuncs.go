@@ -17,6 +17,7 @@ import (
 // store will hold all session data
 // securecookie.GenerateRandomKey(64)
 var store = sessions.NewCookieStore([]byte("super-secret-key"))
+
 //appCookie is the cookie name we will be checking for
 const appCookie = "DeleciousCoLabCookies"
 
@@ -37,7 +38,7 @@ func init() {
 //This handler is called when the user enters the login page
 //This function handles all of the user login requests as well
 //=====================================================================================
-func login(w http.ResponseWriter, r *http.Request) {
+func Login(w http.ResponseWriter, r *http.Request) {
 
 	if debug == true {
 		fmt.Println("Hit login")
@@ -130,7 +131,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 //Logout occurs by updating session authentication value to false
 //After logout, user is redirected to the homepage
 //=====================================================================================
-func logout(w http.ResponseWriter, r *http.Request) {
+func Logout(w http.ResponseWriter, r *http.Request) {
 
 	if debug == true {
 		fmt.Println("Hit logout")
@@ -161,7 +162,7 @@ func logout(w http.ResponseWriter, r *http.Request) {
 //They will not be logged in
 //They will be redirected to the signin page
 //=====================================================================================
-func signup(w http.ResponseWriter, r *http.Request) {
+func Signup(w http.ResponseWriter, r *http.Request) {
 
 	if debug == true {
 		fmt.Println("Hit signup")
@@ -244,8 +245,14 @@ func heimdall(w http.ResponseWriter, r *http.Request) bool {
 			fmt.Println("Error saving cookie")
 			return false
 		}
+		if debug == true {
+			fmt.Println(session, session.Values["usr"], " is not logged in")
+		}
 		return false
 	}
 	//session.Values["auth"] = true
+	if debug == true {
+		fmt.Println(session.Values["usr"], " is logged in")
+	}
 	return true
 }
