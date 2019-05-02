@@ -1,3 +1,5 @@
+![Alt text](assets/colab_2.png)
+
 These days, everyone seems glued to their social media, 
 So we asked:
 What if we could bring that kind of engagement to the workplace?
