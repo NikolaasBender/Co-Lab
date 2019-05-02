@@ -62,7 +62,7 @@
 				<div class="container" id="task_container">
 					<!-- FILLED DYNAMICALLY -->
 					{{range .Tasks}}
-					{{if (ne .Task.Name "")}}
+					{{if (ne .Name "")}}
 					<div class="container" id="post">
 						<div class="container" id="post-title">
 							<h1>{{.Name}}</h1>
@@ -85,7 +85,7 @@
 								</div>
 							</div>
 						</div>
-						
+
 						{{range .Comments}}
 						<div class="container" id="comment">
 							<div class="container" id="comment-header">
@@ -114,11 +114,11 @@
 				</div>
 
 <!-- ////////////////////////////////////////////////////////////////////////////////////////////// -->
-				
+
 				<div class="container" id="pin_container">
 					<!-- FILLED DYNAMICALLY -->
 					{{range .Pins}}
-					{{if (ne .Post.Title "")}}
+					{{if (ne .Title "")}}
 					<div class="container" id="post">
 						<div class="container" id="post-title">
 							<h1>{{.Name}}</h1>
@@ -150,7 +150,7 @@
 				<div class="container" id="feed_container">
 					<!-- FILLED DYNAMICALLY -->
 					{{range .Feed}}
-					{{if (ne .Post.Title "")}}
+					{{if (ne .Title "")}}
 					<div class="container" id="post">
 						<div class="container" id="post-title">
 							<h1>{{.Name}}</h1>
