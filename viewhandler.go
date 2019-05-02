@@ -57,7 +57,15 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 		p := go_dev.PopulateUserPage(session.Values["usr"].(string), db)
 		if debug == true {
 			fmt.Println("POPULATED THE USER PAGE CORRECTLY")
-			fmt.Println(p)
+			fmt.Println(p.UserInfo)
+			fmt.Println("\n")
+			fmt.Println(p.Feed)
+			fmt.Println("\n")
+			fmt.Println(p.Tasks)
+			fmt.Println("\n")
+			fmt.Println(p.Pins)
+			fmt.Println("\n")
+			fmt.Println(p.Projects)
 		}
 
 		t.Execute(w, p)
