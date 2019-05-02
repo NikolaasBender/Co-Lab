@@ -117,3 +117,17 @@ func GetProjectMembers(id int, db *sql.DB) []string {
 
 	return members
 }
+
+func GetProjectName(id int, db *sql.DB) string {
+	sqlStatement1 := `SELECT name FROM projects WHERE id = $1;`
+
+	var name string
+
+	err = db.QueryRow(sqlStatement1, id).Scan(&name)
+
+	if err != nil {
+		//Do something
+	}
+
+	return name
+}
