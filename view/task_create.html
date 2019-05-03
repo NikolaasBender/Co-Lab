@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>Sign up for CoLab!</title>
+        <title>Create a Task</title>
     
         <link rel="stylesheet" href="/static/style.css">
     
@@ -22,37 +22,43 @@
 
     <body>
 
-        <!-- THIS WILL SUBMIT TO /view/task_create.html -->
-        <form method="post" class="form-inlin justify-content-center" id="forms" >
-            <div class="form-group">
-                <select id="pjc_sel">
-                    {{range .}}
-                    {{if (ne .Project_name "")}}
-                    <option value="{{ .Project_name }}">{{ .Project_name }}</option>
-                    {{end}}
-                    {{end}}
-                </select>
+        <div class="container-fluid" id="task_create" >
+            <div class="container">
+                <div class="jumbotron">
+                    <h1>Sign up now to start your adventure!</h1>
+        
+                    <div class="info-form">
+                        <form method="post" class="form-inlin justify-content-center" id="forms">
+                            <div class="form-group">
+                                <label for="email">Select project:</label>
+                                <select id="pjc_sel" name="pjc_sel">
+                                    {{range .}}
+                                    {{if (ne .Project_name "")}}
+                                    <option value="{{ .Project_name }}" id="{{ .Project_name }}">{{ .Project_name }}</option>
+                                    {{end}}
+                                    {{end}}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Task Name:</label>
+                                <input class="form-control" id="name" placeholder="Task Name" name="name">
+                            </div>
+                            <div class="form-group">
+                                <label>Description:</label>
+                                <textarea class="form-control" rows="5" id="des" placeholder="This task has some purpouse... we hope"
+                                    name="des"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Due date:</label>
+                                <input class="form-control" id="dd" placeholder="Yesterday!" name="dd">
+                            </div>
+                            <button type="submit" class="btn btn-login">Submit</button>
+                        </form>
+                    </div>
+                    <br></br>
+                </div>
             </div>
-            <div class="form-group">
-                <label>Task Name:</label>
-                <input class="form-control" id="name" placeholder="Task Name" name="name">
-            </div>
-            <div class="form-group">
-                <label>Description:</label>
-                <textarea class="form-control" rows="5" id="des" placeholder="This task has some purpouse... we hope" name="des"></textarea>
-            </div>
-            <div class="form-group">
-                <label>Due date:</label>
-                <input class="form-control" id="dd" placeholder="Yesterday!" name="dd">
-            </div>
-            
-            <a href="/view/allMyTasks.html" class="btn btn-login">Create!</a>
-            <a href="/view/task_create.html" class="btn btn-login">Create another task</a>
-            <button type="submit" class="btn btn-login">Create!</button>
-
-        </form>
         </div>
-
     </body>
 
 </html>

@@ -228,9 +228,12 @@ If user has no tasks, then the userTasks array returned will be empty
 */
 func GetUserTasks(username string, db *sql.DB) []Task {
 
-	sqlStatement := `SELECT p.name, t.name, t.description, EXTRACT(MONTH FROM t.due_date) as month, EXTRACT(DAY FROM t.due_date) as day, t.status
+	sqlStatement := `SELECT t.id, p.name, t.name, t.description, EXTRACT(MONTH FROM t.due_date) as month, EXTRACT(DAY FROM t.due_date) as day, t.status
   FROM tasks t INNER JOIN  projects p ON t.project = p.id
   WHERE $1 = ANY(t.users) ORDER BY t.due_date ASC;`
+
+	sqlStatement2 := `SELECT p.title, p.users, p.content, t.name
+	FROM posts p INNER JOIN tasks t ON p.task = t.id WHERE p.task = $1;`
 
 	rows, err := db.Query(sqlStatement, username)
 
@@ -238,21 +241,46 @@ func GetUserTasks(username string, db *sql.DB) []Task {
 		//Do something
 	}
 
-	var userTasks = make([]Task, 5)
+	var userTasks = make([]Task, 0)
 	var day, month string
 	var tsk Task
+	var tskid int
+
+	var comments = make([]Post,0)
+	var pst Post
 
 	defer rows.Close()
 
 	for rows.Next() {
 
-		err = rows.Scan(&tsk.Project_name, &tsk.Name, &tsk.Description, &month, &day, &tsk.Status)
+		err = rows.Scan(&tskid, &tsk.Project_name, &tsk.Name, &tsk.Description, &month, &day, &tsk.Status)
 
 		if err != nil {
 			//Do something
 		}
 
 		tsk.Due_date = month + "-" + day
+
+		rows, err = db.Query(sqlStatement2, tskid)
+
+		if err != nil {
+			//Do something
+		}
+
+		defer rows.Close()
+
+		for rows.Next() {
+
+			err = rows.Scan(&pst.Title, &pst.Username, &pst.Content, &pst.Task)
+
+			if err != nil {
+				//Do something
+			}
+
+			comments = append(comments, pst)
+		}
+
+		tsk.Comments = comments
 
 		userTasks = append(userTasks, tsk)
 	}
@@ -286,7 +314,7 @@ func GetProjectTasks(id int, status int, db *sql.DB) []Task {
 		//Do something
 	}
 
-	var ProjectTasks = make([]Task, 5)
+	var ProjectTasks = make([]Task, 0)
 
 	defer rows.Close()
 

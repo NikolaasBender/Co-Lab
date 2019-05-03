@@ -62,7 +62,7 @@
 				<div class="container" id="task_container">
 					<!-- FILLED DYNAMICALLY -->
 					{{range .Tasks}}
-					{{if (ne .Name "")}}
+					<!-- {{if (ne .Name "")}} -->
 					<div class="container" id="post">
 						<div class="container" id="post-title">
 							<h1>{{.Name}}</h1>
@@ -84,12 +84,11 @@
 											style="font-size: 1.5em;"></i></button>
 								</div>
 							</div>
-						</div>
 
 						{{range .Comments}}
 						<div class="container" id="comment">
 							<div class="container" id="comment-header">
-
+								<h1>{{.Title}}
 							</div>
 							<div class="container" id="comment-box">
 
@@ -109,8 +108,9 @@
 						</div>
 						{{end}}
 					</div>
+					<!-- {{end}} -->
 					{{end}}
-					{{end}}
+					</div>
 				</div>
 
 <!-- ////////////////////////////////////////////////////////////////////////////////////////////// -->

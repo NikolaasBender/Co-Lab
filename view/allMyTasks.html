@@ -24,18 +24,22 @@
     <h1> All your tasks</h1>
     <div class="flex-container">
         <div class="main">
+            taskname:
             {{range .Tasks}}
-            {{if (ne .Task.Name "")}}
             <div class="card">
                 <div class="container">
+                    project name:
                     {{.Project_name}}
+                    name:
                     <h4><b>{{.Name}}</b></h4>
+                    description:
                     <p>{{.Description}}</p>
+                    due:
                     {{.Due_date}}
+                    status:
                     {{.Status}}
                 </div>
             </div>
-            {{end}}
             {{end}}
         </div>
 

@@ -57,15 +57,12 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 		p := go_dev.PopulateUserPage(session.Values["usr"].(string), db)
 		if debug == true {
 			fmt.Println("POPULATED THE USER PAGE CORRECTLY")
-			fmt.Println(p.Info)
-			fmt.Println("\n")
-			fmt.Println(p.Feed)
-			fmt.Println("\n")
-			fmt.Println(p.Tasks)
-			fmt.Println("\n")
-			fmt.Println(p.Pins)
-			fmt.Println("\n")
-			fmt.Println(p.Projects)
+			// fmt.Println(p.Info)
+			// fmt.Println(p.Feed)
+			// fmt.Println(p.Tasks)
+			// fmt.Println(p.Pins)
+			// fmt.Println(p.Projects)
+			//fmt.Println(p.Tasks[0].Comments)
 		}
 
 		t.Execute(w, p)
@@ -112,14 +109,24 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		if strings.Contains(page, "task") == true {
 			pjcts := go_dev.GetProjects(user, db)
+			if debug == true {
+				fmt.Println("you got to task_create")
+			}
 			if r.Method != http.MethodPost {
 				t.Execute(w, pjcts)
 				return
 			}
+			if debug == true {
+				fmt.Println("the method should be post")
+			}
+			//r.ParseForm()
 			pjs := string(r.FormValue("pjc_sel"))
 			nam := string(r.FormValue("name"))
 			due := string(r.FormValue("dd"))
 			des := string(r.FormValue("des"))
+			if debug == true {
+				fmt.Println("got the form values", pjs, nam, due, des, user)
+			}
 			ok := go_dev.CreateTask(pjs, user, nam, db)
 			if ok != true {
 				fmt.Println("error creating task", pjs, nam, due, des, user)
