@@ -314,7 +314,7 @@ func GetProjectTasks(id int, status int, db *sql.DB) []Task {
 		//Do something
 	}
 
-	var ProjectTasks = make([]Task, 5)
+	var ProjectTasks = make([]Task, 0)
 
 	defer rows.Close()
 
