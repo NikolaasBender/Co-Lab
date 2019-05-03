@@ -58,9 +58,8 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 		if debug == true {
 			fmt.Println("POPULATED THE USER PAGE CORRECTLY")
 
-
-			for i,s := range p.Tasks {
-				fmt.Println(i,s.Name)
+			for i, s := range p.Tasks {
+				fmt.Println(i, s.Name)
 			}
 		}
 
@@ -80,79 +79,11 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 	if strings.Contains(page, "_create") == true {
 
 		if strings.Contains(page, "project") == true {
-			if r.Method != http.MethodPost {
-				t.Execute(w, nil)
-				return
-			}
-			worked := go_dev.CreateProject(user, string(r.FormValue("pjn")), db)
-			adusr := string(r.FormValue("addusrs"))
-			if adusr != "" {
-				usrs := strings.Split(adusr, ",")
-				for _, usr := range usrs {
-					err := go_dev.AddProjectMembers(user, string(r.FormValue("pjn")), usr, db)
-					if err != true {
-						fmt.Println("Error adding ", usr, " to project")
-					}
-				}
-			}
-
-			if worked != true {
-				fmt.Println("Error creating a project")
-				t.Execute(w, nil)
-			} else {
-				//IF CREATION WAS SUCCESSFUL THEN REDIRECT TO USER PAGE
-				http.Redirect(w, r, "/view/userpage.html", http.StatusFound)
-				return
-			}
-
+			ProjectCreateHandler(w, r, user, t)
+			return
 		}
 		if strings.Contains(page, "task") == true {
-			pjcts := go_dev.GetProjects(user, db)
-			if debug == true {
-				fmt.Println("you got to task_create")
-			}
-			if r.Method != http.MethodPost {
-				t.Execute(w, pjcts)
-				return
-			}
-			if debug == true {
-				fmt.Println("the method should be post")
-			}
-			//r.ParseForm()
-			pjs := string(r.FormValue("pjc_sel"))
-			nam := string(r.FormValue("name"))
-			due := string(r.FormValue("dd"))
-			des := string(r.FormValue("des"))
-			urs := string(r.FormValue("addusrs"))
-			if debug == true {
-				fmt.Println("got the form values", pjs, nam, due, des, user)
-			}
-			ok := go_dev.CreateTask(pjs, user, nam, db)
-			if ok != true {
-				fmt.Println("error creating task", pjs, nam, due, des, user)
-			}
-			ok = go_dev.AddDescription(pjs, user, nam, des, db)
-			if ok != true {
-				fmt.Println("error adding description to task")
-			}
-			ok = go_dev.DueDate(pjs, user, nam, due, db)
-			if ok != true {
-				fmt.Println("error adding due date to task")
-			}
-			ok = go_dev.AddTaskMembers(pjs, user, nam, user, db)
-			if ok != true {
-				fmt.Println("error adding project owner to task")
-			}
-			if urs != "" {
-				usrs := strings.Split(urs, ",")
-				for _, usr := range usrs {
-					ok = go_dev.AddTaskMembers(pjs, user, nam, usr, db)
-					if ok != true {
-						fmt.Println("Error adding ", usr, " to task ", nam)
-					}
-				}
-			}
-			t.Execute(w, pjcts)
+			TaskCreateHandler(w, r, user, t)
 			return
 		}
 		//A SUCCESS MESSAGE WOULD BE BETTER
@@ -174,4 +105,81 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 	//DEALS WITH REALLY BASIC STATIC PAGES
 	t.Execute(w, nil)
 
+}
+
+func TaskCreateHandler(w http.ResponseWriter, r *http.Request, user string, t *Template) {
+	pjcts := go_dev.GetProjects(user, db)
+	if debug == true {
+		fmt.Println("you got to task_create")
+	}
+	if r.Method != http.MethodPost {
+		t.Execute(w, pjcts)
+		return
+	}
+	if debug == true {
+		fmt.Println("the method should be post")
+	}
+	//r.ParseForm()
+	pjs := string(r.FormValue("pjc_sel"))
+	nam := string(r.FormValue("name"))
+	due := string(r.FormValue("dd"))
+	des := string(r.FormValue("des"))
+	urs := string(r.FormValue("addusrs"))
+	if debug == true {
+		fmt.Println("got the form values", pjs, nam, due, des, user)
+	}
+	ok := go_dev.CreateTask(pjs, user, nam, db)
+	if ok != true {
+		fmt.Println("error creating task", pjs, nam, due, des, user)
+	}
+	ok = go_dev.AddDescription(pjs, user, nam, des, db)
+	if ok != true {
+		fmt.Println("error adding description to task")
+	}
+	ok = go_dev.DueDate(pjs, user, nam, due, db)
+	if ok != true {
+		fmt.Println("error adding due date to task")
+	}
+	ok = go_dev.AddTaskMembers(pjs, user, nam, user, db)
+	if ok != true {
+		fmt.Println("error adding project owner to task")
+	}
+	if urs != "" {
+		usrs := strings.Split(urs, ",")
+		for _, usr := range usrs {
+			ok = go_dev.AddTaskMembers(pjs, user, nam, usr, db)
+			if ok != true {
+				fmt.Println("Error adding ", usr, " to task ", nam)
+			}
+		}
+	}
+	t.Execute(w, pjcts)
+	return
+}
+
+func ProjectCreateHandler(w http.ResponseWriter, r *http.Request, user string, t *Template) {
+	if r.Method != http.MethodPost {
+		t.Execute(w, nil)
+		return
+	}
+	worked := go_dev.CreateProject(user, string(r.FormValue("pjn")), db)
+	adusr := string(r.FormValue("addusrs"))
+	if adusr != "" {
+		usrs := strings.Split(adusr, ",")
+		for _, usr := range usrs {
+			err := go_dev.AddProjectMembers(user, string(r.FormValue("pjn")), usr, db)
+			if err != true {
+				fmt.Println("Error adding ", usr, " to project")
+			}
+		}
+	}
+
+	if worked != true {
+		fmt.Println("Error creating a project")
+		t.Execute(w, nil)
+	} else {
+		//IF CREATION WAS SUCCESSFUL THEN REDIRECT TO USER PAGE
+		http.Redirect(w, r, "/view/userpage.html", http.StatusFound)
+		return
+	}
 }
