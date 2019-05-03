@@ -86,13 +86,13 @@
               <h1>To do:</h1>
               <div class="container-fluid task-area" id="todo">
                 {{range .Todo}}
-                  {{.Name}}
-                  {{.Due_Date}}
-                  {{range .Comments}}
-                    {{.Title}}
-                    {{.Content}}
-                    {{.Username}}
-                  {{end}}
+                    {{.Name}}
+                    {{.Due_Date}}
+                    {{range .Comments}}
+                        {{.Title}}
+                        {{.Content}}
+                        {{.Username}}
+                    {{end}}
                 {{end}}
               </div>
             </div>
