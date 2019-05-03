@@ -113,19 +113,24 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		if strings.Contains(page, "task") == true {
 			pjcts := go_dev.GetProjects(user, db)
+			if debug == true {
+				fmt.Println("you got to task_create")
+			}
 			if r.Method != http.MethodPost {
 				t.Execute(w, pjcts)
 				return
 			}
-			r.ParseForm()
-			// pjs := string(r.FormValue("pjc_sel"))
-			// nam := string(r.FormValue("name"))
-			// due := string(r.FormValue("dd"))
-			// des := string(r.FormValue("des"))
-			pjs := r.Form["pjc_sel"][0]
-			nam := r.Form["name"][0]
-			due := r.Form["dd"][0]
-			des := r.Form["des"][0]
+			if debug == true {
+				fmt.Println("the method should be post")
+			}
+			//r.ParseForm()
+			pjs := string(r.FormValue("pjc_sel"))
+			nam := string(r.FormValue("name"))
+			due := string(r.FormValue("dd"))
+			des := string(r.FormValue("des"))
+			if debug == true {
+				fmt.Println("got the form values", pjs, nam, due, des, user)
+			}
 			ok := go_dev.CreateTask(pjs, user, nam, db)
 			if ok != true {
 				fmt.Println("error creating task", pjs, nam, due, des, user)
