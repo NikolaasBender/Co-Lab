@@ -42,7 +42,7 @@ Adds a new member to an existing task
 If succesful, returns true
 Otherwise, returns false
 */
-func AddTaskMembers(project_name, project_owner, task_name, newMember, db *sql.DB) bool {
+func AddTaskMembers(project_name, project_owner, task_name, newMember string, db *sql.DB) bool {
 	sqlStatement1 := `SELECT id FROM projects WHERE owner = $1 AND name = $2;`
 
 	var parentID string
@@ -246,7 +246,7 @@ func GetUserTasks(username string, db *sql.DB) []Task {
 	var tsk Task
 	var tskid int
 
-	var comments = make([]Post,0)
+	var comments = make([]Post, 0)
 	var pst Post
 
 	defer rows.Close()
