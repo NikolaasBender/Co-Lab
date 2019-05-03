@@ -45,7 +45,7 @@ Otherwise, returns false
 func AddTaskMembers(project_name, project_owner, task_name, newMember string, db *sql.DB) bool {
 	sqlStatement1 := `SELECT id FROM projects WHERE owner = $1 AND name = $2;`
 
-	var parentID string
+	var parentID int
 	err = db.QueryRow(sqlStatement1, project_owner, project_name).Scan(&parentID)
 
 	if err == sql.ErrNoRows {
@@ -55,7 +55,7 @@ func AddTaskMembers(project_name, project_owner, task_name, newMember string, db
 	}
 
 	sqlStatement := `UPDATE tasks
-  	SET users = users || '{$1}'
+  	SET users = users || '{'$1'}'
   	WHERE project = $2 AND name = $3;`
 
 	_, err = db.Exec(sqlStatement, newMember, parentID, task_name)
