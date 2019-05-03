@@ -58,15 +58,11 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 		if debug == true {
 			fmt.Println("POPULATED THE USER PAGE CORRECTLY")
 			// fmt.Println(p.Info)
-			// fmt.Println("\n")
 			// fmt.Println(p.Feed)
-			// fmt.Println("\n")
 			// fmt.Println(p.Tasks)
-			// fmt.Println("\n")
 			// fmt.Println(p.Pins)
-			// fmt.Println("\n")
 			// fmt.Println(p.Projects)
-			fmt.Println(p.Tasks[0].Comments)
+			//fmt.Println(p.Tasks[0].Comments)
 		}
 
 		t.Execute(w, p)
