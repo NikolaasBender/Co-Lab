@@ -26,7 +26,6 @@
         <div class="main">
             taskname:
             {{range .Tasks}}
-            {{if (ne .Name "")}}
             <div class="card">
                 <div class="container">
                     project name:
@@ -41,7 +40,6 @@
                     {{.Status}}
                 </div>
             </div>
-            {{end}}
             {{end}}
         </div>
 
