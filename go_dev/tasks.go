@@ -241,12 +241,12 @@ func GetUserTasks(username string, db *sql.DB) []Task {
 		//Do something
 	}
 
-	var userTasks = make([]Task, 5)
+	var userTasks = make([]Task, 0)
 	var day, month string
 	var tsk Task
 	var tskid int
 
-	var comments = make([]Post,5)
+	var comments = make([]Post,0)
 	var pst Post
 
 	defer rows.Close()
@@ -314,7 +314,7 @@ func GetProjectTasks(id int, status int, db *sql.DB) []Task {
 		//Do something
 	}
 
-	var ProjectTasks = make([]Task, 5)
+	var ProjectTasks = make([]Task, 0)
 
 	defer rows.Close()
 
