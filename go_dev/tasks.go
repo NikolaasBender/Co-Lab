@@ -3,8 +3,8 @@ package go_dev
 import (
 	"database/sql"
 
-	_ "github.com/lib/pq"
-	// "fmt"
+	"github.com/lib/pq"
+	"fmt"
 )
 
 /*
@@ -49,18 +49,23 @@ func AddTaskMembers(project_name, project_owner, task_name, newMember string, db
 	err = db.QueryRow(sqlStatement1, project_owner, project_name).Scan(&parentID)
 
 	if err == sql.ErrNoRows {
+		fmt.Println("No rows")
 		return false
 	} else if err != nil {
+		fmt.Println("Other error first statement.")
 		return false
 	}
 
 	sqlStatement := `UPDATE tasks
-  	SET users = users || '{'$1'}'
+  	SET users = users || $1
   	WHERE project = $2 AND name = $3;`
 
-	_, err = db.Exec(sqlStatement, newMember, parentID, task_name)
+	_, err = db.Exec(sqlStatement, pq.Array([]string{newMember}), parentID, task_name)
 
 	if err != nil {
+		fmt.Println("Other error second statement.")
+		fmt.Println(err)
+		fmt.Printf("%T\n",newMember)
 		return false
 	}
 
