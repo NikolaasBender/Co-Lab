@@ -249,7 +249,6 @@ func GetUserTasks(username string, db *sql.DB) []Task {
 	var userTasks = make([]Task, 0)
 	var day, month string
 	var tsk Task
-	var tskid int
 
 	var comments = make([]Post, 0)
 	var pst Post
@@ -258,7 +257,7 @@ func GetUserTasks(username string, db *sql.DB) []Task {
 
 	for rows.Next() {
 
-		err = rows.Scan(&tskid, &tsk.Project_name, &tsk.Name, &tsk.Description, &month, &day, &tsk.Status)
+		err = rows.Scan(&tsk.Key, &tsk.Project_name, &tsk.Name, &tsk.Description, &month, &day, &tsk.Status)
 
 		if err != nil {
 			//Do something
@@ -266,7 +265,7 @@ func GetUserTasks(username string, db *sql.DB) []Task {
 
 		tsk.Due_date = month + "-" + day
 
-		rows2, er := db.Query(sqlStatement2, tskid)
+		rows2, er := db.Query(sqlStatement2, tsk.Key)
 
 		if er != nil {
 			//Do something

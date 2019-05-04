@@ -35,6 +35,7 @@ type Project struct {
 type Task struct {
 	Project_name string
 	Name         string
+	Key 				 int
 	Description  string
 	Comments     []Post
 	Due_date     string
