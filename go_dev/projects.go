@@ -3,7 +3,7 @@ package go_dev
 import (
 	"database/sql"
 	//"fmt"
-	_ "github.com/lib/pq"
+	"github.com/lib/pq"
 )
 
 /*
