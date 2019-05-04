@@ -119,11 +119,12 @@ func TaskViewHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//HAVE TO DO THIS SEQUENCE FOR GET AND POST
 	pathVariables := mux.Vars(r)
 
 	id, _ := strconv.Atoi(string(pathVariables["key"]))
 
-	p := go_dev.PopulateProjectPage(id, db)
+	p := go_dev.GetTask(id, db)
 
 	t, err := template.ParseFiles("/view/task_view.html")
 
@@ -131,8 +132,117 @@ func TaskViewHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("task view Handler parsing error", err)
 	}
 
-	t.Execute(w, p)
+	//IF ITS A GET REQUEST IT JUST SHOWS THE TASK AND ITS COMMENTS
+	if r.Method != http.MethodPost {
+		t.Execute(w, p)
+		return
+	}
 
+	t.Execute(w, p)
+	return
+}
+
+//DEALS WITH ADDING COMMENTS TO A TASK
+func TaskCommentHandler(w http.ResponseWriter, r *http.Request) {
+	if debug == true {
+		fmt.Println("Hit TaskViewHandler")
+	}
+	//session, _ := store.Get(r, "cookie-name")
+
+	if heimdall(w, r) != true {
+		http.Redirect(w, r, "/login", http.StatusFound)
+		return
+	}
+
+	//GET OUR APP COOKIE FOR USE LATER
+	session, _ := store.Get(r, appCookie)
+	//SPECIFYING THE USERNAME UP HERE BECAUSE IT'S USED SO MUCH
+	user := session.Values["usr"].(string)
+
+	//HAVE TO DO THIS SEQUENCE FOR GET AND POST
+	pathVariables := mux.Vars(r)
+
+	id, _ := strconv.Atoi(string(pathVariables["key"]))
+
+	p := go_dev.GetTask(id, db)
+
+	t, err := template.ParseFiles("/view/ac2t.html")
+
+	if err != nil {
+		fmt.Println("task view Handler parsing error", err)
+	}
+
+	//IF ITS A GET REQUEST IT JUST SHOWS THE TASK AND ITS COMMENTS
+	if r.Method != http.MethodPost {
+		t.Execute(w, p)
+		return
+	}
+
+	title := string(r.FormValue("title"))
+	cont := string(r.FormValue("content"))
+	if debug == true {
+		fmt.Println("got the form values", title, cont)
+	}
+	ok = go_dev.CreatePost(id, user, title, cont, db)
+	if ok != true {
+		fmt.Println("error adding comment to task")
+	}
+
+	t.Execute(w, p)
+	return
+}
+
+func TaskStatusHandler(w http.ResponseWriter, r *http.Request) {
+	if debug == true {
+		fmt.Println("Hit TaskStatusHandler")
+	}
+	//session, _ := store.Get(r, "cookie-name")
+
+	if heimdall(w, r) != true {
+		http.Redirect(w, r, "/login", http.StatusFound)
+		return
+	}
+
+	//HAVE TO DO THIS SEQUENCE FOR GET AND POST
+	pathVariables := mux.Vars(r)
+
+	id, _ := strconv.Atoi(string(pathVariables["key"]))
+
+	p := go_dev.GetTask(id, db)
+
+	t, err := template.ParseFiles("/view/task_stat.html")
+
+	if err != nil {
+		fmt.Println("task view Handler parsing error", err)
+	}
+
+	//IF ITS A GET REQUEST IT JUST SHOWS THE TASK AND ITS COMMENTS
+	if r.Method != http.MethodPost {
+		t.Execute(w, p)
+		return
+	}
+
+	change, err := strconv.ParseInt(r.FormValue("change")[0:], 10, 64)
+	if err != nil {
+		// handle the error in some way
+	}
+	del := string(r.FormValue("del"))
+
+	if del == "true" {
+		ok := go_dev.DeleteTask(id, db)
+		if ok != true {
+			fmt.Println("ERROR DELETING TASK")
+		}
+	}
+	if change != p["status"] {
+		ok := go_dev.UpdateStatus(id, change, db)
+		if ok != true {
+			fmt.Println("ERROR UPDATING TASK STATUS")
+		}
+	}
+
+	t.Execute(w, p)
+	return
 }
 
 //=====================================================================================

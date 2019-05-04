@@ -36,7 +36,10 @@ func newRouter() *mux.Router {
 
 	//SOME SPECIFIC VIEWING HANDLERS
 	r.HandleFunc("/project_view/{key}", ProjectViewHandler)
-	r.HandleFunc("/task_view/{key}", TaskViewHandler)
+	t := r.PathPrefix("/task_view").Subrouter()
+	t.HandleFunc("/view/{key}", TaskViewHandler)
+	t.HandleFunc("/comment/{key}", TaskCommentHandler)
+	t.HandleFunc("/status/{key}", TaskStatusHandler)
 
 	//SESSIONS AND STUFF
 	r.HandleFunc("/login", Login)
