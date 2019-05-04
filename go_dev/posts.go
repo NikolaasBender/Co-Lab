@@ -7,15 +7,28 @@ import (
 	// "fmt"
 )
 
+func CreatePost(taskID int, user, title, content string, db *sql.DB) bool {
+
+	sqlStatement := `INSERT INTO posts values($1, $2, $3, $4);`
+
+	_, err := db.Exec(sqlStatement, taskID, title, user, content)
+
+	if err != nil {
+		return false
+	}
+
+	return true
+}
+
 /*Pushes new post to the database
 If succesful, return true
 Otherwise, return false
 */
-func addContentPost(title, user, content, db *sql.DB) bool {
+func AddContentPost(title, user, content, db *sql.DB) bool {
 	sqlStatement := `UPDATE posts
   	SET content = $1
   	WHERE title = $2 AND user = $3;`
-	_, err = db.Exec(sqlStatement, content, title, user)
+	_, err := db.Exec(sqlStatement, content, title, user)
 
 	if err != nil {
 		return false
@@ -28,11 +41,11 @@ func addContentPost(title, user, content, db *sql.DB) bool {
 If succesful, return true
 Otherwise, return false
 */
-func deletePost(title, user, db *sql.DB) bool {
+func DeletePost(title, user, db *sql.DB) bool {
 	sqlStatement := `DELETE FROM posts
   	WHERE title = $1 AND users = $2;`
 
-	_, err = db.Exec(sqlStatement, title, user)
+	_, err := db.Exec(sqlStatement, title, user)
 
 	if err != nil {
 		return false

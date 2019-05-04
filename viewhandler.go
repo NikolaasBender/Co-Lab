@@ -57,12 +57,10 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 		p := go_dev.PopulateUserPage(session.Values["usr"].(string), db)
 		if debug == true {
 			fmt.Println("POPULATED THE USER PAGE CORRECTLY")
-			// fmt.Println(p.Info)
-			// fmt.Println(p.Feed)
-			// fmt.Println(p.Tasks)
-			// fmt.Println(p.Pins)
-			// fmt.Println(p.Projects)
-			//fmt.Println(p.Tasks[0].Comments)
+
+			for i, s := range p.Tasks {
+				fmt.Println(i, s.Name)
+			}
 		}
 
 		t.Execute(w, p)
@@ -124,6 +122,7 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 			nam := string(r.FormValue("name"))
 			due := string(r.FormValue("dd"))
 			des := string(r.FormValue("des"))
+			urs := string(r.FormValue("addusrs"))
 			if debug == true {
 				fmt.Println("got the form values", pjs, nam, due, des, user)
 			}
@@ -138,6 +137,19 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 			ok = go_dev.DueDate(pjs, user, nam, due, db)
 			if ok != true {
 				fmt.Println("error adding due date to task")
+			}
+			ok = go_dev.AddTaskMembers(pjs, user, nam, user, db)
+			if ok != true {
+				fmt.Println("error adding project owner to task")
+			}
+			if urs != "" {
+				usrs := strings.Split(urs, ",")
+				for _, usr := range usrs {
+					ok = go_dev.AddTaskMembers(pjs, user, nam, usr, db)
+					if ok != true {
+						fmt.Println("Error adding ", usr, " to task ", nam)
+					}
+				}
 			}
 			t.Execute(w, pjcts)
 			return

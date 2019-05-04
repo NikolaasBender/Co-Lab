@@ -3,8 +3,8 @@ package go_dev
 import (
 	"database/sql"
 
-	_ "github.com/lib/pq"
-	// "fmt"
+	"github.com/lib/pq"
+	"fmt"
 )
 
 /*
@@ -42,25 +42,30 @@ Adds a new member to an existing task
 If succesful, returns true
 Otherwise, returns false
 */
-func AddTaskMembers(project_name, project_owner, task_name, newMember, db *sql.DB) bool {
+func AddTaskMembers(project_name, project_owner, task_name, newMember string, db *sql.DB) bool {
 	sqlStatement1 := `SELECT id FROM projects WHERE owner = $1 AND name = $2;`
 
-	var parentID string
+	var parentID int
 	err = db.QueryRow(sqlStatement1, project_owner, project_name).Scan(&parentID)
 
 	if err == sql.ErrNoRows {
+		fmt.Println("No rows")
 		return false
 	} else if err != nil {
+		fmt.Println("Other error first statement.")
 		return false
 	}
 
 	sqlStatement := `UPDATE tasks
-  	SET users = users || '{$1}'
+  	SET users = users || $1
   	WHERE project = $2 AND name = $3;`
 
-	_, err = db.Exec(sqlStatement, newMember, parentID, task_name)
+	_, err = db.Exec(sqlStatement, pq.Array([]string{newMember}), parentID, task_name)
 
 	if err != nil {
+		fmt.Println("Other error second statement.")
+		fmt.Println(err)
+		fmt.Printf("%T\n",newMember)
 		return false
 	}
 
@@ -244,16 +249,15 @@ func GetUserTasks(username string, db *sql.DB) []Task {
 	var userTasks = make([]Task, 0)
 	var day, month string
 	var tsk Task
-	var tskid int
 
-	var comments = make([]Post,0)
+	var comments = make([]Post, 0)
 	var pst Post
 
 	defer rows.Close()
 
 	for rows.Next() {
 
-		err = rows.Scan(&tskid, &tsk.Project_name, &tsk.Name, &tsk.Description, &month, &day, &tsk.Status)
+		err = rows.Scan(&tsk.Key, &tsk.Project_name, &tsk.Name, &tsk.Description, &month, &day, &tsk.Status)
 
 		if err != nil {
 			//Do something
@@ -261,17 +265,17 @@ func GetUserTasks(username string, db *sql.DB) []Task {
 
 		tsk.Due_date = month + "-" + day
 
-		rows, err = db.Query(sqlStatement2, tskid)
+		rows2, er := db.Query(sqlStatement2, tsk.Key)
 
-		if err != nil {
+		if er != nil {
 			//Do something
 		}
 
-		defer rows.Close()
+		defer rows2.Close()
 
-		for rows.Next() {
+		for rows2.Next() {
 
-			err = rows.Scan(&pst.Title, &pst.Username, &pst.Content, &pst.Task)
+			err = rows2.Scan(&pst.Title, &pst.Username, &pst.Content, &pst.Task)
 
 			if err != nil {
 				//Do something
@@ -334,4 +338,51 @@ func GetProjectTasks(id int, status int, db *sql.DB) []Task {
 	}
 
 	return ProjectTasks
+}
+
+func GetTask(taskID int, db *sql.DB) Task {
+
+	sqlStatement := `SELECT t.id, p.name, t.name, t.description, EXTRACT(MONTH FROM t.due_date) as month, EXTRACT(DAY FROM t.due_date) as day, t.status
+  FROM tasks t INNER JOIN  projects p ON t.project = p.id
+  WHERE $1 = t.id;`
+
+	sqlStatement2 := `SELECT p.title, p.users, p.content, t.name
+	FROM posts p INNER JOIN tasks t ON p.task = t.id WHERE p.task = $1;`
+
+	err := db.QueryRow(sqlStatement, username).Scan(&tsk.Key, &tsk.Project_name, &tsk.Name, &tsk.Description, &month, &day, &tsk.Status)
+
+	if err != nil {
+		//Do something
+	}
+
+	var day, month string
+	var tsk Task
+
+	var comments = make([]Post, 0)
+	var pst Post
+
+	tsk.Due_date = month + "-" + day
+
+	rows, er := db.Query(sqlStatement2, tsk.Key)
+
+	if er != nil {
+		//Do something
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+
+		err = rows.Scan(&pst.Title, &pst.Username, &pst.Content, &pst.Task)
+
+		if err != nil {
+			//Do something
+		}
+
+		comments = append(comments, pst)
+	}
+
+	tsk.Comments = comments
+
+	return tsk
 }

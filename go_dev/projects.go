@@ -3,7 +3,7 @@ package go_dev
 import (
 	"database/sql"
 	//"fmt"
-	_ "github.com/lib/pq"
+	"github.com/lib/pq"
 )
 
 /*
@@ -33,10 +33,10 @@ Otherwise, return false
 func AddProjectMembers(owner, name, newuser string, db *sql.DB) bool {
 
 	sqlStatement := `UPDATE projects
-  SET users = users || '{$1}'
+  SET users = users || $1
   WHERE owner = $2 AND name = $3;`
 
-	_, err = db.Exec(sqlStatement, newuser, owner, name)
+	_, err = db.Exec(sqlStatement, pq.Array([]string{newuser}), owner, name)
 
 	if err != nil {
 		return false

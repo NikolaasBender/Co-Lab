@@ -63,15 +63,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	//READ IN THE PASSWORD ENTERED
 	pw := r.FormValue("pwd")
-	//PASSWORD ENCRYPTION
-	// hash, err := bcrypt.GenerateFromPassword([]byte(pw), bcrypt.MinCost)
-	// if err != nil {
-	// 	log.Println(err)
-	// }
-
-	// if debug == true {
-	// 	fmt.Println(r.FormValue("usr"), string(hash))
-	// }
+	
 
 	//ALL OF THE AUTH
 	if go_dev.Validate(r.FormValue("usr"), string(pw), db) == true {
