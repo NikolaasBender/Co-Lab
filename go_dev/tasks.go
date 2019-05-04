@@ -339,3 +339,50 @@ func GetProjectTasks(id int, status int, db *sql.DB) []Task {
 
 	return ProjectTasks
 }
+
+func GetTask(taskID int, db *sql.DB) Task {
+
+	sqlStatement := `SELECT t.id, p.name, t.name, t.description, EXTRACT(MONTH FROM t.due_date) as month, EXTRACT(DAY FROM t.due_date) as day, t.status
+  FROM tasks t INNER JOIN  projects p ON t.project = p.id
+  WHERE $1 = t.id;`
+
+	sqlStatement2 := `SELECT p.title, p.users, p.content, t.name
+	FROM posts p INNER JOIN tasks t ON p.task = t.id WHERE p.task = $1;`
+
+	err := db.QueryRow(sqlStatement, username).Scan(&tsk.Key, &tsk.Project_name, &tsk.Name, &tsk.Description, &month, &day, &tsk.Status)
+
+	if err != nil {
+		//Do something
+	}
+
+	var day, month string
+	var tsk Task
+
+	var comments = make([]Post, 0)
+	var pst Post
+
+	tsk.Due_date = month + "-" + day
+
+	rows, er := db.Query(sqlStatement2, tsk.Key)
+
+	if er != nil {
+		//Do something
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+
+		err = rows.Scan(&pst.Title, &pst.Username, &pst.Content, &pst.Task)
+
+		if err != nil {
+			//Do something
+		}
+
+		comments = append(comments, pst)
+	}
+
+	tsk.Comments = comments
+
+	return tsk
+}

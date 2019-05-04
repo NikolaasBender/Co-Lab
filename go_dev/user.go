@@ -41,6 +41,15 @@ func AddUser(username, password, email, bio string, db *sql.DB) bool {
 }
 
 /*
+Deletes specified user from database
+Returns true if succesful, false otherwise.
+*/
+func DeleteUser(username, password string) bool {
+
+	
+}
+
+/*
 Checks if a user is in the database
 If the user is in the databse, return true
 If user not found, return false
