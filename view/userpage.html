@@ -21,7 +21,10 @@
 
 <body>
 	<div class="container-fluid" id="header-container">
-		<div class="wrapper">
+		<!-- HEADER -->
+	</div>
+		<!-- MAIN BODY -->
+	<div class="wrapper">
 			<div class="sidenav" id="sidebar-container">
 				<div class="container" id="profile-img">
 					<a href="#">
@@ -85,28 +88,28 @@
 							</div>
 
 						{{range .Comments}}
-						<div class="container" id="comment">
-							<div class="container" id="comment-header">
-								<h1>{{.Title}}
-							</div>
-							<div class="container" id="comment-box">
+							<div class="container" id="comment">
+								<div class="container" id="comment-header">
+									<h1>{{.Title}}
+								</div>
+								<div class="container" id="comment-box">
 
+								</div>
+								<div class="container" id="comment-title">
+									<h1>{{.Username}}</h1>
+								</div>
+								<div class="container" id="comment-contents">
+									<p>
+										{{.Content}}
+									</p>
+									<button type="submit" class="btn btn-pin"><i class="fas fa-thumbtack"
+											style="font-size: 1.5em;"></i></button>
+									<button type="submit" class="btn btn-comment"><i class="fas fa-comment"
+											style="font-size: 1.5em;"></i></button>
+								</div>
 							</div>
-							<div class="container" id="comment-title">
-								<h1>{{.Username}}</h1>
-							</div>
-							<div class="container" id="comment-contents">
-								<p>
-									{{.Content}}
-								</p>
-								<button type="submit" class="btn btn-pin"><i class="fas fa-thumbtack"
-										style="font-size: 1.5em;"></i></button>
-								<a href="/task_view/comment/{{.Key}}" type="submit" class="btn btn-comment"><i class="fas fa-comment"
-										style="font-size: 1.5em;"></i></a>
-							</div>
-						</div>
 						{{end}}
-					</div>
+						</div>
 					{{end}}
 					</div>
 				</div>
@@ -176,8 +179,6 @@
 					{{end}}
 				</div>
 
-			</div>
-		</div>
 	</div>
 
 </body>
