@@ -3,8 +3,9 @@ package go_dev
 import (
 	"database/sql"
 
-	"github.com/lib/pq"
 	"fmt"
+
+	"github.com/lib/pq"
 )
 
 /*
@@ -65,7 +66,7 @@ func AddTaskMembers(project_name, project_owner, task_name, newMember string, db
 	if err != nil {
 		fmt.Println("Other error second statement.")
 		fmt.Println(err)
-		fmt.Printf("%T\n",newMember)
+		fmt.Printf("%T\n", newMember)
 		return false
 	}
 
@@ -193,7 +194,7 @@ Removes a task from the project database
 If succesful, returns true
 Otherwise, returns false
 */
-func DeleteTask(taskID, db *sql.DB) bool {
+func DeleteTask(taskID int, db *sql.DB) bool {
 	sqlStatement := `SELECT project, status FROM tasks WHERE id = $1;`
 
 	var parentID int

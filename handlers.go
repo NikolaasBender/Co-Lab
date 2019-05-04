@@ -183,7 +183,7 @@ func TaskCommentHandler(w http.ResponseWriter, r *http.Request) {
 	if debug == true {
 		fmt.Println("got the form values", title, cont)
 	}
-	ok = go_dev.CreatePost(id, user, title, cont, db)
+	ok := go_dev.CreatePost(id, user, title, cont, db)
 	if ok != true {
 		fmt.Println("error adding comment to task")
 	}
@@ -222,10 +222,10 @@ func TaskStatusHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	change, err := strconv.ParseInt(r.FormValue("change")[0:], 10, 64)
-	if err != nil {
-		// handle the error in some way
-	}
+	//change, err := strconv.ParseInt(r.FormValue("change")[0:], 10, 64)
+	// if err != nil {
+	// 	// handle the error in some way
+	// }
 	del := string(r.FormValue("del"))
 
 	if del == "true" {
@@ -234,12 +234,12 @@ func TaskStatusHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("ERROR DELETING TASK")
 		}
 	}
-	if change != p["status"] {
-		ok := go_dev.UpdateStatus(id, change, db)
-		if ok != true {
-			fmt.Println("ERROR UPDATING TASK STATUS")
-		}
-	}
+	// if change != p["status"] {
+	// 	ok := go_dev.UpdateStatus(id, change, db)
+	// 	if ok != true {
+	// 		fmt.Println("ERROR UPDATING TASK STATUS")
+	// 	}
+	// }
 
 	t.Execute(w, p)
 	return
