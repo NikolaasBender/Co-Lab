@@ -77,22 +77,14 @@ Updates a tasks status and then populates the corresponding project task lisk
 If succesful, returns true
 Otherwise, returns false
 */
-func UpdateStatus(project_name, project_owner, task_name, status int, db *sql.DB) bool {
-	sqlStatement1 := `SELECT id FROM projects WHERE owner = $1 AND name = $2;`
+func UpdateStatus(taskID, status int, db *sql.DB) bool {
 
-	var parentID string
-	err = db.QueryRow(sqlStatement1, project_owner, project_name).Scan(&parentID)
-
-	if err == sql.ErrNoRows {
-		return false
-	} else if err != nil {
-		return false
-	}
-	sqlStatement2 := `SELECT id,status FROM tasks WHERE project = $1 AND name = $2;`
+	var parentID int
+	sqlStatement2 := `SELECT project, status FROM tasks WHERE id = $1;`
 
 	var oldStatus int
 	var taskID int
-	err = db.QueryRow(sqlStatement2, parentID, task_name).Scan(&taskID, &oldStatus)
+	err = db.QueryRow(sqlStatement2, taskID).Scan(&parentID, &oldStatus)
 	if err == sql.ErrNoRows {
 		return false
 	} else if err != nil {
@@ -202,11 +194,12 @@ Removes a task from the project database
 If succesful, returns true
 Otherwise, returns false
 */
-func DeleteTask(project_name, project_owner, task_name, db *sql.DB) bool {
-	sqlStatement1 := `SELECT id FROM projects WHERE owner = $1 AND name = $2;`
+func DeleteTask(taskID, db *sql.DB) bool {
+	sqlStatement := `SELECT project, status FROM tasks WHERE id = $1;`
 
-	var parentID string
-	err = db.QueryRow(sqlStatement1, project_owner, project_name).Scan(&parentID)
+	var parentID int
+	var status int
+	err = db.QueryRow(sqlStatement1, taskID).Scan(&parentID, &status)
 
 	if err == sql.ErrNoRows {
 		return false
@@ -214,14 +207,27 @@ func DeleteTask(project_name, project_owner, task_name, db *sql.DB) bool {
 		return false
 	}
 
-	sqlStatement := `DELETE FROM tasks
-  	WHERE  project= $1 AND name = $2;`
+	sqlStatement = `DELETE FROM tasks
+  	WHERE id= $1;`
 
-	_, err = db.Exec(sqlStatement, parentID, task_name)
+	_, err = db.Exec(sqlStatement, taskID)
 
 	if err != nil {
 		return false
 	}
+
+	var oldColumn string
+	if status == 0 {
+		oldColumn = "inprogress_tasks"
+	} else if status == 1 {
+		oldColumn = "todo_tasks"
+	} else {
+		oldColumn = "completed_tasks"
+	}
+
+	sqlStatement = `UPDATE projects SET $1 = array_remove($1, $2) WHERE id = $3;`
+
+	_, err = db.Exec(sqlStatement, oldColumn, taskID, parentID)
 
 	return true
 }
