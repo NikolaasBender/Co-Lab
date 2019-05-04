@@ -83,7 +83,6 @@ func UpdateStatus(taskID, status int, db *sql.DB) bool {
 	sqlStatement2 := `SELECT project, status FROM tasks WHERE id = $1;`
 
 	var oldStatus int
-	var taskID int
 	err = db.QueryRow(sqlStatement2, taskID).Scan(&parentID, &oldStatus)
 	if err == sql.ErrNoRows {
 		return false
@@ -108,8 +107,8 @@ func UpdateStatus(taskID, status int, db *sql.DB) bool {
 		newColumn = "completed_tasks"
 	}
 
-	sqlStatement3 := `UPDATE tasks SET status = $1 WHERE project = $2 AND name = $3;`
-	_, err = db.Exec(sqlStatement3, status, parentID, task_name)
+	sqlStatement3 := `UPDATE tasks SET status = $1 WHERE id = $2;`
+	_, err = db.Exec(sqlStatement3, status, taskID)
 	if err != nil {
 		return false
 	}
@@ -199,7 +198,7 @@ func DeleteTask(taskID, db *sql.DB) bool {
 
 	var parentID int
 	var status int
-	err = db.QueryRow(sqlStatement1, taskID).Scan(&parentID, &status)
+	err = db.QueryRow(sqlStatement, taskID).Scan(&parentID, &status)
 
 	if err == sql.ErrNoRows {
 		return false
@@ -355,14 +354,14 @@ func GetTask(taskID int, db *sql.DB) Task {
 	sqlStatement2 := `SELECT p.title, p.users, p.content, t.name
 	FROM posts p INNER JOIN tasks t ON p.task = t.id WHERE p.task = $1;`
 
-	err := db.QueryRow(sqlStatement, username).Scan(&tsk.Key, &tsk.Project_name, &tsk.Name, &tsk.Description, &month, &day, &tsk.Status)
+	var tsk Task
+	var day, month string
+
+	err := db.QueryRow(sqlStatement, taskID).Scan(&tsk.Key, &tsk.Project_name, &tsk.Name, &tsk.Description, &month, &day, &tsk.Status)
 
 	if err != nil {
 		//Do something
 	}
-
-	var day, month string
-	var tsk Task
 
 	var comments = make([]Post, 0)
 	var pst Post

@@ -60,7 +60,7 @@ func DeleteUser(username, password string, db *sql.DB) bool {
 	_, err := db.Exec(sqlStatement, username)
 	_, er := db.Exec(sqlStatement2, username)
 
-	if err != nil or er != nil {
+	if err != nil || er != nil {
 		return false
 	}
 
