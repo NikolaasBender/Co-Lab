@@ -43,10 +43,28 @@ func AddUser(username, password, email, bio string, db *sql.DB) bool {
 /*
 Deletes specified user from database
 Returns true if succesful, false otherwise.
-*/
-func DeleteUser(username, password string) bool {
 
-	
+Be warned. Does not delete all trace of the user
+*/
+func DeleteUser(username, password string, db *sql.DB) bool {
+
+	valid := Validate(username, password, db)
+
+	if valid != true {
+		return false
+	}
+
+	sqlStatement := `DELETE FROM user_info WHERE username = $1;`
+	sqlStatement2 := `DELETE FROM user_login WHERE username = $1;`
+
+	_, err := db.Exec(sqlStatement, username)
+	_, er := db.Exec(sqlStatement2, username)
+
+	if err != nil or er != nil {
+		return false
+	}
+
+	return true
 }
 
 /*
