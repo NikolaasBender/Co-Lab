@@ -192,6 +192,13 @@ func TaskCommentHandler(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+type StatPage struct {
+	Task   go_dev.Task
+	Check1 string
+	Check2 string
+	Check3 string
+}
+
 func TaskStatusHandler(w http.ResponseWriter, r *http.Request) {
 	if debug == true {
 		fmt.Println("Hit TaskStatusHandler")
@@ -209,6 +216,26 @@ func TaskStatusHandler(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(string(pathVariables["key"]))
 
 	p := go_dev.GetTask(id, db)
+	page := StatPage{
+		Task:   p,
+		Check1: "",
+		Check2: "",
+		Check3: "",
+	}
+
+	if p.Status == 0 {
+		page.Check1 = "checked"
+		page.Check2 = ""
+		page.Check3 = ""
+	} else if p.Status == 1 {
+		page.Check1 = ""
+		page.Check2 = "checked"
+		page.Check3 = ""
+	} else {
+		page.Check1 = ""
+		page.Check2 = ""
+		page.Check3 = "checked"
+	}
 
 	t, err := template.ParseFiles("/view/task_stat.html")
 
@@ -218,14 +245,12 @@ func TaskStatusHandler(w http.ResponseWriter, r *http.Request) {
 
 	//IF ITS A GET REQUEST IT JUST SHOWS THE TASK AND ITS COMMENTS
 	if r.Method != http.MethodPost {
-		t.Execute(w, p)
+		t.Execute(w, page)
 		return
 	}
 
-	//change, err := strconv.ParseInt(r.FormValue("change")[0:], 10, 64)
-	// if err != nil {
-	// 	// handle the error in some way
-	// }
+	r.ParseForm()
+	stat := r.Form.Get("chng_tsk_stat")
 	del := string(r.FormValue("del"))
 
 	if del == "true" {
@@ -233,13 +258,25 @@ func TaskStatusHandler(w http.ResponseWriter, r *http.Request) {
 		if ok != true {
 			fmt.Println("ERROR DELETING TASK")
 		}
+		http.Redirect(w, r, "/view/allMyTasks", http.StatusFound)
+
 	}
-	// if change != p["status"] {
-	// 	ok := go_dev.UpdateStatus(id, change, db)
-	// 	if ok != true {
-	// 		fmt.Println("ERROR UPDATING TASK STATUS")
-	// 	}
-	// }
+
+	s := 0
+
+	if stat == "todo" {
+		s = 1
+	}
+	if stat == "done" {
+		s = 2
+	}
+
+	if s != p.Status {
+		ok := go_dev.UpdateStatus(id, s, db)
+		if ok != true {
+			fmt.Println("ERROR UPDATING TASK STATUS")
+		}
+	}
 
 	t.Execute(w, p)
 	return
