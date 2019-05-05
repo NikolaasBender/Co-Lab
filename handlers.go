@@ -269,7 +269,7 @@ func TaskStatusHandler(w http.ResponseWriter, r *http.Request) {
 		if ok != true {
 			fmt.Println("ERROR DELETING TASK")
 		}
-		http.Redirect(w, r, "/view/allMyTasks", http.StatusFound)
+		http.Redirect(w, r, "/view/userpage", http.StatusFound)
 
 	}
 
@@ -289,7 +289,7 @@ func TaskStatusHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	t.Execute(w, p)
+	t.Execute(w, page)
 	return
 }
 
