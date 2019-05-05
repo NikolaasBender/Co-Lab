@@ -126,16 +126,14 @@ func TaskViewHandler(w http.ResponseWriter, r *http.Request) {
 
 	p := go_dev.GetTask(id, db)
 
+	if debug == true {
+		fmt.Println(p)
+	}
+
 	t, err := template.ParseFiles("/view/task_view.html")
 
 	if err != nil {
 		fmt.Println("task view Handler parsing error", err)
-	}
-
-	//IF ITS A GET REQUEST IT JUST SHOWS THE TASK AND ITS COMMENTS
-	if r.Method != http.MethodPost {
-		t.Execute(w, p)
-		return
 	}
 
 	t.Execute(w, p)
@@ -145,7 +143,7 @@ func TaskViewHandler(w http.ResponseWriter, r *http.Request) {
 //DEALS WITH ADDING COMMENTS TO A TASK
 func TaskCommentHandler(w http.ResponseWriter, r *http.Request) {
 	if debug == true {
-		fmt.Println("Hit TaskViewHandler")
+		fmt.Println("Hit TaskCommentHandler")
 	}
 	//session, _ := store.Get(r, "cookie-name")
 
@@ -165,6 +163,10 @@ func TaskCommentHandler(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(string(pathVariables["key"]))
 
 	p := go_dev.GetTask(id, db)
+
+	if debug == true {
+		fmt.Println(p)
+	}
 
 	t, err := template.ParseFiles("view/ac2t.html")
 
@@ -216,6 +218,11 @@ func TaskStatusHandler(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(string(pathVariables["key"]))
 
 	p := go_dev.GetTask(id, db)
+
+	if debug == true {
+		fmt.Println(p)
+	}
+
 	page := StatPage{
 		Task:   p,
 		Check1: "",
@@ -237,6 +244,9 @@ func TaskStatusHandler(w http.ResponseWriter, r *http.Request) {
 		page.Check3 = "checked"
 	}
 
+	if debug == true {
+		fmt.Println(page)
+	}
 
 	t, err := template.ParseFiles("view/task_stat.html")
 
