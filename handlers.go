@@ -166,7 +166,7 @@ func TaskCommentHandler(w http.ResponseWriter, r *http.Request) {
 
 	p := go_dev.GetTask(id, db)
 
-	t, err := template.ParseFiles("/view/ac2t.html")
+	t, err := template.ParseFiles("view/ac2t.html")
 
 	if err != nil {
 		fmt.Println("task view Handler parsing error", err)
@@ -237,7 +237,8 @@ func TaskStatusHandler(w http.ResponseWriter, r *http.Request) {
 		page.Check3 = "checked"
 	}
 
-	t, err := template.ParseFiles("/view/task_stat.html")
+
+	t, err := template.ParseFiles("view/task_stat.html")
 
 	if err != nil {
 		fmt.Println("task view Handler parsing error", err)

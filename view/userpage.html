@@ -67,7 +67,7 @@
 					{{range .Tasks}}
 					<div class="container" id="post">
 						<div class="container" id="post-title">
-							<h1>{{.Name}}</h1>
+							<a href="/task_view/view/{{.Key}}"><h1>{{.Name}}</h1></a>
 							<h5>Due on: {{.Due_date}}</h5>
 						</div>
 						<div class="container" id="post-body">
@@ -84,6 +84,8 @@
 											style="font-size: 1.5em;"></i></button>
 									<button type="submit" class="btn btn-comment"><i class="fas fa-comment"
 											style="font-size: 1.5em;"></i></button>
+									<a href="/task_view/comment/{{.Key}}">Comment on this task</a>
+									<a href="/task_view/status/{{.Key}}">Comment on this task</a>
 								</div>
 							</div>
 						</div>
