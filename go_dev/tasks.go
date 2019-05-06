@@ -86,8 +86,10 @@ func UpdateStatus(taskID, status int, db *sql.DB) bool {
 	var oldStatus int
 	err = db.QueryRow(sqlStatement2, taskID).Scan(&parentID, &oldStatus)
 	if err == sql.ErrNoRows {
+		fmt.Println("First1")
 		return false
 	} else if err != nil {
+		fmt.Println("First2")
 		return false
 	}
 	var oldColumn string
@@ -111,18 +113,21 @@ func UpdateStatus(taskID, status int, db *sql.DB) bool {
 	sqlStatement3 := `UPDATE tasks SET status = $1 WHERE id = $2;`
 	_, err = db.Exec(sqlStatement3, status, taskID)
 	if err != nil {
+		fmt.Println("Second")
 		return false
 	}
 
 	sqlStatement4 := `UPDATE projects SET $1 = array_remove($1, $2) WHERE id = $3;`
 	_, err = db.Exec(sqlStatement4, oldColumn, taskID, parentID)
 	if err != nil {
+		fmt.Println("Third")
 		return false
 	}
 
 	sqlStatement5 := `UPDATE projects SET $1 = array_cat($1, $2) WHERE id = $3;`
 	_, err = db.Exec(sqlStatement5, newColumn, taskID, parentID)
 	if err != nil {
+		fmt.Println("Fourth")
 		return false
 	}
 
