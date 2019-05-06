@@ -9,7 +9,7 @@ import (
 
 func CreatePost(taskID int, user, title, content string, db *sql.DB) bool {
 
-	sqlStatement := `INSERT INTO posts values($1, $2, $3, $4);`
+	sqlStatement := `INSERT INTO posts (task,users,title,content) values($1, $2, $3, $4);`
 
 	_, err := db.Exec(sqlStatement, taskID, title, user, content)
 
