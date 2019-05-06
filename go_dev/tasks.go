@@ -27,9 +27,19 @@ func CreateTask(project_name, project_owner, task_name string, db *sql.DB) bool 
 	}
 
 	sqlStatement2 := `INSERT INTO tasks(project,name,status)
-  	VALUES ($1, $2, 0)`
+  	VALUES ($1, $2, 0) RETURNING id`
 
-	_, err = db.Exec(sqlStatement2, parentID, task_name)
+	var taskID int
+	err = db.QueryRow(sqlStatement2, parentID, task_name).Scan(&taskID)
+
+	if err != nil {
+		return false
+	}
+
+	sqlStatement3 := `UPDATE projects SET todo_tasks = array_cat(todo_tasks, $1)
+	WHERE name = $2 && owner = $3;`
+
+	_, err = db.Exec(sqlStatement3, taskID, project_name, project_owner)
 
 	if err != nil {
 		return false
