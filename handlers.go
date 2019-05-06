@@ -263,7 +263,7 @@ func TaskStatusHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	r.ParseForm()
-	stat := r.Form.Get("chng_tsk_stat")
+	stat := string(r.Form.Get("chng_tsk_stat"))
 	del := string(r.Form.Get("del"))
 
 	if del == "true" {
@@ -275,13 +275,23 @@ func TaskStatusHandler(w http.ResponseWriter, r *http.Request) {
 
 	}
 
+	if debug == true {
+		fmt.Println(stat, del)
+	}
+
 	s := 0
 
 	if stat == "todo" {
 		s = 1
+		if debug == true {
+			fmt.Println("CHANGING STATUS TO TODO")
+		}
 	}
 	if stat == "done" {
 		s = 2
+		if debug == true {
+			fmt.Println("CHANGING STATUS TO DONE")
+		}
 	}
 
 	if s != p.Status {
