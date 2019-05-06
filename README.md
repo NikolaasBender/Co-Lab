@@ -29,17 +29,17 @@ When starting a new project you hit the "New Project" and you should be directed
 
 
 File Structure:
-/assets: Contains all of the images for our website
-/auth: Login and sign up pages
-/go_dev: Go package for pushing and pulling to/from database
-/static: CSS and JS styling for our site
-/templates: HTML templates to be populated with go functions
-/view: All of the HTML files for the site
-/war: For app engine to serve favicon
-/: Our server handlers and sql datbase sit in the main repo
+/assets: Contains all of the images for our website\
+/auth: Login and sign up pages\
+/go_dev: Go package for pushing and pulling to/from database\
+/static: CSS and JS styling for our site\
+/templates: HTML templates to be populated with go functions\
+/view: All of the HTML files for the site\
+/war: For app engine to serve favicon\
+/: Our server handlers sit ouside of a directory\
+/: Database information is stored in Google App Engine\
 
-Useful lessons from our code:
--Nested ranges in golang templates
--Implemented gorilla sessions
--asset hosting
--
+Useful lessons from our code:\
+-Nested ranges in golang templates\
+-Implemented gorilla sessions\
+-asset hosting\
