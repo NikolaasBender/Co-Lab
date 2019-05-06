@@ -264,7 +264,7 @@ func TaskStatusHandler(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseForm()
 	stat := string(r.Form.Get("chng_tsk_stat"))
-	del := string(r.Form.Get("del"))
+	del := string(r.Form.Get("delete"))
 
 	if del == "true" {
 		ok := go_dev.DeleteTask(id, db)
