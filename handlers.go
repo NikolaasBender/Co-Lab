@@ -190,9 +190,9 @@ func TaskCommentHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("error adding comment to task")
 	}
 
-	np := "/task_view/view/" + string(id)
+	//np := "/task_view/view/" + string(id)
 
-	http.Redirect(w, r, np, http.StatusFound)
+	t.Execute(w, p)
 	return
 }
 
@@ -264,7 +264,7 @@ func TaskStatusHandler(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseForm()
 	stat := r.Form.Get("chng_tsk_stat")
-	del := string(r.FormValue("del"))
+	del := string(r.Form.Get("del"))
 
 	if del == "true" {
 		ok := go_dev.DeleteTask(id, db)
@@ -291,9 +291,9 @@ func TaskStatusHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	np := "/task_view/view/" + string(id)
+	//np := "/task_view/view/" + string(id)
 
-	http.Redirect(w, r, np, http.StatusFound)
+	t.Execute(w, page)
 	return
 }
 
