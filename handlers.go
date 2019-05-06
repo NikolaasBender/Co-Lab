@@ -130,7 +130,7 @@ func TaskViewHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(p)
 	}
 
-	t, err := template.ParseFiles("/view/task_view.html")
+	t, err := template.ParseFiles("view/task_view.html")
 
 	if err != nil {
 		fmt.Println("task view Handler parsing error", err)
@@ -190,7 +190,9 @@ func TaskCommentHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("error adding comment to task")
 	}
 
-	t.Execute(w, p)
+	np := "/task_view/view/" + string(id)
+
+	http.Redirect(w, r, np, http.StatusFound)
 	return
 }
 
@@ -289,7 +291,9 @@ func TaskStatusHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	t.Execute(w, page)
+	np := "/task_view/view/" + string(id)
+
+	http.Redirect(w, r, np, http.StatusFound)
 	return
 }
 

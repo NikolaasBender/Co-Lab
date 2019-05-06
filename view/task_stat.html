@@ -24,32 +24,39 @@
     </head>
 
     <body>
-        <div class="container" id="task-body">
-            <h1>{{.Task.Name}}</h1>
-            <h3>Due: {{.Task.Due_date}}</h3>
-            <div class="row">
-                <div class="col-sm-8" id="details">
-                    {{.Task.Description}}
+        <div class="row ">
+            <div class="container  col-4" id="task-body">
+                <h1>{{.Task.Name}}</h1>
+                <h3>Due: {{.Task.Due_date}}</h3>
+                <div class="row">
+                    <div class="col-sm-8" id="details">
+                        {{.Task.Description}}
+                    </div>
+                </div>
+                <form>
+                    <button type="submit" class="btn btn-pin"><i class="fas fa-thumbtack" style="font-size: 1.5em;"></i></button>
+                    <button type="submit" class="btn btn-comment"><i class="fas fa-comment" style="font-size: 1.5em;"></i></button>
+                </form>
+                <div class="container" id="comments-body">
+                    {{range .Task.Comments}}
+                    {{.Title}}
+                    {{.Username}}
+                    {{.Content}}
+                    {{end}}
                 </div>
             </div>
-            <button type="submit" class="btn btn-pin"><i class="fas fa-thumbtack" style="font-size: 1.5em;"></i></button>
-            <button type="submit" class="btn btn-comment"><i class="fas fa-comment" style="font-size: 1.5em;"></i></button>
+            
+            <div class="col-6">
+                <form method="post">
+                    <input class="form-control" type="radio" name="chng_tsk_stat" value="in progress" {{.Check1}} /> in progress
+                    <br>
+                    <input class="form-control" type="radio" name="chng_tsk_stat" value="todo" {{.Check2}} /> todo <br>
+                    <input class="form-control" type="radio" name="chng_tsk_stat" value="done" {{.Check3}} /> done <br>
+                    <p>Deleting PERMANINTELY delets this task</p>
+                    <input class="form-control" type="checkbox" name="delete" value="delete" /> delete <br>
+                    <button class="form-control" type="submit"> Submit </button>
+                </form>
+            </div>
         </div>
-        <div class="container" id="comments-body">
-            <h1>Comments will appear here!</h1>
-            {{range .Task.Comments}}
-                {{.Title}}
-                {{.Username}}
-                {{.Content}}
-            {{end}}
-        </div>
-        <form method="post">
-            <input class="form-control" type="radio" name="chng_tsk_stat" value="in progress" {{.Check1}}/> in progress <br>
-            <input class="form-control" type="radio" name="chng_tsk_stat" value="todo" {{.Check2}}/> todo <br>
-            <input class="form-control" type="radio" name="chng_tsk_stat" value="done" {{.Check3}}/> done <br>
-            <p>Deleting PERMANINTELY delets this task</p>
-            <input class="form-control" type="checkbox" name="delete" value="delete"/> delete <br>
-            <input class="form-control" type="submit">
-        </form>
     </body>
 </html>
